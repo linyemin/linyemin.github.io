@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="nvidia," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="nvidia-smi表含义解释参考：  http://blog.csdn.net/bruce_0712/article/details/63683787">
+<meta name="keywords" content="nvidia">
+<meta property="og:type" content="article">
+<meta property="og:title" content="nvidia-smi命令详解">
+<meta property="og:url" content="http://yoursite.com/2017/09/14/nvidia-smi/index.html">
+<meta property="og:site_name" content="林烨敏的博客">
+<meta property="og:description" content="nvidia-smi表含义解释参考：  http://blog.csdn.net/bruce_0712/article/details/63683787">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-11-30T12:01:00.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="nvidia-smi命令详解">
+<meta name="twitter:description" content="nvidia-smi表含义解释参考：  http://blog.csdn.net/bruce_0712/article/details/63683787">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/09/14/nvidia-smi/"/>
+
+
+
+
+
+  <title>nvidia-smi命令详解 | 林烨敏的博客</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">林烨敏的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/14/nvidia-smi/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="linyemin">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="林烨敏的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">nvidia-smi命令详解</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-14T16:03:29+08:00">
+                2017-09-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/gpu/" itemprop="url" rel="index">
+                    <span itemprop="name">gpu</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="nvidia-smi表含义解释"><a href="#nvidia-smi表含义解释" class="headerlink" title="nvidia-smi表含义解释"></a><code>nvidia-smi</code>表含义解释</h2><p>参考：</p>
+<ul>
+<li><a href="http://blog.csdn.net/bruce_0712/article/details/63683787" target="_blank" rel="noopener">http://blog.csdn.net/bruce_0712/article/details/63683787</a> </li>
+</ul>
+<a id="more"></a>
+<p><code>P100</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">+-----------------------------------------------------------------------------+</span><br><span class="line">| NVIDIA-SMI 375.66                 Driver Version: 375.66                    |</span><br><span class="line">|-------------------------------+----------------------+----------------------+</span><br><span class="line">| GPU  Name        Persistence-M| Bus-Id        Disp.A | Volatile Uncorr. ECC |</span><br><span class="line">| Fan  Temp  Perf  Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |</span><br><span class="line">|===============================+======================+======================|</span><br><span class="line">|   0  Tesla P100-PCIE...  Off  | 0000:02:00.0     Off |                    0 |</span><br><span class="line">| N/A   37C    P0    28W / 250W |      0MiB / 16276MiB |      0%      Default |</span><br><span class="line">+-------------------------------+----------------------+----------------------+</span><br><span class="line">                                                                               </span><br><span class="line">+-----------------------------------------------------------------------------+</span><br><span class="line">| Processes:                                                       GPU Memory |</span><br><span class="line">|  GPU       PID  Type  Process name                               Usage      |</span><br><span class="line">|=============================================================================|</span><br><span class="line">|    1     24227    C   /usr/local/MATLAB/R2015b/bin/glnxa64/MATLAB    393MiB |</span><br><span class="line">+-----------------------------------------------------------------------------+</span><br></pre></td></tr></table></figure>
+<p><code>Titan X</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">Thu Aug  3 14:00:03 2017       </span><br><span class="line">+-----------------------------------------------------------------------------+</span><br><span class="line">| NVIDIA-SMI 375.66                 Driver Version: 375.66                    |</span><br><span class="line">|-------------------------------+----------------------+----------------------+</span><br><span class="line">| GPU  Name        Persistence-M| Bus-Id        Disp.A | Volatile Uncorr. ECC |</span><br><span class="line">| Fan  Temp  Perf  Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |</span><br><span class="line">|===============================+======================+======================|</span><br><span class="line">|   0  GeForce GTX TIT...  On   | 0000:84:00.0      On |                  N/A |</span><br><span class="line">| 50%   35C    P8    16W / 250W |      9MiB / 12207MiB |      0%      Default |</span><br><span class="line">+-------------------------------+----------------------+----------------------+</span><br><span class="line">                                                                               </span><br><span class="line">+-----------------------------------------------------------------------------+</span><br><span class="line">| Processes:                                                       GPU Memory |</span><br><span class="line">|  GPU       PID  Type  Process name                               Usage      |</span><br><span class="line">|=============================================================================|</span><br><span class="line">|    0      5734    G   X                                                7MiB |</span><br><span class="line">+-----------------------------------------------------------------------------+</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>GPU</code>: GPU编号, 从0开始, 若有多台GPU, 则依次累加.</li>
+<li><code>Fan</code>: 风扇转速, 从0%到100%, N/A表示该GPU为被动散热,无风扇</li>
+<li><code>Name</code>: GPU名称, 此处为<code>P100-PCIE...</code>和<code>GTX TIT...</code></li>
+<li><code>Temp</code>: 温度, 单位摄氏度</li>
+<li><code>Perf</code>: 性能状态, 从P0到P12, P0为最大性能, P12为最小性能</li>
+<li><code>Persistence-M</code>: 持续模式的状态, 持续模式开启时, 会加速GPU应用的启动时间, 但是会增大功耗.</li>
+<li><code>Pwr:Usage/Cap</code>: 能耗, 当前能耗/最大能耗, 单位瓦</li>
+<li><code>Bus-Id</code>: 设计GPU总线的东西, 其格式为<code>domain:bus:device.function</code></li>
+<li><code>Disp.A</code>: Display Active, 表示GPU的显示是否初始化</li>
+<li><code>Memory-Usage</code>: 显存使用情况, 当前使用显存/总显存</li>
+<li><code>Volatile GPU-Util</code>: 浮动的GPU利用率.</li>
+<li><code>Uncorr.ECC</code>: 关于ECC</li>
+<li><code>Compute M.</code>: 计算模式 </li>
+</ul>
+<h2 id="nvidia-smi-q"><a href="#nvidia-smi-q" class="headerlink" title="nvidia-smi -q"></a><code>nvidia-smi -q</code></h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br></pre></td><td class="code"><pre><span class="line">==============NVSMI LOG==============</span><br><span class="line"></span><br><span class="line">Timestamp                           : Thu Aug  3 14:12:26 2017</span><br><span class="line">Driver Version                      : 375.66</span><br><span class="line"></span><br><span class="line">Attached GPUs                       : 1</span><br><span class="line">GPU 0000:84:00.0</span><br><span class="line">    Product Name                    : GeForce GTX TITAN X</span><br><span class="line">    Product Brand                   : GeForce</span><br><span class="line">    Display Mode                    : Disabled</span><br><span class="line">    Display Active                  : Enabled</span><br><span class="line">    Persistence Mode                : Enabled</span><br><span class="line">    Accounting Mode                 : Disabled</span><br><span class="line">    Accounting Mode Buffer Size     : 1920</span><br><span class="line">    Driver Model</span><br><span class="line">        Current                     : N/A</span><br><span class="line">        Pending                     : N/A</span><br><span class="line">    Serial Number                   : 0421216034294</span><br><span class="line">    GPU UUID                        : GPU-8e6a16d9-7f97-f238-2fd7-2ab1ed8f5fb1</span><br><span class="line">    Minor Number                    : 0</span><br><span class="line">    VBIOS Version                   : 84.00.45.00.03</span><br><span class="line">    MultiGPU Board                  : No</span><br><span class="line">    Board ID                        : 0x8400</span><br><span class="line">    GPU Part Number                 : N/A</span><br><span class="line">    Inforom Version</span><br><span class="line">        Image Version               : G001.0000.01.03</span><br><span class="line">        OEM Object                  : 1.1</span><br><span class="line">        ECC Object                  : N/A</span><br><span class="line">        Power Management Object     : N/A</span><br><span class="line">    GPU Operation Mode</span><br><span class="line">        Current                     : N/A</span><br><span class="line">        Pending                     : N/A</span><br><span class="line">    GPU Virtualization Mode</span><br><span class="line">        Virtualization mode         : None</span><br><span class="line">    PCI</span><br><span class="line">        Bus                         : 0x84</span><br><span class="line">        Device                      : 0x00</span><br><span class="line">        Domain                      : 0x0000</span><br><span class="line">        Device Id                   : 0x17C210DE</span><br><span class="line">        Bus Id                      : 0000:84:00.0</span><br><span class="line">        Sub System Id               : 0x17C210DE</span><br><span class="line">        GPU Link Info</span><br><span class="line">            PCIe Generation</span><br><span class="line">                Max                 : 3</span><br><span class="line">                Current             : 1</span><br><span class="line">            Link Width</span><br><span class="line">                Max                 : 16x</span><br><span class="line">                Current             : 16x</span><br><span class="line">        Bridge Chip</span><br><span class="line">            Type                    : N/A</span><br><span class="line">            Firmware                : N/A</span><br><span class="line">        Replays since reset         : 0</span><br><span class="line">        Tx Throughput               : 0 KB/s</span><br><span class="line">        Rx Throughput               : 0 KB/s</span><br><span class="line">    Fan Speed                       : 50 %</span><br><span class="line">    Performance State               : P8</span><br><span class="line">    Clocks Throttle Reasons</span><br><span class="line">        Idle                        : Active</span><br><span class="line">        Applications Clocks Setting : Not Active</span><br><span class="line">        SW Power Cap                : Not Active</span><br><span class="line">        HW Slowdown                 : Not Active</span><br><span class="line">        Sync Boost                  : Not Active</span><br><span class="line">        Unknown                     : Not Active</span><br><span class="line">    FB Memory Usage</span><br><span class="line">        Total                       : 12207 MiB</span><br><span class="line">        Used                        : 9 MiB</span><br><span class="line">        Free                        : 12198 MiB</span><br><span class="line">    BAR1 Memory Usage</span><br><span class="line">        Total                       : 256 MiB</span><br><span class="line">        Used                        : 4 MiB</span><br><span class="line">        Free                        : 252 MiB</span><br><span class="line">    Compute Mode                    : Default</span><br><span class="line">    Utilization</span><br><span class="line">        Gpu                         : 0 %</span><br><span class="line">        Memory                      : 1 %</span><br><span class="line">        Encoder                     : 0 %</span><br><span class="line">        Decoder                     : 0 %</span><br><span class="line">    Encoder Stats</span><br><span class="line">        Active Sessions             : 0</span><br><span class="line">        Average FPS                 : 0</span><br><span class="line">        Average Latency             : 0 ms</span><br><span class="line">    Ecc Mode</span><br><span class="line">        Current                     : N/A</span><br><span class="line">        Pending                     : N/A</span><br><span class="line">    ECC Errors</span><br><span class="line">        Volatile</span><br><span class="line">            Single Bit            </span><br><span class="line">                Device Memory       : N/A</span><br><span class="line">                Register File       : N/A</span><br><span class="line">                L1 Cache            : N/A</span><br><span class="line">                L2 Cache            : N/A</span><br><span class="line">                Texture Memory      : N/A</span><br><span class="line">                Texture Shared      : N/A</span><br><span class="line">                Total               : N/A</span><br><span class="line">            Double Bit            </span><br><span class="line">                Device Memory       : N/A</span><br><span class="line">                Register File       : N/A</span><br><span class="line">                L1 Cache            : N/A</span><br><span class="line">                L2 Cache            : N/A</span><br><span class="line">                Texture Memory      : N/A</span><br><span class="line">                Texture Shared      : N/A</span><br><span class="line">                Total               : N/A</span><br><span class="line">        Aggregate</span><br><span class="line">            Single Bit            </span><br><span class="line">                Device Memory       : N/A</span><br><span class="line">                Register File       : N/A</span><br><span class="line">                L1 Cache            : N/A</span><br><span class="line">                L2 Cache            : N/A</span><br><span class="line">                Texture Memory      : N/A</span><br><span class="line">                Texture Shared      : N/A</span><br><span class="line">                Total               : N/A</span><br><span class="line">            Double Bit            </span><br><span class="line">                Device Memory       : N/A</span><br><span class="line">                Register File       : N/A</span><br><span class="line">                L1 Cache            : N/A</span><br><span class="line">                L2 Cache            : N/A</span><br><span class="line">                Texture Memory      : N/A</span><br><span class="line">                Texture Shared      : N/A</span><br><span class="line">                Total               : N/A</span><br><span class="line">    Retired Pages</span><br><span class="line">        Single Bit ECC              : N/A</span><br><span class="line">        Double Bit ECC              : N/A</span><br><span class="line">        Pending                     : N/A</span><br><span class="line">    Temperature</span><br><span class="line">        GPU Current Temp            : 35 C</span><br><span class="line">        GPU Shutdown Temp           : 97 C</span><br><span class="line">        GPU Slowdown Temp           : 92 C</span><br><span class="line">    Power Readings</span><br><span class="line">        Power Management            : Supported</span><br><span class="line">        Power Draw                  : 16.25 W</span><br><span class="line">        Power Limit                 : 250.00 W</span><br><span class="line">        Default Power Limit         : 250.00 W</span><br><span class="line">        Enforced Power Limit        : 250.00 W</span><br><span class="line">        Min Power Limit             : 150.00 W</span><br><span class="line">        Max Power Limit             : 275.00 W</span><br><span class="line">    Clocks</span><br><span class="line">        Graphics                    : 135 MHz</span><br><span class="line">        SM                          : 135 MHz</span><br><span class="line">        Memory                      : 405 MHz</span><br><span class="line">        Video                       : 405 MHz</span><br><span class="line">    Applications Clocks</span><br><span class="line">        Graphics                    : 1000 MHz</span><br><span class="line">        Memory                      : 3505 MHz</span><br><span class="line">    Default Applications Clocks</span><br><span class="line">        Graphics                    : 1000 MHz</span><br><span class="line">        Memory                      : 3505 MHz</span><br><span class="line">    Max Clocks</span><br><span class="line">        Graphics                    : 1392 MHz</span><br><span class="line">        SM                          : 1392 MHz</span><br><span class="line">        Memory                      : 3505 MHz</span><br><span class="line">        Video                       : 1281 MHz</span><br><span class="line">    Clock Policy</span><br><span class="line">        Auto Boost                  : On</span><br><span class="line">        Auto Boost Default          : On</span><br><span class="line">    Processes</span><br><span class="line">        Process ID                  : 5734</span><br><span class="line">            Type                    : G</span><br><span class="line">            Name                    : X</span><br><span class="line">            Used GPU Memory         : 7 MiB</span><br></pre></td></tr></table></figure>
+<h2 id="nvidia-smi-help"><a href="#nvidia-smi-help" class="headerlink" title="nvidia-smi --help"></a><code>nvidia-smi --help</code></h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br></pre></td><td class="code"><pre><span class="line">NVIDIA System Management Interface -- v375.66</span><br><span class="line"></span><br><span class="line">NVSMI provides monitoring information for Tesla and select Quadro devices.</span><br><span class="line">The data is presented in either a plain text or an XML format, via stdout or a file.</span><br><span class="line">NVSMI also provides several management operations for changing the device state.</span><br><span class="line"></span><br><span class="line">Note that the functionality of NVSMI is exposed through the NVML C-based</span><br><span class="line">library. See the NVIDIA developer website for more information about NVML.</span><br><span class="line">Python wrappers to NVML are also available.  The output of NVSMI is</span><br><span class="line">not guaranteed to be backwards compatible; NVML and the bindings are backwards</span><br><span class="line">compatible.</span><br><span class="line"></span><br><span class="line">http://developer.nvidia.com/nvidia-management-library-nvml/</span><br><span class="line">http://pypi.python.org/pypi/nvidia-ml-py/</span><br><span class="line">Supported products:</span><br><span class="line">- Full Support</span><br><span class="line">    - All Tesla products, starting with the Fermi architecture</span><br><span class="line">    - All Quadro products, starting with the Fermi architecture</span><br><span class="line">    - All GRID products, starting with the Kepler architecture</span><br><span class="line">    - GeForce Titan products, starting with the Kepler architecture</span><br><span class="line">- Limited Support</span><br><span class="line">    - All Geforce products, starting with the Fermi architecture</span><br><span class="line">nvidia-smi [OPTION1 [ARG1]] [OPTION2 [ARG2]] ...</span><br><span class="line"></span><br><span class="line">    -h,   --help                Print usage information and exit.</span><br><span class="line"></span><br><span class="line">  LIST OPTIONS:</span><br><span class="line"></span><br><span class="line">    -L,   --list-gpus           Display a list of GPUs connected to the system.</span><br><span class="line"></span><br><span class="line">  SUMMARY OPTIONS:</span><br><span class="line"></span><br><span class="line">    &lt;no arguments&gt;              Show a summary of GPUs connected to the system.</span><br><span class="line"></span><br><span class="line">    [plus any of]</span><br><span class="line"></span><br><span class="line">    -i,   --id=                 Target a specific GPU.</span><br><span class="line">    -f,   --filename=           Log to a specified file, rather than to stdout.</span><br><span class="line">    -l,   --loop=               Probe until Ctrl+C at specified second interval.</span><br><span class="line"></span><br><span class="line">  QUERY OPTIONS:</span><br><span class="line"></span><br><span class="line">    -q,   --query               Display GPU or Unit info.</span><br><span class="line"></span><br><span class="line">    [plus any of]</span><br><span class="line"></span><br><span class="line">    -u,   --unit                Show unit, rather than GPU, attributes.</span><br><span class="line">    -i,   --id=                 Target a specific GPU or Unit.</span><br><span class="line">    -f,   --filename=           Log to a specified file, rather than to stdout.</span><br><span class="line">    -x,   --xml-format          Produce XML output.</span><br><span class="line">          --dtd                 When showing xml output, embed DTD.</span><br><span class="line">    -d,   --display=            Display only selected information: MEMORY,</span><br><span class="line">                                    UTILIZATION, ECC, TEMPERATURE, POWER, CLOCK,</span><br><span class="line">                                    COMPUTE, PIDS, PERFORMANCE, SUPPORTED_CLOCKS,</span><br><span class="line">                                    PAGE_RETIREMENT, ACCOUNTING, ENCODER STATS </span><br><span class="line">                                Flags can be combined with comma e.g. ECC,POWER.</span><br><span class="line">                                Sampling data with max/min/avg is also returned </span><br><span class="line">                                for POWER, UTILIZATION and CLOCK display types.</span><br><span class="line">                                Doesn&apos;t work with -u or -x flags.</span><br><span class="line">    -l,   --loop=               Probe until Ctrl+C at specified second interval.</span><br><span class="line"></span><br><span class="line">    -lms, --loop-ms=            Probe until Ctrl+C at specified millisecond interval.</span><br><span class="line"></span><br><span class="line">  SELECTIVE QUERY OPTIONS:</span><br><span class="line"></span><br><span class="line">    Allows the caller to pass an explicit list of properties to query.</span><br><span class="line"></span><br><span class="line">    [one of]</span><br><span class="line"></span><br><span class="line">    --query-gpu=                Information about GPU.</span><br><span class="line">                                Call --help-query-gpu for more info.</span><br><span class="line">    --query-supported-clocks=   List of supported clocks.</span><br><span class="line">                                Call --help-query-supported-clocks for more info.</span><br><span class="line">    --query-compute-apps=       List of currently active compute processes.</span><br><span class="line">                                Call --help-query-compute-apps for more info.</span><br><span class="line">    --query-accounted-apps=     List of accounted compute processes.</span><br><span class="line">                                Call --help-query-accounted-apps for more info.</span><br><span class="line">    --query-retired-pages=      List of device memory pages that have been retired.</span><br><span class="line">                                Call --help-query-retired-pages for more info.</span><br><span class="line"></span><br><span class="line">    [mandatory]</span><br><span class="line"></span><br><span class="line">    --format=                   Comma separated list of format options:</span><br><span class="line">                                  csv - comma separated values (MANDATORY)</span><br><span class="line">                                  noheader - skip the first line with column headers</span><br><span class="line">                                  nounits - don&apos;t print units for numerical</span><br><span class="line">                                             values</span><br><span class="line"></span><br><span class="line">    [plus any of]</span><br><span class="line"></span><br><span class="line">    -i,   --id=                 Target a specific GPU or Unit.</span><br><span class="line">    -f,   --filename=           Log to a specified file, rather than to stdout.</span><br><span class="line">    -l,   --loop=               Probe until Ctrl+C at specified second interval.</span><br><span class="line">    -lms, --loop-ms=            Probe until Ctrl+C at specified millisecond interval.</span><br><span class="line"></span><br><span class="line">  DEVICE MODIFICATION OPTIONS:</span><br><span class="line"></span><br><span class="line">    [any one of]</span><br><span class="line"></span><br><span class="line">    -pm,  --persistence-mode=   Set persistence mode: 0/DISABLED, 1/ENABLED</span><br><span class="line">    -e,   --ecc-config=         Toggle ECC support: 0/DISABLED, 1/ENABLED</span><br><span class="line">    -p,   --reset-ecc-errors=   Reset ECC error counts: 0/VOLATILE, 1/AGGREGATE</span><br><span class="line">    -c,   --compute-mode=       Set MODE for compute applications:</span><br><span class="line">                                0/DEFAULT, 1/EXCLUSIVE_PROCESS,</span><br><span class="line">                                2/PROHIBITED</span><br><span class="line">          --gom=                Set GPU Operation Mode:</span><br><span class="line">                                    0/ALL_ON, 1/COMPUTE, 2/LOW_DP</span><br><span class="line">    -r    --gpu-reset           Trigger reset of the GPU.</span><br><span class="line">                                Can be used to reset the GPU HW state in situations</span><br><span class="line">                                that would otherwise require a machine reboot.</span><br><span class="line">                                Typically useful if a double bit ECC error has</span><br><span class="line">                                occurred.</span><br><span class="line">                                Reset operations are not guarenteed to work in</span><br><span class="line">                                all cases and should be used with caution.</span><br><span class="line">                                --id= switch is mandatory for this switch</span><br><span class="line">    -vm   --virt-mode=          Switch GPU Virtualization Mode:</span><br><span class="line">                                Sets GPU virtualization mode to 3/VGPU or 4/VSGA</span><br><span class="line">                                Virtualization mode of a GPU can only be set when</span><br><span class="line">                                it is running on a hypervisor.</span><br><span class="line">    -ac   --applications-clocks= Specifies &lt;memory,graphics&gt; clocks as a</span><br><span class="line">                                    pair (e.g. 2000,800) that defines GPU&apos;s</span><br><span class="line">                                    speed in MHz while running applications on a GPU.</span><br><span class="line">    -rac  --reset-applications-clocks</span><br><span class="line">                                Resets the applications clocks to the default values.</span><br><span class="line">    -acp  --applications-clocks-permission=</span><br><span class="line">                                Toggles permission requirements for -ac and -rac commands:</span><br><span class="line">                                0/UNRESTRICTED, 1/RESTRICTED</span><br><span class="line">    -pl   --power-limit=        Specifies maximum power management limit in watts.</span><br><span class="line">    -am   --accounting-mode=    Enable or disable Accounting Mode: 0/DISABLED, 1/ENABLED</span><br><span class="line">    -caa  --clear-accounted-apps</span><br><span class="line">                                Clears all the accounted PIDs in the buffer.</span><br><span class="line">          --auto-boost-default= Set the default auto boost policy to 0/DISABLED</span><br><span class="line">                                or 1/ENABLED, enforcing the change only after the</span><br><span class="line">                                last boost client has exited.</span><br><span class="line">          --auto-boost-permission=</span><br><span class="line">                                Allow non-admin/root control over auto boost mode:</span><br><span class="line">                                0/UNRESTRICTED, 1/RESTRICTED</span><br><span class="line">   [plus optional]</span><br><span class="line"></span><br><span class="line">    -i,   --id=                 Target a specific GPU.</span><br><span class="line"></span><br><span class="line">  UNIT MODIFICATION OPTIONS:</span><br><span class="line"></span><br><span class="line">    -t,   --toggle-led=         Set Unit LED state: 0/GREEN, 1/AMBER</span><br><span class="line"></span><br><span class="line">   [plus optional]</span><br><span class="line"></span><br><span class="line">    -i,   --id=                 Target a specific Unit.</span><br><span class="line"></span><br><span class="line">  SHOW DTD OPTIONS:</span><br><span class="line"></span><br><span class="line">          --dtd                 Print device DTD and exit.</span><br><span class="line"></span><br><span class="line">     [plus optional]</span><br><span class="line"></span><br><span class="line">    -f,   --filename=           Log to a specified file, rather than to stdout.</span><br><span class="line">    -u,   --unit                Show unit, rather than device, DTD.</span><br><span class="line"></span><br><span class="line">    --debug=                    Log encrypted debug information to a specified file. </span><br><span class="line"></span><br><span class="line"> STATISTICS: (EXPERIMENTAL)</span><br><span class="line">    stats                       Displays device statistics. &quot;nvidia-smi stats -h&quot; for more information.</span><br><span class="line"></span><br><span class="line"> Device Monitoring:</span><br><span class="line">    dmon                        Displays device stats in scrolling format.</span><br><span class="line">                                &quot;nvidia-smi dmon -h&quot; for more information.</span><br><span class="line"></span><br><span class="line">    daemon                      Runs in background and monitor devices as a daemon process.</span><br><span class="line">                                This is an experimental feature.</span><br><span class="line">                                &quot;nvidia-smi daemon -h&quot; for more information.</span><br><span class="line"></span><br><span class="line">    replay                      Used to replay/extract the persistent stats generated by daemon.</span><br><span class="line">                                This is an experimental feature.</span><br><span class="line">                                &quot;nvidia-smi replay -h&quot; for more information.</span><br><span class="line"></span><br><span class="line"> Process Monitoring:</span><br><span class="line">    pmon                        Displays process stats in scrolling format.</span><br><span class="line">                                &quot;nvidia-smi pmon -h&quot; for more information.</span><br><span class="line"></span><br><span class="line"> TOPOLOGY:</span><br><span class="line">    topo                        Displays device/system topology. &quot;nvidia-smi topo -h&quot; for more information.</span><br><span class="line"></span><br><span class="line"> DRAIN STATES:</span><br><span class="line">    drain                       Displays/modifies GPU drain states for power idling. &quot;nvidia-smi drain -h&quot; for more information.</span><br><span class="line"></span><br><span class="line"> NVLINK:</span><br><span class="line">    nvlink                      Displays device nvlink information. &quot;nvidia-smi nvlink -h&quot; for more information.</span><br><span class="line"></span><br><span class="line"> CLOCKS:</span><br><span class="line">    clocks                      Control and query clock information. &quot;nvidia-smi clocks -h&quot; for more information.</span><br><span class="line"></span><br><span class="line"> ENCODER SESSIONS:</span><br><span class="line">    encodersessions             Displays device encoder sessions information. &quot;nvidia-smi encodersessions -h&quot; for more information.</span><br><span class="line"></span><br><span class="line"> GRID vGPU:</span><br><span class="line">    vgpu                        Displays vGPU information. &quot;nvidia-smi vgpu -h&quot; for more information.</span><br><span class="line"></span><br><span class="line">Please see the nvidia-smi(1) manual page for more detailed information.</span><br></pre></td></tr></table></figure>
+<h2 id="特殊命令"><a href="#特殊命令" class="headerlink" title="特殊命令"></a>特殊命令</h2><h3 id="获取GPU的当前温度"><a href="#获取GPU的当前温度" class="headerlink" title="获取GPU的当前温度"></a>获取GPU的当前温度</h3><p>依次获得所有GPU卡的温度</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nvidia-smi -q 2&gt;&amp;1|grep -i &quot;gpu current temp&quot;|awk &apos;&#123;print $5&#125;&apos;| sed s/\%//g</span><br></pre></td></tr></table></figure>
+<p>获得指定GPU卡的温度，添加<code>-g</code>参数，后加GPU ID，从0开始索引</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nvidia-smi -q -g 0 2&gt;&amp;1|grep -i &quot;gpu current temp&quot;|awk &apos;&#123;print $5&#125;&apos;| sed s/\%//g</span><br></pre></td></tr></table></figure>
+<h3 id="获取GPU当前正在运行的进程"><a href="#获取GPU当前正在运行的进程" class="headerlink" title="获取GPU当前正在运行的进程"></a>获取GPU当前正在运行的进程</h3><p>依次获得所有GPU卡的进程</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nvidia-smi -q 2&gt;&amp;1|grep -i &quot;Process ID&quot;|awk &apos;&#123;print $4&#125;&apos;</span><br></pre></td></tr></table></figure>
+<p>获得指定GPU卡的温度，添加<code>-g</code>参数，后加GPU ID，从0开始索引</p>
+<h3 id="获取GPU当前使用率"><a href="#获取GPU当前使用率" class="headerlink" title="获取GPU当前使用率"></a>获取GPU当前使用率</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nvidia-smi -q 2&gt;&amp;1|grep -i &quot;Process ID&quot;|awk &apos;&#123;print $4&#125;&apos;</span><br></pre></td></tr></table></figure>
+<p>附： 使用python远程监控gpu状态，并返回json格式的数据。或者简单用shell脚本执行返回。</p>
+<p>首先需配置SSH免密钥登录，在执行脚本的机器上重复执行。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd ~/.ssh</span><br><span class="line">ssh-keygen -t rsa</span><br><span class="line">ssh-copy-id -i ~/.ssh/id_rsa.pub root@10.42.10.xx</span><br></pre></td></tr></table></figure>
+<p>python版本<code>get-gpu-util.py</code></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> paramiko</span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">ssh_exec</span><span class="params">(ip, cmd)</span>:</span></span><br><span class="line">    client = paramiko.SSHClient()</span><br><span class="line">    client.load_system_host_keys()</span><br><span class="line">    client.connect(ip)</span><br><span class="line">    stdin, stdout, stderr = client.exec_command(cmd)</span><br><span class="line">    <span class="keyword">if</span> len(stderr.readlines()):</span><br><span class="line">        output = [<span class="string">"-1"</span>]</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        output =  stdout.readlines()</span><br><span class="line">    client.close()</span><br><span class="line">    <span class="keyword">return</span> output</span><br><span class="line"></span><br><span class="line">command = <span class="string">"nvidia-smi -q|grep \"Gpu\"|awk '&#123;print $3&#125;'"</span></span><br><span class="line">hosts = [<span class="string">"10.42.10.35"</span>, <span class="string">"10.42.10.41"</span>, <span class="string">"10.42.10.62"</span>]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">result = []</span><br><span class="line"><span class="keyword">for</span> host <span class="keyword">in</span> hosts:</span><br><span class="line">    utils = ssh_exec(host, command)</span><br><span class="line">    <span class="keyword">for</span> index, util <span class="keyword">in</span> enumerate(utils):</span><br><span class="line">        util = util.strip()</span><br><span class="line">        info = &#123;&#125;</span><br><span class="line">        info[<span class="string">"ip"</span>] = host</span><br><span class="line">        info[<span class="string">"card"</span>] = index</span><br><span class="line">        info[<span class="string">"gpu-util"</span>] = int(util)</span><br><span class="line">        result.append(info)</span><br><span class="line"></span><br><span class="line">print(json.dumps(result))</span><br></pre></td></tr></table></figure>
+<p>输出如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[&#123;&quot;ip&quot;: &quot;10.42.10.35&quot;, &quot;card&quot;: 0, &quot;gpu-util&quot;: 0&#125;, &#123;&quot;ip&quot;: &quot;10.42.10.41&quot;, &quot;card&quot;: 0, &quot;gpu-util&quot;: 99&#125;, &#123;&quot;ip&quot;: &quot;10.42.10.41&quot;, &quot;card&quot;: 1, &quot;gpu-util&quot;: 65&#125;, &#123;&quot;ip&quot;: &quot;10.42.10.41&quot;, &quot;card&quot;: 2, &quot;gpu-util&quot;: 85&#125;, &#123;&quot;ip&quot;: &quot;10.42.10.41&quot;, &quot;card&quot;: 3, &quot;gpu-util&quot;: 0&#125;, &#123;&quot;ip&quot;: &quot;10.42.10.62&quot;, &quot;card&quot;: 0, &quot;gpu-util&quot;: 90&#125;, &#123;&quot;ip&quot;: &quot;10.42.10.62&quot;, &quot;card&quot;: 1, &quot;gpu-util&quot;: 33&#125;, &#123;&quot;ip&quot;: &quot;10.42.10.62&quot;, &quot;card&quot;: 2, &quot;gpu-util&quot;: 91&#125;, &#123;&quot;ip&quot;: &quot;10.42.10.62&quot;, &quot;card&quot;: 3, &quot;gpu-util&quot;: 87&#125;]</span><br></pre></td></tr></table></figure>
+<p>Shell版本<code>get-gpu-util.sh</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="built_in">command</span>=<span class="string">"nvidia-smi -q|grep \"Gpu\"|awk '&#123;print \$3&#125;'|tr '\n' ','"</span></span><br><span class="line"></span><br><span class="line">result35=`ssh 10.42.10.35 <span class="variable">$command</span>`</span><br><span class="line">result41=`ssh 10.42.10.41 <span class="variable">$command</span>`</span><br><span class="line">result62=`ssh 10.42.10.62 <span class="variable">$command</span>`</span><br><span class="line"></span><br><span class="line">result=<span class="variable">$result35</span><span class="variable">$result41</span><span class="variable">$result62</span></span><br><span class="line">result1=<span class="variable">$&#123;result:0:$&#123;#result&#125;</span>-1&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$result1</span></span><br></pre></td></tr></table></figure>
+<p>运行命令<code>bash get-gpu-util.sh</code></p>
+<blockquote>
+<p>若无法配置SSH免密钥登录，比如需要在容器中运行等，则可以利用远程执行ssh的工具<a href="https://github.com/liqiang311/sshexec" target="_blank" rel="noopener">sshexec</a>来执行，代码如下：</p>
+</blockquote>
+<p>首先在每台机器上创建用于查询信息的用户名，无需管理员权限（nvidia-smi不需管理员）。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">useradd -s /bin/bash -mr gpu</span><br><span class="line">passwd gpu</span><br><span class="line">gpu</span><br></pre></td></tr></table></figure>
+<p>远程代码执行如下</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="built_in">set</span> -e</span><br><span class="line"></span><br><span class="line">res35=`sshexec -i 10.42.10.35 -u gpu -p gpu -e <span class="string">"nvidia-smi -q | grep Gpu"</span> | awk <span class="string">'&#123;print $3&#125;'</span> | tr <span class="string">'\n'</span> <span class="string">','</span> `</span><br><span class="line">res41=`sshexec -i 10.42.10.41 -u gpu -p gpu -e <span class="string">"nvidia-smi -q | grep Gpu"</span> | awk <span class="string">'&#123;print $3&#125;'</span> | tr <span class="string">'\n'</span> <span class="string">','</span> `</span><br><span class="line">res62=`sshexec -i 10.42.10.62 -u gpu -p gpu -e <span class="string">"nvidia-smi -q | grep Gpu"</span> | awk <span class="string">'&#123;print $3&#125;'</span> | tr <span class="string">'\n'</span> <span class="string">','</span> `</span><br><span class="line">res1=<span class="variable">$res35</span><span class="variable">$res41</span><span class="variable">$res62</span></span><br><span class="line">res2=<span class="variable">$&#123;res1:0:$&#123;#res1&#125;</span>-1&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$res2</span></span><br></pre></td></tr></table></figure>
+<p>若要使用命令行输入，shell代码如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">#!/bin/bash</span><br><span class="line">set -e</span><br><span class="line"></span><br><span class="line">args_num=$#</span><br><span class="line"></span><br><span class="line">if [ $args_num -ge 2 ] </span><br><span class="line">then </span><br><span class="line">  ip=$1</span><br><span class="line">  card=$2</span><br><span class="line">  sshexec -i $ip -u gpu -p gpu -e &quot;nvidia-smi -q -g $card | grep Gpu&quot; | awk &apos;&#123;print $3&#125;&apos;</span><br><span class="line">fi</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/nvidia/" rel="tag"># nvidia</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/09/14/nvidia-docker/" rel="next" title="nvidia-docker命令详解">
+                <i class="fa fa-chevron-left"></i> nvidia-docker命令详解
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/09/14/opengl-x11/" rel="prev" title="OpenGL容器运行">
+                OpenGL容器运行 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">linyemin</p>
+              <p class="site-description motion-element" itemprop="description">海阔凭鱼跃，天高任鸟飞</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">69</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">14</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">45</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#nvidia-smi表含义解释"><span class="nav-number">1.</span> <span class="nav-text">nvidia-smi表含义解释</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#nvidia-smi-q"><span class="nav-number">2.</span> <span class="nav-text">nvidia-smi -q</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#nvidia-smi-help"><span class="nav-number">3.</span> <span class="nav-text">nvidia-smi --help</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#特殊命令"><span class="nav-number">4.</span> <span class="nav-text">特殊命令</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#获取GPU的当前温度"><span class="nav-number">4.1.</span> <span class="nav-text">获取GPU的当前温度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#获取GPU当前正在运行的进程"><span class="nav-number">4.2.</span> <span class="nav-text">获取GPU当前正在运行的进程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#获取GPU当前使用率"><span class="nav-number">4.3.</span> <span class="nav-text">获取GPU当前使用率</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">linyemin</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

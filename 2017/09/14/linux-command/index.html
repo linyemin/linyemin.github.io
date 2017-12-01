@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="linux," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="下载Ubuntu ISO 清华下载">
+<meta name="keywords" content="linux">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux常用命令">
+<meta property="og:url" content="http://yoursite.com/2017/09/14/linux-command/index.html">
+<meta property="og:site_name" content="林烨敏的博客">
+<meta property="og:description" content="下载Ubuntu ISO 清华下载">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-11-30T12:01:00.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Linux常用命令">
+<meta name="twitter:description" content="下载Ubuntu ISO 清华下载">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/09/14/linux-command/"/>
+
+
+
+
+
+  <title>Linux常用命令 | 林烨敏的博客</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">林烨敏的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/14/linux-command/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="linyemin">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="林烨敏的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Linux常用命令</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-14T16:02:27+08:00">
+                2017-09-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/linux/" itemprop="url" rel="index">
+                    <span itemprop="name">linux</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="下载"><a href="#下载" class="headerlink" title="下载"></a>下载</h2><p><a href="https://mirrors.tuna.tsinghua.edu.cn/ubuntu-releases/" target="_blank" rel="noopener">Ubuntu ISO 清华下载</a><br><a id="more"></a></p>
+<h2 id="系统相关"><a href="#系统相关" class="headerlink" title="系统相关"></a>系统相关</h2><h3 id="版本号"><a href="#版本号" class="headerlink" title="版本号"></a>版本号</h3><ul>
+<li><code>cat /etc/issue</code></li>
+<li><code>lsb_release -a</code></li>
+<li><code>uname -a</code><h3 id="设置root密码"><a href="#设置root密码" class="headerlink" title="设置root密码"></a>设置root密码</h3><code>sudo passwd root</code><h3 id="时区设置"><a href="#时区设置" class="headerlink" title="时区设置"></a>时区设置</h3></li>
+<li><p>更改时区</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">apt-get update</span><br><span class="line">apt-get install tzdata</span><br><span class="line">dpkg-reconfigure tzdata</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>或者无交互设置</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">apt-get update</span><br><span class="line">apt-get install -y tzdata</span><br><span class="line">cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime</span><br><span class="line">echo &apos;Asia/Shanghai&apos; &gt; /etc/timezone</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="同步时间"><a href="#同步时间" class="headerlink" title="同步时间"></a>同步时间</h3>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ntpdate cn.pool.ntp.org</span><br><span class="line">ntpdate 10.30.1.105(自定义时间服务器)</span><br><span class="line">date -s &quot;29 Jun 2017 09:42:00&quot;(手动指定时间)</span><br></pre></td></tr></table></figure>
+<h3 id="重启网卡"><a href="#重启网卡" class="headerlink" title="重启网卡"></a>重启网卡</h3><p><code>sudo /etc/init.d/networking restart</code></p>
+<h3 id="重启电脑"><a href="#重启电脑" class="headerlink" title="重启电脑"></a>重启电脑</h3><p><code>reboot</code></p>
+<h3 id="修改crontab默认编辑器"><a href="#修改crontab默认编辑器" class="headerlink" title="修改crontab默认编辑器"></a>修改crontab默认编辑器</h3><ul>
+<li><p>方法1：修改环境变量</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">echo "export EDITOR=/usr/bin/vim" &gt;&gt; /etc/profile</span><br><span class="line">source /etc/profile</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>方法2：输入以下命令，选择3即可。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">update-alternatives --config editor</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">There are 4 choices for the alternative editor (providing /usr/bin/editor).</span><br><span class="line"></span><br><span class="line">  Selection    Path                Priority   Status</span><br><span class="line">------------------------------------------------------------</span><br><span class="line">* 0            /bin/nano            40        auto mode</span><br><span class="line">  1            /bin/ed             -100       manual mode</span><br><span class="line">  2            /bin/nano            40        manual mode</span><br><span class="line">  3            /usr/bin/vim.basic   30        manual mode</span><br><span class="line">  4            /usr/bin/vim.tiny    10        manual mode</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="ubuntu网络重启后或主机重启后，-etc-resolv-conf恢复原样的解决"><a href="#ubuntu网络重启后或主机重启后，-etc-resolv-conf恢复原样的解决" class="headerlink" title="ubuntu网络重启后或主机重启后，/etc/resolv.conf恢复原样的解决"></a><a href="http://blog.csdn.net/bytxl/article/details/44201347" target="_blank" rel="noopener">ubuntu网络重启后或主机重启后，/etc/resolv.conf恢复原样的解决</a></h3><h2 id="系统监控"><a href="#系统监控" class="headerlink" title="系统监控"></a>系统监控</h2><h3 id="查看CPU型號、核心數量、頻率和溫度"><a href="#查看CPU型號、核心數量、頻率和溫度" class="headerlink" title="查看CPU型號、核心數量、頻率和溫度"></a><a href="https://magiclen.org/linux-view-cpu/" target="_blank" rel="noopener">查看CPU型號、核心數量、頻率和溫度</a></h3><h3 id="查看程序端口占用情况"><a href="#查看程序端口占用情况" class="headerlink" title="查看程序端口占用情况"></a><a href="http://www.cnblogs.com/benio/archive/2010/09/15/1826728.html" target="_blank" rel="noopener">查看程序端口占用情况</a></h3><p><code>netstat –apn | grep 8080</code></p>
+<h2 id="用户"><a href="#用户" class="headerlink" title="用户"></a>用户</h2><h3 id="显示普通账户和系统用户"><a href="#显示普通账户和系统用户" class="headerlink" title="显示普通账户和系统用户"></a>显示普通账户和系统用户</h3><p><code>awk -F: &#39;{if($3&gt;=1000){printf &quot;Common User: %s \n&quot;,$1}}&#39; /etc/passwd</code><br><code>awk -F: &#39;{if($3&gt;=1000){printf &quot;Common User: %s \n&quot;,$1}else{printf &quot;root or sysuser:%s\n&quot;,$1}}&#39; /etc/passwd</code></p>
+<h3 id="启动禁用账户"><a href="#启动禁用账户" class="headerlink" title="启动禁用账户"></a><a href="http://blog.csdn.net/rainylin/article/details/6132916" target="_blank" rel="noopener">启动禁用账户</a></h3><h3 id="userdel"><a href="#userdel" class="headerlink" title="userdel"></a><a href="http://www.cnblogs.com/DaDaOnline/p/5527833.html" target="_blank" rel="noopener">userdel</a></h3><h3 id="添加管理员账户"><a href="#添加管理员账户" class="headerlink" title="添加管理员账户"></a>添加管理员账户</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">su</span><br><span class="line">useradd -s /bin/bash -mr &lt;username&gt;</span><br><span class="line">passwd &lt;username&gt;</span><br><span class="line">visudo</span><br></pre></td></tr></table></figure>
+<ul>
+<li>在<code>root    ALL=(ALL:ALL) ALL</code>下按格式对齐添加一行<code>&lt;username&gt;   ALL=(ALL:ALL) ALL</code>, <code>Ctrl+O</code>回车保存,<code>Ctrl+X</code>退出.</li>
+</ul>
+<h2 id="SSH"><a href="#SSH" class="headerlink" title="SSH"></a>SSH</h2><h3 id="免密钥登录"><a href="#免密钥登录" class="headerlink" title="免密钥登录"></a>免密钥登录</h3><ol>
+<li><code>ssh-keygen -t rsa</code></li>
+<li><code>ssh-copy-id -i ~/.ssh/id_rsa.pub root@10.42.10.xx</code><h3 id="为Root用户开启SSH登录"><a href="#为Root用户开启SSH登录" class="headerlink" title="为Root用户开启SSH登录"></a>为Root用户开启SSH登录</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sed -i &apos;s/^PermitRootLogin.*$/PermitRootLogin yes/g&apos; /etc/ssh/sshd_config</span><br><span class="line">service ssh restart</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="ssh-keygen命令"><a href="#ssh-keygen命令" class="headerlink" title="ssh-keygen命令"></a><a href="http://man.linuxde.net/ssh-keygen" target="_blank" rel="noopener">ssh-keygen命令</a></h3><h3 id="ssh连接远程主机执行脚本的环境变量问题"><a href="#ssh连接远程主机执行脚本的环境变量问题" class="headerlink" title="ssh连接远程主机执行脚本的环境变量问题"></a><a href="http://blog.csdn.net/liuyuzhu111/article/details/51334635" target="_blank" rel="noopener">ssh连接远程主机执行脚本的环境变量问题</a></h3><h3 id="SSH连接反应慢的分析解决"><a href="#SSH连接反应慢的分析解决" class="headerlink" title="SSH连接反应慢的分析解决"></a><a href="http://xjsunjie.blog.51cto.com/999372/658354/" target="_blank" rel="noopener">SSH连接反应慢的分析解决</a></h3><h2 id="进程相关"><a href="#进程相关" class="headerlink" title="进程相关"></a>进程相关</h2><h3 id="查看指定进程详细信息"><a href="#查看指定进程详细信息" class="headerlink" title="查看指定进程详细信息"></a>查看指定进程详细信息</h3><p><code>pmap -d PID</code></p>
+<h3 id="查看指定进程详细信息的最后一行"><a href="#查看指定进程详细信息的最后一行" class="headerlink" title="查看指定进程详细信息的最后一行"></a>查看指定进程详细信息的最后一行</h3><ul>
+<li>mapped 表示该进程映射的虚拟地址空间大小，即该进程预先分配的虚拟内存大小</li>
+<li>writeable/private 表示进程所占用的私有地址空间大小，即该进程实际使用的内存大小</li>
+<li>shared 表示进程和其他进程共享的内存大小<h3 id="top"><a href="#top" class="headerlink" title="top"></a>top</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"># 所有进程状态</span><br><span class="line">top</span><br><span class="line"># 查看指定进程的状态</span><br><span class="line">top -p PID</span><br><span class="line"># 每隔x秒刷新一次指定进程状态</span><br><span class="line">top -p PID -d x</span><br><span class="line"></span><br><span class="line"># PID           进程ID</span><br><span class="line"># USER          进程所有者</span><br><span class="line"># PR            进程优先级，越小越优先</span><br><span class="line"># NI</span><br><span class="line"># VIRT          进程占用的虚拟内存</span><br><span class="line"># RES           进程占用的物理内存</span><br><span class="line"># SHR           进程使用的共享内存</span><br><span class="line"># S             进程状态 S-休眠 R-运行 Z-僵死 N-优先级为负数</span><br><span class="line"># %CPU          进程占用CPU使用率</span><br><span class="line"># %MEM          进程使用的物理内存和总内存的百分比</span><br><span class="line"># TIME+         进程启动后占用的总CPU时间</span><br><span class="line"># COMMAND       进程启动名称</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="开机自启动进程"><a href="#开机自启动进程" class="headerlink" title="开机自启动进程"></a>开机自启动进程</h3><p><code>update-rc.d xxxxx defaults</code></p>
+<h2 id="Vim"><a href="#Vim" class="headerlink" title="Vim"></a>Vim</h2><h3 id="Vim命令合集-http-www-cnblogs-com-softwaretesting-archive-2011-07-12-2104435-html"><a href="#Vim命令合集-http-www-cnblogs-com-softwaretesting-archive-2011-07-12-2104435-html" class="headerlink" title="[Vim命令合集]http://www.cnblogs.com/softwaretesting/archive/2011/07/12/2104435.html)"></a>[Vim命令合集]<a href="http://www.cnblogs.com/softwaretesting/archive/2011/07/12/2104435.html" target="_blank" rel="noopener">http://www.cnblogs.com/softwaretesting/archive/2011/07/12/2104435.html</a>)</h3><h3 id="Tab键不能自动补全问题"><a href="#Tab键不能自动补全问题" class="headerlink" title="Tab键不能自动补全问题"></a><a href="http://logicluo.iteye.com/blog/2145084" target="_blank" rel="noopener">Tab键不能自动补全问题</a></h3><h2 id="sed"><a href="#sed" class="headerlink" title="sed"></a>sed</h2><h3 id="http-www-cnblogs-com-dong008259-archive-2011-12-07-2279897-html"><a href="#http-www-cnblogs-com-dong008259-archive-2011-12-07-2279897-html" class="headerlink" title="http://www.cnblogs.com/dong008259/archive/2011/12/07/2279897.html"></a><a href="http://www.cnblogs.com/dong008259/archive/2011/12/07/2279897.html" target="_blank" rel="noopener">http://www.cnblogs.com/dong008259/archive/2011/12/07/2279897.html</a></h3><h3 id="http-www-frostsky-com-2014-01-linux-sed-command"><a href="#http-www-frostsky-com-2014-01-linux-sed-command" class="headerlink" title="http://www.frostsky.com/2014/01/linux-sed-command/"></a><a href="http://www.frostsky.com/2014/01/linux-sed-command/" target="_blank" rel="noopener">http://www.frostsky.com/2014/01/linux-sed-command/</a></h3><h3 id="在匹配行插入某个文件的内容"><a href="#在匹配行插入某个文件的内容" class="headerlink" title="在匹配行插入某个文件的内容"></a>在匹配行插入某个文件的内容</h3><p><code>sed -i &#39;/FROM/r common.ubuntu.head&#39; $tmp</code></p>
+<h2 id="stdin-stdout-stderr"><a href="#stdin-stdout-stderr" class="headerlink" title="stdin/stdout/stderr"></a>stdin/stdout/stderr</h2><h3 id="Shell标准输出、标准错误-gt-dev-null-2-gt-amp-1"><a href="#Shell标准输出、标准错误-gt-dev-null-2-gt-amp-1" class="headerlink" title="Shell标准输出、标准错误 &gt;/dev/null 2&gt;&amp;1"></a><a href="http://blog.sina.com.cn/s/blog_4aae007d010192qc.html" target="_blank" rel="noopener">Shell标准输出、标准错误 &gt;/dev/null 2&gt;&amp;1</a></h3><h2 id="积累命令"><a href="#积累命令" class="headerlink" title="积累命令"></a>积累命令</h2><h3 id="用管道命令移动指定文件-find-name-quot-cpp-quot-xargs-i-mv"><a href="#用管道命令移动指定文件-find-name-quot-cpp-quot-xargs-i-mv" class="headerlink" title="用管道命令移动指定文件 find . -name &quot;*.cpp&quot; | xargs -i mv {} ./"></a>用管道命令移动指定文件 <code>find . -name &quot;*.cpp&quot; | xargs -i mv {} ./</code></h3><h3 id="dirname-0"><a href="#dirname-0" class="headerlink" title="`dirname $0`"></a><a href="http://www.cnblogs.com/xupeizhi/archive/2013/02/19/2917644.html" target="_blank" rel="noopener">`dirname $0`</a></h3><h3 id="批量重命名文件"><a href="#批量重命名文件" class="headerlink" title="批量重命名文件)"></a><a href="(http://www.lx138.com/page.php?ID=Vkd0U1ZtVkJQVDA9">批量重命名文件</a>)</h3><h3 id="pushd和popd"><a href="#pushd和popd" class="headerlink" title="pushd和popd"></a><a href="http://www.jianshu.com/p/53cccae3c443" target="_blank" rel="noopener">pushd和popd</a></h3>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/linux/" rel="tag"># linux</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/09/14/regular/" rel="next" title="正则表达式学习">
+                <i class="fa fa-chevron-left"></i> 正则表达式学习
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/09/14/linux-file/" rel="prev" title="Linux中文件相关知识">
+                Linux中文件相关知识 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">linyemin</p>
+              <p class="site-description motion-element" itemprop="description">海阔凭鱼跃，天高任鸟飞</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">69</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">14</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">45</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#下载"><span class="nav-number">1.</span> <span class="nav-text">下载</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#系统相关"><span class="nav-number">2.</span> <span class="nav-text">系统相关</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#版本号"><span class="nav-number">2.1.</span> <span class="nav-text">版本号</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#设置root密码"><span class="nav-number">2.2.</span> <span class="nav-text">设置root密码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#时区设置"><span class="nav-number">2.3.</span> <span class="nav-text">时区设置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#同步时间"><span class="nav-number">2.4.</span> <span class="nav-text">同步时间</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#重启网卡"><span class="nav-number">2.5.</span> <span class="nav-text">重启网卡</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#重启电脑"><span class="nav-number">2.6.</span> <span class="nav-text">重启电脑</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#修改crontab默认编辑器"><span class="nav-number">2.7.</span> <span class="nav-text">修改crontab默认编辑器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ubuntu网络重启后或主机重启后，-etc-resolv-conf恢复原样的解决"><span class="nav-number">2.8.</span> <span class="nav-text">ubuntu网络重启后或主机重启后，/etc/resolv.conf恢复原样的解决</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#系统监控"><span class="nav-number">3.</span> <span class="nav-text">系统监控</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#查看CPU型號、核心數量、頻率和溫度"><span class="nav-number">3.1.</span> <span class="nav-text">查看CPU型號、核心數量、頻率和溫度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查看程序端口占用情况"><span class="nav-number">3.2.</span> <span class="nav-text">查看程序端口占用情况</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#用户"><span class="nav-number">4.</span> <span class="nav-text">用户</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#显示普通账户和系统用户"><span class="nav-number">4.1.</span> <span class="nav-text">显示普通账户和系统用户</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#启动禁用账户"><span class="nav-number">4.2.</span> <span class="nav-text">启动禁用账户</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#userdel"><span class="nav-number">4.3.</span> <span class="nav-text">userdel</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#添加管理员账户"><span class="nav-number">4.4.</span> <span class="nav-text">添加管理员账户</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SSH"><span class="nav-number">5.</span> <span class="nav-text">SSH</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#免密钥登录"><span class="nav-number">5.1.</span> <span class="nav-text">免密钥登录</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#为Root用户开启SSH登录"><span class="nav-number">5.2.</span> <span class="nav-text">为Root用户开启SSH登录</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ssh-keygen命令"><span class="nav-number">5.3.</span> <span class="nav-text">ssh-keygen命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ssh连接远程主机执行脚本的环境变量问题"><span class="nav-number">5.4.</span> <span class="nav-text">ssh连接远程主机执行脚本的环境变量问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SSH连接反应慢的分析解决"><span class="nav-number">5.5.</span> <span class="nav-text">SSH连接反应慢的分析解决</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#进程相关"><span class="nav-number">6.</span> <span class="nav-text">进程相关</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#查看指定进程详细信息"><span class="nav-number">6.1.</span> <span class="nav-text">查看指定进程详细信息</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查看指定进程详细信息的最后一行"><span class="nav-number">6.2.</span> <span class="nav-text">查看指定进程详细信息的最后一行</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#top"><span class="nav-number">6.3.</span> <span class="nav-text">top</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#开机自启动进程"><span class="nav-number">6.4.</span> <span class="nav-text">开机自启动进程</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Vim"><span class="nav-number">7.</span> <span class="nav-text">Vim</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Vim命令合集-http-www-cnblogs-com-softwaretesting-archive-2011-07-12-2104435-html"><span class="nav-number">7.1.</span> <span class="nav-text">[Vim命令合集]http://www.cnblogs.com/softwaretesting/archive/2011/07/12/2104435.html)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Tab键不能自动补全问题"><span class="nav-number">7.2.</span> <span class="nav-text">Tab键不能自动补全问题</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sed"><span class="nav-number">8.</span> <span class="nav-text">sed</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#http-www-cnblogs-com-dong008259-archive-2011-12-07-2279897-html"><span class="nav-number">8.1.</span> <span class="nav-text">http://www.cnblogs.com/dong008259/archive/2011/12/07/2279897.html</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#http-www-frostsky-com-2014-01-linux-sed-command"><span class="nav-number">8.2.</span> <span class="nav-text">http://www.frostsky.com/2014/01/linux-sed-command/</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#在匹配行插入某个文件的内容"><span class="nav-number">8.3.</span> <span class="nav-text">在匹配行插入某个文件的内容</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#stdin-stdout-stderr"><span class="nav-number">9.</span> <span class="nav-text">stdin/stdout/stderr</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Shell标准输出、标准错误-gt-dev-null-2-gt-amp-1"><span class="nav-number">9.1.</span> <span class="nav-text">Shell标准输出、标准错误 >/dev/null 2>&1</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#积累命令"><span class="nav-number">10.</span> <span class="nav-text">积累命令</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#用管道命令移动指定文件-find-name-quot-cpp-quot-xargs-i-mv"><span class="nav-number">10.1.</span> <span class="nav-text">用管道命令移动指定文件 find . -name "*.cpp" | xargs -i mv {} ./</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#dirname-0"><span class="nav-number">10.2.</span> <span class="nav-text">`dirname $0`</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#批量重命名文件"><span class="nav-number">10.3.</span> <span class="nav-text">批量重命名文件)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pushd和popd"><span class="nav-number">10.4.</span> <span class="nav-text">pushd和popd</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">linyemin</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

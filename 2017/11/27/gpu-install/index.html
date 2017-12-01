@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="gpu," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="下载各个安装包">
+<meta name="keywords" content="gpu">
+<meta property="og:type" content="article">
+<meta property="og:title" content="GPU集群环境一键式部署">
+<meta property="og:url" content="http://yoursite.com/2017/11/27/gpu-install/index.html">
+<meta property="og:site_name" content="林烨敏的博客">
+<meta property="og:description" content="下载各个安装包">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-11-30T12:01:00.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="GPU集群环境一键式部署">
+<meta name="twitter:description" content="下载各个安装包">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/11/27/gpu-install/"/>
+
+
+
+
+
+  <title>GPU集群环境一键式部署 | 林烨敏的博客</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">林烨敏的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/11/27/gpu-install/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="linyemin">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="林烨敏的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">GPU集群环境一键式部署</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-27T23:30:00+08:00">
+                2017-11-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/linux/" itemprop="url" rel="index">
+                    <span itemprop="name">linux</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>下载各个安装包</p>
+<a id="more"></a>
+<ul>
+<li><a href="http://www.nvidia.com/Download/Find.aspx?lang=cn" target="_blank" rel="noopener">下载特定NVIDIA驱动</a></li>
+<li><a href="https://github.com/NVIDIA/nvidia-docker/releases" target="_blank" rel="noopener">下载Nvidia-docker</a></li>
+<li><a href="https://github.com/docker/compose/releases" target="_blank" rel="noopener">下载Docker-Compose</a></li>
+<li><a href="http://ch.mellanox.com/page/products_dyn?product_family=26&amp;mtag=linux_sw_drivers" target="_blank" rel="noopener">下载MLNX_OFED</a></li>
+</ul>
+<h2 id="安装GPU驱动"><a href="#安装GPU驱动" class="headerlink" title="安装GPU驱动"></a>安装GPU驱动</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">svn export svn://10.42.10.xx/gpu/install/nvidia-diag-driver-local-repo-ubuntu1404-384.81_1.0-1_amd64.deb --username username --password passwd --no-auth-cache</span><br><span class="line">dpkg -i nvidia-diag-driver-local-repo-ubuntu1404-384.81_1.0-1_amd64.deb</span><br><span class="line">apt-key add /var/nvidia-diag-driver-local-repo-384.81/7fa2af80.pub</span><br><span class="line">apt-get update -qq</span><br><span class="line">apt-get install -y -qq cuda-drivers</span><br><span class="line">nvidia-smi</span><br><span class="line">rm nvidia-diag-driver-local-repo-ubuntu1404-384.81_1.0-1_amd64.deb</span><br></pre></td></tr></table></figure>
+<p>需重启</p>
+<h2 id="安装Docker、Docker-Compose、Nvidia-Docker"><a href="#安装Docker、Docker-Compose、Nvidia-Docker" class="headerlink" title="安装Docker、Docker-Compose、Nvidia-Docker"></a>安装Docker、Docker-Compose、Nvidia-Docker</h2><p>公网安装见<a href="http://liqiang311.com/docker-install/" target="_blank" rel="noopener">安装Docker、Docker-Compose</a></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">wget -qO- http://gitlab.zte.com.cn/mirrors/tunasync/raw/zte/import-docker-pgp-key.sh | sudo sh</span><br><span class="line">echo "deb http://mirrors.zte.com.cn/docker/apt/repo ubuntu-trusty main" | sudo tee /etc/apt/sources.list.d/docker.list</span><br><span class="line">apt-get remove lxc-docker*</span><br><span class="line">apt-get update -qq</span><br><span class="line">apt-get install -y -qq docker-engine</span><br><span class="line">docker --version</span><br><span class="line"></span><br><span class="line">svn export svn://10.42.10.xx/gpu/install/docker-compose-Linux-x86_64 --username username --password passwd --no-auth-cache</span><br><span class="line">mv docker-compose-Linux-x86_64 /usr/local/bin/docker-compose</span><br><span class="line">chmod +x /usr/local/bin/docker-compose</span><br><span class="line">docker-compose --version</span><br><span class="line"></span><br><span class="line">svn export svn://10.42.10.xx/gpu/install/nvidia-docker_1.0.1-1_amd64.deb --username username --password passwd --no-auth-cache</span><br><span class="line">dpkg -i nvidia-docker_1.0.1-1_amd64.deb</span><br><span class="line">rm nvidia-docker_1.0.1-1_amd64.deb</span><br><span class="line">nvidia-docker-plugin -v</span><br></pre></td></tr></table></figure>
+<h2 id="安装ib驱动"><a href="#安装ib驱动" class="headerlink" title="安装ib驱动"></a>安装ib驱动</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">svn export svn://10.42.10.xx/gpu/install/MLNX_OFED_LINUX-4.2-1.0.0.0-ubuntu14.04-x86_64.tgz --username username --password passwd --no-auth-cache</span><br><span class="line">tar zxvf MLNX_OFED_LINUX-4.2-1.0.0.0-ubuntu14.04-x86_64.tgz</span><br><span class="line">rm MLNX_OFED_LINUX-4.2-1.0.0.0-ubuntu14.04-x86_64.tgz</span><br><span class="line">apt-get update -qq &amp;&amp; apt-get install -y -qq perl dpkg autotools-dev autoconf libtool automake1.10 automake m4 dkms debhelper tcl tcl8.4 chrpath swig graphviz tcl-dev tcl8.4-dev tk-dev tk8.4-dev bison flex dpatch zlib1g-dev curl libcurl4-gnutls-dev python-libxml2 libvirt-bin libvirt0 libnl-dev libglib2.0-dev libgfortran3 automake m4 pkg-config libnuma-dev libnuma1 logrotate ethtool lsof gfortran quilt</span><br><span class="line">./MLNX_OFED_LINUX-4.2-1.0.0.0-ubuntu14.04-x86_64/mlnxofedinstall --force</span><br><span class="line">rm -rf MLNX_OFED_LINUX-4.2-1.0.0.0-ubuntu14.04-x86_64</span><br><span class="line">/etc/init.d/openibd restart</span><br><span class="line">/etc/init.d/opensmd start</span><br></pre></td></tr></table></figure>
+<h2 id="配置Zabbix-Agent"><a href="#配置Zabbix-Agent" class="headerlink" title="配置Zabbix-Agent"></a>配置Zabbix-Agent</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">apt-get update -qq</span><br><span class="line">apt-get install -y -qq zabbix-agent lm-sensors</span><br><span class="line">sed -i 's/^Server=127.0.0.1/Server=10.42.10.xx/g' /etc/zabbix/zabbix_agentd.conf</span><br><span class="line">sed -i 's/^ServerActive=127.0.0.1/ServerActive=10.42.10.xx:10051/g' /etc/zabbix/zabbix_agentd.conf</span><br><span class="line">echo "UserParameter=gpu0.temp, nvidia-smi -q -g 0 2&gt;&amp;1|grep -i "gpu current temp"|awk '&#123;print $5&#125;'| sed s/\%//g" &gt;&gt; /etc/zabbix/zabbix_agentd.conf</span><br><span class="line">echo "UserParameter=cpu0.temp, sensors coretemp-isa-0000|grep Physical|awk '&#123;print $4&#125;'|cut -d "." -f1" &gt;&gt; /etc/zabbix/zabbix_agentd.conf</span><br><span class="line">echo "UserParameter=cpu1.temp, sensors coretemp-isa-0001|grep Physical|awk '&#123;print $4&#125;'|cut -d "." -f1" &gt;&gt; /etc/zabbix/zabbix_agentd.conf</span><br><span class="line">service zabbix-agent restart</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/gpu/" rel="tag"># gpu</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/11/23/multinet/" rel="next" title="MultiNet：自主驾驶中的实时联合语义推理">
+                <i class="fa fa-chevron-left"></i> MultiNet：自主驾驶中的实时联合语义推理
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/11/27/gpu-qa/" rel="prev" title="GPU集群环境一键式部署">
+                GPU集群环境一键式部署 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">linyemin</p>
+              <p class="site-description motion-element" itemprop="description">海阔凭鱼跃，天高任鸟飞</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">69</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">14</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">45</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#安装GPU驱动"><span class="nav-number">1.</span> <span class="nav-text">安装GPU驱动</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装Docker、Docker-Compose、Nvidia-Docker"><span class="nav-number">2.</span> <span class="nav-text">安装Docker、Docker-Compose、Nvidia-Docker</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装ib驱动"><span class="nav-number">3.</span> <span class="nav-text">安装ib驱动</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置Zabbix-Agent"><span class="nav-number">4.</span> <span class="nav-text">配置Zabbix-Agent</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">linyemin</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

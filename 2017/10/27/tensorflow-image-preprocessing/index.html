@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="tensorflow," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="图像代码文档tensorflow.org">
+<meta name="keywords" content="tensorflow">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TensorFlow 图像预处理常用手段">
+<meta property="og:url" content="http://yoursite.com/2017/10/27/tensorflow-image-preprocessing/index.html">
+<meta property="og:site_name" content="林烨敏的博客">
+<meta property="og:description" content="图像代码文档tensorflow.org">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-11-30T12:01:00.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="TensorFlow 图像预处理常用手段">
+<meta name="twitter:description" content="图像代码文档tensorflow.org">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/10/27/tensorflow-image-preprocessing/"/>
+
+
+
+
+
+  <title>TensorFlow 图像预处理常用手段 | 林烨敏的博客</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">林烨敏的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/27/tensorflow-image-preprocessing/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="linyemin">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="林烨敏的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">TensorFlow 图像预处理常用手段</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-27T17:00:00+08:00">
+                2017-10-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/tensorflow/" itemprop="url" rel="index">
+                    <span itemprop="name">tensorflow</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>图像代码文档<a href="https://www.tensorflow.org/api_guides/python/image#Working_with_Bounding_Boxes" target="_blank" rel="noopener">tensorflow.org</a><br><a id="more"></a></p>
+<p>图像地址<a href="http://outz1n6zr.bkt.clouddn.com/127127207ede00bc9599d754cdf78be0.jpg" target="_blank" rel="noopener">qiniu</a></p>
+<h2 id="单一处理"><a href="#单一处理" class="headerlink" title="单一处理"></a>单一处理</h2><h3 id="编解码"><a href="#编解码" class="headerlink" title="编解码"></a>编解码</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"></span><br><span class="line"><span class="comment"># 读取图片</span></span><br><span class="line">image_raw_data = tf.gfile.FastGFile(<span class="string">"cat.jpg"</span>, <span class="string">'rb'</span>).read()</span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">        <span class="comment"># 对于PNG图片，调用decode_png</span></span><br><span class="line">    img_data = tf.image.decode_jpeg(image_raw_data)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 输出解码之后的三维矩阵。</span></span><br><span class="line">    print(img_data.eval())</span><br><span class="line"></span><br><span class="line">    plt.imshow(img_data.eval())</span><br><span class="line">    plt.show()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 重新编码</span></span><br><span class="line">    <span class="comment"># 将数据转化为实数，以方便下面的示例程序对图像进行处理</span></span><br><span class="line">    img_data = tf.image.convert_image_dtype(img_data, dtype=tf.uint8)</span><br><span class="line"></span><br><span class="line">    encodeed_image = tf.image.encode_png(img_data)</span><br><span class="line">    <span class="keyword">with</span> tf.gfile.GFile(<span class="string">"cat.png"</span>, <span class="string">"wb"</span>) <span class="keyword">as</span> f:</span><br><span class="line">        f.write(encodeed_image.eval())</span><br></pre></td></tr></table></figure>
+<h3 id="大小调整"><a href="#大小调整" class="headerlink" title="大小调整"></a>大小调整</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"></span><br><span class="line"><span class="comment"># 读取图片</span></span><br><span class="line">image_raw_data = tf.gfile.FastGFile(<span class="string">"cat.jpg"</span>, <span class="string">'rb'</span>).read()</span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">    <span class="comment"># 对于PNG图片，调用decode_png</span></span><br><span class="line">    img_data = tf.image.decode_jpeg(image_raw_data)</span><br><span class="line">    img_data = tf.image.convert_image_dtype(img_data, dtype=tf.float32)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 直接缩放成任意大小</span></span><br><span class="line">    resized = tf.image.resize_images(img_data, [<span class="number">300</span>, <span class="number">300</span>], method=<span class="number">0</span>)</span><br><span class="line">    plt.imshow(resized.eval())</span><br><span class="line">    plt.show()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 使用裁剪和填充</span></span><br><span class="line">    croped = tf.image.resize_image_with_crop_or_pad(img_data, <span class="number">300</span>, <span class="number">300</span>)</span><br><span class="line">    plt.imshow(croped.eval())</span><br><span class="line">    plt.show()</span><br><span class="line"></span><br><span class="line">    padded = tf.image.resize_image_with_crop_or_pad(img_data, <span class="number">3000</span>, <span class="number">3000</span>)</span><br><span class="line">    plt.imshow(padded.eval())</span><br><span class="line">    plt.show()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 通过比例裁剪</span></span><br><span class="line">    central_cropped = tf.image.central_crop(img_data, <span class="number">0.5</span>)</span><br><span class="line">    plt.imshow(central_cropped.eval())</span><br><span class="line">    plt.show()</span><br></pre></td></tr></table></figure>
+<p>附<code>resize_images</code>中method的取值</p>
+<ul>
+<li>0: 双线性插值法</li>
+<li>1: 最近邻法</li>
+<li>2: 双三次插值法</li>
+<li>3: 面积插值法</li>
+</ul>
+<h3 id="图像翻转"><a href="#图像翻转" class="headerlink" title="图像翻转"></a>图像翻转</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"></span><br><span class="line"><span class="comment"># 读取图片</span></span><br><span class="line">image_raw_data = tf.gfile.FastGFile(<span class="string">"cat.jpg"</span>, <span class="string">'rb'</span>).read()</span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">    <span class="comment"># 对于PNG图片，调用decode_png</span></span><br><span class="line">    img_data = tf.image.decode_jpeg(image_raw_data)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 上下翻转</span></span><br><span class="line">    flipped = tf.image.flip_up_down(img_data)</span><br><span class="line">    plt.imshow(flipped.eval())</span><br><span class="line">    plt.show()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 左右翻转</span></span><br><span class="line">    flipped = tf.image.flip_left_right(img_data)</span><br><span class="line">    plt.imshow(flipped.eval())</span><br><span class="line">    plt.show()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 左右翻转</span></span><br><span class="line">    transposed = tf.image.transpose_image(img_data)</span><br><span class="line">    plt.imshow(transposed.eval())</span><br><span class="line">    plt.show()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 概率上下翻转</span></span><br><span class="line">    flipped = tf.image.random_flip_up_down(img_data)</span><br><span class="line">    plt.imshow(flipped.eval())</span><br><span class="line">    plt.show()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 概率左右翻转</span></span><br><span class="line">    flipped = tf.image.random_flip_left_right(img_data)</span><br><span class="line">    plt.imshow(flipped.eval())</span><br><span class="line">    plt.show()</span><br></pre></td></tr></table></figure>
+<h3 id="图像色彩调整"><a href="#图像色彩调整" class="headerlink" title="图像色彩调整"></a>图像色彩调整</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"></span><br><span class="line"><span class="comment"># 读取图片</span></span><br><span class="line">image_raw_data = tf.gfile.FastGFile(<span class="string">"cat.jpg"</span>, <span class="string">'rb'</span>).read()</span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">    <span class="comment"># 对于PNG图片，调用decode_png</span></span><br><span class="line">    img_data = tf.image.decode_jpeg(image_raw_data)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 亮度调整 -0.5</span></span><br><span class="line">    adjusted = tf.image.adjust_brightness(img_data, <span class="number">-0.5</span>)</span><br><span class="line">    plt.imshow(adjusted.eval())</span><br><span class="line">    plt.show()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 亮度调整 +0.5</span></span><br><span class="line">    adjusted = tf.image.adjust_brightness(img_data, <span class="number">0.5</span>)</span><br><span class="line">    plt.imshow(adjusted.eval())</span><br><span class="line">    plt.show()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 亮度随机调整</span></span><br><span class="line">    adjusted = tf.image.random_brightness(img_data, <span class="number">0.5</span>)</span><br><span class="line">    plt.imshow(adjusted.eval())</span><br><span class="line">    plt.show()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 对比度调整 -5</span></span><br><span class="line">    adjusted = tf.image.adjust_contrast(img_data, <span class="number">-5</span>)</span><br><span class="line">    plt.imshow(adjusted.eval())</span><br><span class="line">    plt.show()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 对比度调整 +5</span></span><br><span class="line">    adjusted = tf.image.adjust_contrast(img_data, <span class="number">5</span>)</span><br><span class="line">    plt.imshow(adjusted.eval())</span><br><span class="line">    plt.show()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 对比度随机调整</span></span><br><span class="line">    adjusted = tf.image.random_contrast(img_data, <span class="number">1</span>, <span class="number">5</span>)</span><br><span class="line">    plt.imshow(adjusted.eval())</span><br><span class="line">    plt.show()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 色相调整 0.1</span></span><br><span class="line">    adjusted = tf.image.adjust_hue(img_data, <span class="number">0.1</span>)</span><br><span class="line">    plt.imshow(adjusted.eval())</span><br><span class="line">    plt.show()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 色相调整 0.5</span></span><br><span class="line">    adjusted = tf.image.adjust_hue(img_data, <span class="number">0.5</span>)</span><br><span class="line">    plt.imshow(adjusted.eval())</span><br><span class="line">    plt.show()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 色相随机调整</span></span><br><span class="line">    adjusted = tf.image.random_hue(img_data, <span class="number">0.5</span>)</span><br><span class="line">    plt.imshow(adjusted.eval())</span><br><span class="line">    plt.show()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 饱和度调整 -5</span></span><br><span class="line">    adjusted = tf.image.adjust_saturation(img_data, <span class="number">-5</span>)</span><br><span class="line">    plt.imshow(adjusted.eval())</span><br><span class="line">    plt.show()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 饱和度调整 +5</span></span><br><span class="line">    adjusted = tf.image.adjust_saturation(img_data, <span class="number">5</span>)</span><br><span class="line">    plt.imshow(adjusted.eval())</span><br><span class="line">    plt.show()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 饱和度随机调整</span></span><br><span class="line">    adjusted = tf.image.random_saturation(img_data, <span class="number">1</span>, <span class="number">5</span>)</span><br><span class="line">    plt.imshow(adjusted.eval())</span><br><span class="line">    plt.show()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 均值为0，方差为1</span></span><br><span class="line">    adjusted = tf.image.per_image_standardization(img_data)</span><br><span class="line">    plt.imshow(adjusted.eval())</span><br><span class="line">    plt.show()</span><br></pre></td></tr></table></figure>
+<h3 id="处理标注框"><a href="#处理标注框" class="headerlink" title="处理标注框"></a>处理标注框</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"></span><br><span class="line"><span class="comment"># 读取图片</span></span><br><span class="line">image_raw_data = tf.gfile.FastGFile(<span class="string">"cat.jpg"</span>, <span class="string">'rb'</span>).read()</span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">    <span class="comment"># 对于PNG图片，调用decode_png</span></span><br><span class="line">    img_data = tf.image.decode_jpeg(image_raw_data)</span><br><span class="line"></span><br><span class="line">    batched = tf.expand_dims(</span><br><span class="line">        tf.image.convert_image_dtype(img_data, dtype=tf.float32), <span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># [y_min, x_min, y_max, x_max]</span></span><br><span class="line">    boxes = tf.constant([[[<span class="number">0.05</span>, <span class="number">0.05</span>, <span class="number">0.9</span>, <span class="number">0.7</span>], [<span class="number">0.35</span>, <span class="number">0.47</span>, <span class="number">0.5</span>, <span class="number">0.56</span>]]])</span><br><span class="line"></span><br><span class="line">    result = tf.image.draw_bounding_boxes(batched, boxes)</span><br><span class="line">    result = tf.reshape(result, tf.shape(img_data))</span><br><span class="line">    plt.imshow(result.eval())</span><br><span class="line">    plt.show()</span><br></pre></td></tr></table></figure>
+<p>随机选择标注框并进行裁剪</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"></span><br><span class="line"><span class="comment"># 读取图片</span></span><br><span class="line">image_raw_data = tf.gfile.FastGFile(<span class="string">"cat.jpg"</span>, <span class="string">'rb'</span>).read()</span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">    <span class="comment"># 对于PNG图片，调用decode_png</span></span><br><span class="line">    img_data = tf.image.decode_jpeg(image_raw_data)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># [y_min, x_min, y_max, x_max]</span></span><br><span class="line">    boxes = tf.constant([[[<span class="number">0.05</span>, <span class="number">0.05</span>, <span class="number">0.9</span>, <span class="number">0.7</span>], [<span class="number">0.35</span>, <span class="number">0.47</span>, <span class="number">0.5</span>, <span class="number">0.56</span>]]])</span><br><span class="line"></span><br><span class="line">    begin, size, bbox_for_draw = tf.image.sample_distorted_bounding_box(</span><br><span class="line">        tf.shape(img_data), bounding_boxes=boxes)</span><br><span class="line"></span><br><span class="line">    print(bbox_for_draw.eval())</span><br><span class="line"></span><br><span class="line">    distorted_image = tf.slice(img_data, begin, size)</span><br><span class="line">    plt.imshow(distorted_image.eval())</span><br><span class="line">    plt.show()</span><br></pre></td></tr></table></figure>
+<h2 id="实际训练中的随机处理"><a href="#实际训练中的随机处理" class="headerlink" title="实际训练中的随机处理"></a>实际训练中的随机处理</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 随机调整图片的色彩，定义两种顺序</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">distort_color</span><span class="params">(image, color_ordering=<span class="number">0</span>)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> color_ordering == <span class="number">0</span>:</span><br><span class="line">        image = tf.image.random_brightness(image, max_delta=<span class="number">32.</span> / <span class="number">255.</span>)</span><br><span class="line">        image = tf.image.random_saturation(image, lower=<span class="number">0.5</span>, upper=<span class="number">1.5</span>)</span><br><span class="line">        image = tf.image.random_hue(image, max_delta=<span class="number">0.2</span>)</span><br><span class="line">        image = tf.image.random_contrast(image, lower=<span class="number">0.5</span>, upper=<span class="number">1.5</span>)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        image = tf.image.random_saturation(image, lower=<span class="number">0.5</span>, upper=<span class="number">1.5</span>)</span><br><span class="line">        image = tf.image.random_brightness(image, max_delta=<span class="number">32.</span> / <span class="number">255.</span>)</span><br><span class="line">        image = tf.image.random_contrast(image, lower=<span class="number">0.5</span>, upper=<span class="number">1.5</span>)</span><br><span class="line">        image = tf.image.random_hue(image, max_delta=<span class="number">0.2</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> tf.clip_by_value(image, <span class="number">0.0</span>, <span class="number">1.0</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 对图片进行预处理，将图片转化成神经网络的输入层数据</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">preprocess_for_train</span><span class="params">(image, height, width, bbox)</span>:</span></span><br><span class="line">    <span class="comment"># 查看是否存在标注框。</span></span><br><span class="line">    <span class="keyword">if</span> bbox <span class="keyword">is</span> <span class="keyword">None</span>:</span><br><span class="line">        bbox = tf.constant([<span class="number">0.0</span>, <span class="number">0.0</span>, <span class="number">1.0</span>, <span class="number">1.0</span>],</span><br><span class="line">                           dtype=tf.float32, shape=[<span class="number">1</span>, <span class="number">1</span>, <span class="number">4</span>])</span><br><span class="line">    <span class="keyword">if</span> image.dtype != tf.float32:</span><br><span class="line">        image = tf.image.convert_image_dtype(image, dtype=tf.float32)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 随机的截取图片中一个块。</span></span><br><span class="line">    bbox_begin, bbox_size, _ = tf.image.sample_distorted_bounding_box(</span><br><span class="line">        tf.shape(image), bounding_boxes=bbox)</span><br><span class="line">    distorted_image = tf.slice(image, bbox_begin, bbox_size)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 将随机截取的图片调整为神经网络输入层的大小。</span></span><br><span class="line">    distorted_image = tf.image.resize_images(</span><br><span class="line">        distorted_image, [height, width], method=np.random.randint(<span class="number">4</span>))</span><br><span class="line">    distorted_image = tf.image.random_flip_left_right(distorted_image)</span><br><span class="line">    distorted_image = distort_color(distorted_image, np.random.randint(<span class="number">2</span>))</span><br><span class="line">    <span class="keyword">return</span> distorted_image</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 读取图片</span></span><br><span class="line">image_raw_data = tf.gfile.FastGFile(<span class="string">"cat.jpg"</span>, <span class="string">"rb"</span>).read()</span><br><span class="line"><span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">    img_data = tf.image.decode_jpeg(image_raw_data)</span><br><span class="line">    boxes = tf.constant([[[<span class="number">0.05</span>, <span class="number">0.05</span>, <span class="number">0.9</span>, <span class="number">0.7</span>], [<span class="number">0.35</span>, <span class="number">0.47</span>, <span class="number">0.5</span>, <span class="number">0.56</span>]]])</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">9</span>):</span><br><span class="line">        result = preprocess_for_train(img_data, <span class="number">299</span>, <span class="number">299</span>, boxes)</span><br><span class="line">        plt.imshow(result.eval())</span><br><span class="line">        plt.show()</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/tensorflow/" rel="tag"># tensorflow</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/10/26/tensorflow-tfrecord/" rel="next" title="TensorFlow TFRecord格式">
+                <i class="fa fa-chevron-left"></i> TensorFlow TFRecord格式
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/10/30/tensorflow-thread-input/" rel="prev" title="TensorFlow 多线程输入数据处理框架">
+                TensorFlow 多线程输入数据处理框架 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">linyemin</p>
+              <p class="site-description motion-element" itemprop="description">海阔凭鱼跃，天高任鸟飞</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">69</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">14</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">45</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#单一处理"><span class="nav-number">1.</span> <span class="nav-text">单一处理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#编解码"><span class="nav-number">1.1.</span> <span class="nav-text">编解码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#大小调整"><span class="nav-number">1.2.</span> <span class="nav-text">大小调整</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#图像翻转"><span class="nav-number">1.3.</span> <span class="nav-text">图像翻转</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#图像色彩调整"><span class="nav-number">1.4.</span> <span class="nav-text">图像色彩调整</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#处理标注框"><span class="nav-number">1.5.</span> <span class="nav-text">处理标注框</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实际训练中的随机处理"><span class="nav-number">2.</span> <span class="nav-text">实际训练中的随机处理</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">linyemin</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

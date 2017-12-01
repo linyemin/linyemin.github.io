@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="hadoop," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="分布式文件系统">
+<meta name="keywords" content="hadoop">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hadoop相关概念">
+<meta property="og:url" content="http://yoursite.com/2017/09/14/hadoop-concept/index.html">
+<meta property="og:site_name" content="林烨敏的博客">
+<meta property="og:description" content="分布式文件系统">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-11-30T12:01:00.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Hadoop相关概念">
+<meta name="twitter:description" content="分布式文件系统">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/09/14/hadoop-concept/"/>
+
+
+
+
+
+  <title>Hadoop相关概念 | 林烨敏的博客</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">林烨敏的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/14/hadoop-concept/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="linyemin">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="林烨敏的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Hadoop相关概念</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-14T16:01:29+08:00">
+                2017-09-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/大数据/" itemprop="url" rel="index">
+                    <span itemprop="name">大数据</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="分布式文件系统"><a href="#分布式文件系统" class="headerlink" title="分布式文件系统"></a>分布式文件系统</h1><a id="more"></a>
+<p>HDFS，Hadoop Distributed File System</p>
+<p>块默认大小为64MB，设计如此大是为了最小化寻址空间。</p>
+<p><code>% hadoop fsck / -files -blocks</code></p>
+<p>列出文件系统中各个文件由哪些快构成</p>
+<h2 id="namenode和datanode"><a href="#namenode和datanode" class="headerlink" title="namenode和datanode"></a>namenode和datanode</h2><p>namenode为管理者，管理文件系统中的命名空间，维护文件系统树及整棵树内所有的文件和目录。这些信息以2个文件形式永久保存在本地磁盘：命名空间镜像文件、编辑日志文件。namenode也记录每个文件中每个块所在的数据节点信息，但是并不永久保存，因为这些信息会在系统启动时由datanode重建。</p>
+<p>datanode是工作者，它根据需要存储并检索数据块（由客户端或者namenode调度），并且定期向namenode发送它们所存储的块的列表。</p>
+<p>namenode失效将导致文件系统无法使用，为了对namenode进行容错，一种方法是备份那些组成文件系统元数据持久状态的文件，另一种方法是运行一个辅助namenode，这个namenode不是真正的namenode，它是用来定期通过编辑日志合并命名空间镜像，以防止编辑日志过大，它会在namenode失效时启用，但是难免会丢失部分数据。</p>
+<h2 id="联邦HDFS"><a href="#联邦HDFS" class="headerlink" title="联邦HDFS"></a>联邦HDFS</h2><p>namenode在内存中保存文件系统中每个文件和每个数据块的引用关系，这意味着内存会限制集群的扩展，hadoop2.x版本引入联邦HDFS，该系统允许添加namenode实现拓展，其中每个namenode管理文件系统中的一部分，如一个管理/usr，另一个管理/share。</p>
+<p>联邦环境下，每个namenode维护一个命名空间卷，包括命名空间的源数据和在该命名空间下的文件的所有数据块的数据快池。命名空间卷是相互独立的，两两互不通信，一个失效也不会影响另外一个。数据块池不再进行切分，所以集群中的datanode需要注册到每个namenode，并存储来自多个数据块池中的数据块。</p>
+<h2 id="命令行接口"><a href="#命令行接口" class="headerlink" title="命令行接口"></a>命令行接口</h2><p>配置伪分布式时候，属性项fs.default.name设置为hfs://localhost/，意思是使用hdfs作为hadoop的默认文件系统，将在localhost的8020端口上运行namenode。属性项dfs.replication设置为1，hdfs就不会默认将文件系统块复本设置为3，因为我们只有1到2个datanode，无法复制3份，会一直给副本不足的警告。</p>
+<p>% hadoop fs -help</p>
+<p>获取每个命令的详细帮助</p>
+<p>从本地系统中复制一个文件到hdfs</p>
+<p>% hadoop fs -copyFromLocal input/docs/quangle.txt hdfs://localhost/user/tom/quangle.txt</p>
+<p>如果主机的默认URI在core-site.xml中设置，则输入</p>
+<p>% hadoop fs -copyFromLocal input/docs/quangle.txt /user/tom/quangle.txt</p>
+<p>使用相对目录也可，默认是home目录</p>
+<p>% hadoop fs -copyFromLocal input/docs/quangle.txt quangle.txt</p>
+<p>再将文件复制回本地系统，检查是否一致，正确结果为相同</p>
+<p>% hadoop fs -copyToLocal quangle.txt quangle.coy.txt</p>
+<p>% md5 input/docs/quangle.txt quangle.copy.txt</p>
+<p>新建一个目录</p>
+<p>% hadoop fs -mkdir books</p>
+<p>查看hdfs文件列表</p>
+<p>% hadoop fs -ls</p>
+<p>输出如下：</p>
+<p>Found 2 items</p>
+<p>drwxr-xr-x  -   tom supergroup  0   2009-04-02  22:41   /user/tom/books</p>
+<p>-rw-r–r–      1   tom supergroup  118 2009-04-02  22:29   /user/tom/quangle.txt</p>
+<table>
+<thead>
+<tr>
+<th>文件模式</th>
+<th>备份数目</th>
+<th>所属用户</th>
+<th>所属组别</th>
+<th>文件大小</th>
+<th>最后修改日期</th>
+<th>最后修改时间</th>
+<th>文件或者目录的队绝对目录</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-rw-r—–</td>
+<td>3</td>
+<td>root</td>
+<td>liqiang</td>
+<td>13546617</td>
+<td>2017-06-19</td>
+<td>10:16</td>
+<td>/user/liqiang/blockinfo.txt</td>
+</tr>
+<tr>
+<td>drwxr-x—</td>
+<td>-</td>
+<td>root</td>
+<td>liqaing</td>
+<td>0</td>
+<td>2017-06-19</td>
+<td>10:30</td>
+<td>/user/liqiang/dir</td>
+</tr>
+</tbody>
+</table>
+<p>依次显示的为文件模式、文件的备份数、文件所属用户、文件所属组别、文件大小、文件最后修改日期、文件最后修改时间、文件或者目录的绝对路径</p>
+<p>文件模式中r为只读权限，w为写入权限，x为执行权限。</p>
+<p>文件备份数中，目录显示为空，因为目录作为元数据保存在namenode中，而非datanode中。</p>
+<p>文件大小以字节为单位，目录为0。</p>
+<h2 id="Hadoop文件系统"><a href="#Hadoop文件系统" class="headerlink" title="Hadoop文件系统"></a>Hadoop文件系统</h2><p>Java抽象类org.apache.hadoop.fs.FileSystem定义了Hadoop中的一个文件系统接口。</p>
+<p>列出本地文件系统根目录下的文件</p>
+<p>% hadoop fs -ls file:///</p>
+<p>HTTP</p>
+<p>通过HTTP访问HDFS由2种方法，一种是直接访问，由namenode内嵌的web服务器（端口50070）提供目录服务，目录以xml或者json格式存储；由datanode内嵌的web服务器（端口50075）以数据流的形式传输。另一种访问方式是通过HDFS代理，客户端通常使用DistributedFileSystemAPI来访问HDFS。</p>
+<p>C</p>
+<p>libhdfs库，在发行包的Libhdfs/docs/api目录下寻找CAPI的相关文档</p>
+<p>FUSE</p>
+<p>用户空间文件系统（Filesystem in Userspace），实现了一种将现有的文件系统整合为一个Unix文件系统，并可以进行挂载，然后利用Unix工具进行交互。</p>
+<h1 id="FileSystem类"><a href="#FileSystem类" class="headerlink" title="FileSystem类"></a>FileSystem类</h1><p>通过URL读取数据</p>
+<p>从hadoop文件系统中读取文件，使用java.net.URL打开对象流</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">InputStream in = <span class="keyword">null</span>;</span><br><span class="line"><span class="keyword">try</span>&#123;</span><br><span class="line">    in = <span class="keyword">new</span> URL(<span class="string">"hdfs://host/path"</span>).openStream();</span><br><span class="line">    <span class="comment">// process in</span></span><br><span class="line">&#125;<span class="keyword">finally</span>&#123;</span><br><span class="line">    IOUtils.closeStream(in);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在此之前，需要实例化一个对象。</p>
+<p>通过URLStreamHandler实例以标准输出方式显示Hadoop文件系统的文件</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">URLCat</span> </span>&#123;</span><br><span class="line"><span class="keyword">static</span> &#123;</span><br><span class="line">URL.setURLStreamHandlerFactory(<span class="keyword">new</span> FsUrlStreamHandlerFactory());</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line">InputStream in = <span class="keyword">null</span>;</span><br><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">in = <span class="keyword">new</span> URL(args[<span class="number">0</span>]).openStream();</span><br><span class="line">IOUtils.copyBytes(in, System.out, <span class="number">4096</span>, <span class="keyword">false</span>);</span><br><span class="line">&#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">IOUtils.closeStream(in);</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>运行<br>% hadoop URLCat hdfs://localhost/user/tom/quangle.txt</p>
+<p>注：<br>copyBytes函数参数（输入流，输出流，复制的缓冲区大小，复制结束后是否关闭数据流）</p>
+<p>本例中finally中结束in，故copyBytes函数最后一个参数为fasle</p>
+<p>通过FileSystem API读取数据</p>
+<p>第一个方法中需要实例化，若其他程序实例化过，则无法再次实例化，程序会运行失败。</p>
+<h2 id="Hadoop"><a href="#Hadoop" class="headerlink" title="Hadoop"></a>Hadoop</h2><p>查看Yarn Web页面 <a href="http://ip:50070/" target="_blank" rel="noopener">http://ip:50070/</a></p>
+<p>查看Hadoop总览页面 <a href="http://ip:8088" target="_blank" rel="noopener">http://ip:8088</a>]</p>
+<p>列出所有文件由哪些块组成，由于信息较多，将重定向到文件中去 <code>hadoop fsck / -files -blocks &gt;&gt; blockinfo.txt</code></p>
+<p>复制文件到hdfs中<code>hadoop fs -copyFromLocal blockinfo.txt /user/liqiang/blockinfo.txt</code></p>
+<p>复制文件到本地<code>hadoop fs -copyToLocal /user/liqiang/blockinfo.txt blockinfo.txt</code></p>
+<h2 id="Hive"><a href="#Hive" class="headerlink" title="Hive"></a>Hive</h2><p>给当前用户提升权限<code>grant all on database test to user root;</code></p>
+<p>切换数据库<code>use db_name</code></p>
+<p>创建表</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">create table records(year STRING, temperature INT , quality INT)</span><br><span class="line">row format delimited</span><br><span class="line">  fields terminated by &apos;\t&apos;;</span><br></pre></td></tr></table></figure>
+<p>导入数据</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">load data local inpath &apos;/root/lq/ch02/data/1901.gz&apos;</span><br><span class="line">overwrite into table records;</span><br></pre></td></tr></table></figure>
+<h2 id="Spark"><a href="#Spark" class="headerlink" title="Spark"></a>Spark</h2><p><a href="http://www.cnblogs.com/yangzhang-home/p/6056133.html" target="_blank" rel="noopener">link</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">pyspark</span><br><span class="line">textFile=sc.textFile(&quot;file:///opt/ZDH/parcels/lib/spark/README.md&quot;)</span><br><span class="line">textFile.count()</span><br><span class="line">textFile.first()</span><br><span class="line">linesWithSpark = textFile.filter(lambda line: &quot;Spark&quot; in line)</span><br><span class="line">textFile.filter(lambda line: &quot;Spark&quot; in line).count()  # 有多好行含有“Spark”这一字符串</span><br><span class="line">textFile.map(lambda line: len(line.split())).reduce(lambda a, b: a if (a&gt;b) else b)</span><br><span class="line">wordCounts = textFile.flatMap(lambda line: line.split()).map(lambda word: (word, 1)).reduceByKey(lambda a, b: a+b)</span><br><span class="line">wordCounts.collect()</span><br><span class="line">linesWithSpark.cache()</span><br><span class="line">linesWithSpark.count()</span><br><span class="line">linesWithSpark.count()</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/hadoop/" rel="tag"># hadoop</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/09/14/hadoop-book/" rel="next" title="Hadoop权威指南学习">
+                <i class="fa fa-chevron-left"></i> Hadoop权威指南学习
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/09/14/hadoop-install/" rel="prev" title="虚拟机Hadoop集群安装">
+                虚拟机Hadoop集群安装 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">linyemin</p>
+              <p class="site-description motion-element" itemprop="description">海阔凭鱼跃，天高任鸟飞</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">69</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">14</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">45</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#分布式文件系统"><span class="nav-number">1.</span> <span class="nav-text">分布式文件系统</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#namenode和datanode"><span class="nav-number">1.1.</span> <span class="nav-text">namenode和datanode</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#联邦HDFS"><span class="nav-number">1.2.</span> <span class="nav-text">联邦HDFS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#命令行接口"><span class="nav-number">1.3.</span> <span class="nav-text">命令行接口</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Hadoop文件系统"><span class="nav-number">1.4.</span> <span class="nav-text">Hadoop文件系统</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#FileSystem类"><span class="nav-number">2.</span> <span class="nav-text">FileSystem类</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Hadoop"><span class="nav-number">2.1.</span> <span class="nav-text">Hadoop</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Hive"><span class="nav-number">2.2.</span> <span class="nav-text">Hive</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Spark"><span class="nav-number">2.3.</span> <span class="nav-text">Spark</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">linyemin</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

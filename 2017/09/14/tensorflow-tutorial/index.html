@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="tensorflow," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="参照Tensorflow官网教程，边学边译。内容如下：">
+<meta name="keywords" content="tensorflow">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TensorFlow官网教学（中文翻译）">
+<meta property="og:url" content="http://yoursite.com/2017/09/14/tensorflow-tutorial/index.html">
+<meta property="og:site_name" content="林烨敏的博客">
+<meta property="og:description" content="参照Tensorflow官网教程，边学边译。内容如下：">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-11-30T12:01:00.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="TensorFlow官网教学（中文翻译）">
+<meta name="twitter:description" content="参照Tensorflow官网教程，边学边译。内容如下：">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/09/14/tensorflow-tutorial/"/>
+
+
+
+
+
+  <title>TensorFlow官网教学（中文翻译） | 林烨敏的博客</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">林烨敏的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/14/tensorflow-tutorial/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="linyemin">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="林烨敏的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">TensorFlow官网教学（中文翻译）</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-14T15:59:55+08:00">
+                2017-09-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/tensorflow/" itemprop="url" rel="index">
+                    <span itemprop="name">tensorflow</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>参照Tensorflow官网教程，边学边译。内容如下：</p>
+<a id="more"></a>
+<ul>
+<li><h1 id="Get-Started"><a href="#Get-Started" class="headerlink" title="Get Started"></a>Get Started</h1><ul>
+<li><h2 id="Getting-Started"><a href="#Getting-Started" class="headerlink" title="Getting Started"></a><a href="https://github.com/liqiang311/tensorflow/blob/master/tensorflow/docs_src/get_started/index.md" target="_blank" rel="noopener">Getting Started</a></h2></li>
+<li><h2 id="Getting-Started-With-TensorFLow"><a href="#Getting-Started-With-TensorFLow" class="headerlink" title="Getting Started With TensorFLow"></a><a href="https://github.com/liqiang311/tensorflow/blob/master/tensorflow/docs_src/get_started/get_started.md" target="_blank" rel="noopener">Getting Started With TensorFLow</a></h2></li>
+<li><h2 id="MNIST-For-ML-Beginners"><a href="#MNIST-For-ML-Beginners" class="headerlink" title="MNIST For ML Beginners"></a><a href="https://github.com/liqiang311/tensorflow/blob/master/tensorflow/docs_src/get_started/mnist/beginners.md" target="_blank" rel="noopener">MNIST For ML Beginners</a></h2></li>
+<li><h2 id="Deep-MNIST-for-Experts"><a href="#Deep-MNIST-for-Experts" class="headerlink" title="Deep MNIST for Experts"></a><a href="https://github.com/liqiang311/tensorflow/blob/master/tensorflow/docs_src/get_started/mnist/pros.md" target="_blank" rel="noopener">Deep MNIST for Experts</a></h2></li>
+<li><h2 id="TensorFLow-Mechanics-101"><a href="#TensorFLow-Mechanics-101" class="headerlink" title="TensorFLow Mechanics 101"></a><a href="https://github.com/liqiang311/tensorflow/blob/master/tensorflow/docs_src/get_started/mnist/mechanics.md" target="_blank" rel="noopener">TensorFLow Mechanics 101</a></h2></li>
+<li><h2 id="tf-estimator-Quickstart"><a href="#tf-estimator-Quickstart" class="headerlink" title="tf.estimator Quickstart"></a><a href="https://github.com/liqiang311/tensorflow/blob/master/tensorflow/docs_src/get_started/estimator.md" target="_blank" rel="noopener">tf.estimator Quickstart</a></h2></li>
+<li><h2 id="Building-Input-Functions-with-tf-estimator"><a href="#Building-Input-Functions-with-tf-estimator" class="headerlink" title="Building Input Functions with tf.estimator"></a><a href="https://github.com/liqiang311/tensorflow/blob/master/tensorflow/docs_src/get_started/input_fn.md" target="_blank" rel="noopener">Building Input Functions with tf.estimator</a></h2></li>
+<li><h2 id="TensorBoard-Visualizing-Learning"><a href="#TensorBoard-Visualizing-Learning" class="headerlink" title="TensorBoard: Visualizing Learning"></a><a href="https://github.com/liqiang311/tensorflow/blob/master/tensorflow/docs_src/get_started/summaries_and_tensorboard.md" target="_blank" rel="noopener">TensorBoard: Visualizing Learning</a></h2></li>
+<li><h2 id="TensorBoard-Graph-Visualization"><a href="#TensorBoard-Graph-Visualization" class="headerlink" title="TensorBoard: Graph Visualization"></a><a href="https://github.com/liqiang311/tensorflow/blob/master/tensorflow/docs_src/get_started/graph_viz.md" target="_blank" rel="noopener">TensorBoard: Graph Visualization</a></h2></li>
+<li><h2 id="TensorBoard-Histogram-Dashboard"><a href="#TensorBoard-Histogram-Dashboard" class="headerlink" title="TensorBoard Histogram Dashboard"></a><a href="https://github.com/liqiang311/tensorflow/blob/master/tensorflow/docs_src/get_started/tensorboard_histograms.md" target="_blank" rel="noopener">TensorBoard Histogram Dashboard</a></h2></li>
+</ul>
+</li>
+<li><h1 id="Programmer’s-Guide"><a href="#Programmer’s-Guide" class="headerlink" title="Programmer’s Guide"></a>Programmer’s Guide</h1><ul>
+<li><h2 id="Programmer’s-Guide-1"><a href="#Programmer’s-Guide-1" class="headerlink" title="Programmer’s Guide"></a><a href="https://github.com/liqiang311/tensorflow/blob/master/tensorflow/docs_src/programmers_guide/index.md" target="_blank" rel="noopener">Programmer’s Guide</a></h2></li>
+<li><h2 id="Tensors"><a href="#Tensors" class="headerlink" title="Tensors"></a><a href="https://github.com/liqiang311/tensorflow/blob/master/tensorflow/docs_src/programmers_guide/tensors.md" target="_blank" rel="noopener">Tensors</a></h2></li>
+<li><h2 id="Variables"><a href="#Variables" class="headerlink" title="Variables"></a><a href="https://github.com/liqiang311/tensorflow/blob/master/tensorflow/docs_src/programmers_guide/variables.md" target="_blank" rel="noopener">Variables</a></h2></li>
+<li><h2 id="Graphs-and-Sessions"><a href="#Graphs-and-Sessions" class="headerlink" title="Graphs and Sessions"></a><a href="https://github.com/liqiang311/tensorflow/blob/master/tensorflow/docs_src/programmers_guide/graphs.md" target="_blank" rel="noopener">Graphs and Sessions</a></h2></li>
+<li><h2 id="Estimators"><a href="#Estimators" class="headerlink" title="Estimators"></a><a href="https://github.com/liqiang311/tensorflow/blob/master/tensorflow/docs_src/programmers_guide/estimators.md" target="_blank" rel="noopener">Estimators</a></h2></li>
+<li><h2 id="Saving-and-Restoring"><a href="#Saving-and-Restoring" class="headerlink" title="Saving and Restoring"></a><a href="https://github.com/liqiang311/tensorflow/blob/master/tensorflow/docs_src/programmers_guide/saved_model.md" target="_blank" rel="noopener">Saving and Restoring</a></h2></li>
+<li><h2 id="Using-the-Dataset-API-for-TensorFlow-Input-Pipelines"><a href="#Using-the-Dataset-API-for-TensorFlow-Input-Pipelines" class="headerlink" title="Using the Dataset API for TensorFlow Input Pipelines"></a><a href="https://github.com/liqiang311/tensorflow/blob/master/tensorflow/docs_src/programmers_guide/datasets.md" target="_blank" rel="noopener">Using the <code>Dataset</code> API for TensorFlow Input Pipelines</a></h2></li>
+<li><h2 id="Threading-and-Queues"><a href="#Threading-and-Queues" class="headerlink" title="Threading and Queues"></a><a href="https://github.com/liqiang311/tensorflow/blob/master/tensorflow/docs_src/programmers_guide/threading_and_queues.md" target="_blank" rel="noopener">Threading and Queues</a></h2></li>
+<li><h2 id="Embeddings"><a href="#Embeddings" class="headerlink" title="Embeddings"></a><a href="https://github.com/liqiang311/tensorflow/blob/master/tensorflow/docs_src/programmers_guide/embedding.md" target="_blank" rel="noopener">Embeddings</a></h2></li>
+<li><h2 id="Debugging-TensorFlow-Programs"><a href="#Debugging-TensorFlow-Programs" class="headerlink" title="Debugging TensorFlow Programs"></a><a href="https://github.com/liqiang311/tensorflow/blob/master/tensorflow/docs_src/programmers_guide/debugger.md" target="_blank" rel="noopener">Debugging TensorFlow Programs</a></h2></li>
+<li><h2 id="TensorFlow-Version-Compatibility"><a href="#TensorFlow-Version-Compatibility" class="headerlink" title="TensorFlow Version Compatibility"></a><a href="https://github.com/liqiang311/tensorflow/blob/master/tensorflow/docs_src/programmers_guide/version_compat.md" target="_blank" rel="noopener">TensorFlow Version Compatibility</a></h2></li>
+<li><h2 id="Frequently-Asked-Questions"><a href="#Frequently-Asked-Questions" class="headerlink" title="Frequently Asked Questions"></a><a href="https://github.com/liqiang311/tensorflow/blob/master/tensorflow/docs_src/programmers_guide/faq.md" target="_blank" rel="noopener">Frequently Asked Questions</a></h2></li>
+</ul>
+</li>
+<li><h1 id="Tutorials"><a href="#Tutorials" class="headerlink" title="Tutorials"></a>Tutorials</h1><ul>
+<li><h2 id="Tutorials-1"><a href="#Tutorials-1" class="headerlink" title="Tutorials"></a><a href="https://github.com/liqiang311/tensorflow/blob/master/tensorflow/docs_src/tutorials/index.md" target="_blank" rel="noopener">Tutorials</a></h2></li>
+<li><h2 id="Using-GPUs"><a href="#Using-GPUs" class="headerlink" title="Using GPUs"></a><a href="https://github.com/liqiang311/tensorflow/blob/master/tensorflow/docs_src/tutorials/using_gpu.md" target="_blank" rel="noopener">Using GPUs</a></h2></li>
+<li><h2 id="Image-Recognition"><a href="#Image-Recognition" class="headerlink" title="Image Recognition"></a><a href="https://github.com/liqiang311/tensorflow/blob/master/tensorflow/docs_src/tutorials/image_recognition.md" target="_blank" rel="noopener">Image Recognition</a></h2></li>
+<li><h2 id="How-to-Retrain-Inception’s-Final-Layer-for-New-Categories"><a href="#How-to-Retrain-Inception’s-Final-Layer-for-New-Categories" class="headerlink" title="How to Retrain Inception’s Final Layer for New Categories"></a><a href="https://github.com/liqiang311/tensorflow/blob/master/tensorflow/docs_src/tutorials/image_retraining.md" target="_blank" rel="noopener">How to Retrain Inception’s Final Layer for New Categories</a></h2></li>
+<li><h2 id="A-Guide-to-TF-Layers-Building-a-Convolutional-Neural-Network"><a href="#A-Guide-to-TF-Layers-Building-a-Convolutional-Neural-Network" class="headerlink" title="A Guide to TF Layers: Building a Convolutional Neural Network"></a><a href="https://github.com/liqiang311/tensorflow/blob/master/tensorflow/docs_src/tutorials/layers.md" target="_blank" rel="noopener">A Guide to TF Layers: Building a Convolutional Neural Network</a></h2></li>
+<li><h2 id="Convolutional-Neural-Networks"><a href="#Convolutional-Neural-Networks" class="headerlink" title="Convolutional Neural Networks"></a><a href="https://github.com/liqiang311/tensorflow/blob/master/tensorflow/docs_src/tutorials/deep_cnn.md" target="_blank" rel="noopener">Convolutional Neural Networks</a></h2></li>
+<li><h2 id="Vector-Representations-of-Words"><a href="#Vector-Representations-of-Words" class="headerlink" title="Vector Representations of Words"></a><a href="https://github.com/liqiang311/tensorflow/blob/master/tensorflow/docs_src/tutorials/word2vec.md" target="_blank" rel="noopener">Vector Representations of Words</a></h2></li>
+<li><h2 id="Recurrent-Neural-Networks"><a href="#Recurrent-Neural-Networks" class="headerlink" title="Recurrent Neural Networks"></a><a href="https://github.com/liqiang311/tensorflow/blob/master/tensorflow/docs_src/tutorials/recurrent.md" target="_blank" rel="noopener">Recurrent Neural Networks</a></h2></li>
+<li><h2 id="Sequence-to-Sequence-Models"><a href="#Sequence-to-Sequence-Models" class="headerlink" title="Sequence-to-Sequence Models"></a><a href="https://github.com/liqiang311/tensorflow/blob/master/tensorflow/docs_src/tutorials/seq2seq.md" target="_blank" rel="noopener">Sequence-to-Sequence Models</a></h2></li>
+<li><h2 id="Large-scale-Linear-Models-with-TensorFlow"><a href="#Large-scale-Linear-Models-with-TensorFlow" class="headerlink" title="Large-scale Linear Models with TensorFlow"></a><a href="https://github.com/liqiang311/tensorflow/blob/master/tensorflow/docs_src/tutorials/linear.md" target="_blank" rel="noopener">Large-scale Linear Models with TensorFlow</a></h2></li>
+<li><h2 id="TensorFlow-Linear-Model-Tutorial"><a href="#TensorFlow-Linear-Model-Tutorial" class="headerlink" title="TensorFlow Linear Model Tutorial"></a><a href="https://github.com/liqiang311/tensorflow/blob/master/tensorflow/docs_src/tutorials/wide.md" target="_blank" rel="noopener">TensorFlow Linear Model Tutorial</a></h2></li>
+<li><h2 id="TensorFlow-Wide-amp-Deep-Learning-Tutorial"><a href="#TensorFlow-Wide-amp-Deep-Learning-Tutorial" class="headerlink" title="TensorFlow Wide &amp; Deep Learning Tutorial"></a><a href="https://github.com/liqiang311/tensorflow/blob/master/tensorflow/docs_src/tutorials/wide_and_deep.md" target="_blank" rel="noopener">TensorFlow Wide &amp; Deep Learning Tutorial</a></h2></li>
+<li><h2 id="Improving-Linear-Models-Using-Explicit-Kernel-Methods"><a href="#Improving-Linear-Models-Using-Explicit-Kernel-Methods" class="headerlink" title="Improving Linear Models Using Explicit Kernel Methods"></a><a href="https://github.com/liqiang311/tensorflow/blob/master/tensorflow/docs_src/tutorials/kernel_methods.md" target="_blank" rel="noopener">Improving Linear Models Using Explicit Kernel Methods</a></h2></li>
+<li><h2 id="Mandelbrot-Set"><a href="#Mandelbrot-Set" class="headerlink" title="Mandelbrot Set"></a><a href="https://github.com/liqiang311/tensorflow/blob/master/tensorflow/docs_src/tutorials/mandelbrot.md" target="_blank" rel="noopener">Mandelbrot Set</a></h2></li>
+<li><h2 id="Partial-Differential-Equations"><a href="#Partial-Differential-Equations" class="headerlink" title="Partial Differential Equations"></a><a href="https://github.com/liqiang311/tensorflow/blob/master/tensorflow/docs_src/tutorials/pdes.md" target="_blank" rel="noopener">Partial Differential Equations</a></h2></li>
+</ul>
+</li>
+<li><h1 id="Performance"><a href="#Performance" class="headerlink" title="[Performance]"></a>[Performance]</h1><ul>
+<li><h2 id="Performance-1"><a href="#Performance-1" class="headerlink" title="Performance"></a><a href="https://github.com/liqiang311/tensorflow/blob/master/tensorflow/docs_src/performance/index.md" target="_blank" rel="noopener">Performance</a></h2></li>
+<li><h2 id="Performance-Guide"><a href="#Performance-Guide" class="headerlink" title="Performance Guide"></a><a href="https://github.com/liqiang311/tensorflow/blob/master/tensorflow/docs_src/performance/performance_guide.md" target="_blank" rel="noopener">Performance Guide</a></h2></li>
+<li><h2 id="High-Performance-Models"><a href="#High-Performance-Models" class="headerlink" title="High-Performance Models"></a><a href="https://github.com/liqiang311/tensorflow/blob/master/tensorflow/docs_src/performance/performance_models.md" target="_blank" rel="noopener">High-Performance Models</a></h2></li>
+<li><h2 id="Benchmarks"><a href="#Benchmarks" class="headerlink" title="Benchmarks"></a><a href="https://github.com/liqiang311/tensorflow/blob/master/tensorflow/docs_src/performance/benchmarks.md" target="_blank" rel="noopener">Benchmarks</a></h2></li>
+<li><h2 id="How-to-Quantize-Neural-Networks-with-TensorFlow"><a href="#How-to-Quantize-Neural-Networks-with-TensorFlow" class="headerlink" title="How to Quantize Neural Networks with TensorFlow"></a><a href="https://github.com/liqiang311/tensorflow/blob/master/tensorflow/docs_src/performance/quantization.md" target="_blank" rel="noopener">How to Quantize Neural Networks with TensorFlow</a></h2></li>
+<li><h2 id="XLA"><a href="#XLA" class="headerlink" title="XLA"></a>XLA</h2><ul>
+<li><h3 id="XLA-Overview"><a href="#XLA-Overview" class="headerlink" title="XLA Overview"></a><a href="https://github.com/liqiang311/tensorflow/blob/master/tensorflow/docs_src/performance/xla/index.md" target="_blank" rel="noopener">XLA Overview</a></h3></li>
+<li><h3 id="Broadcasting-semantics"><a href="#Broadcasting-semantics" class="headerlink" title="Broadcasting semantics"></a><a href="https://github.com/liqiang311/tensorflow/blob/master/tensorflow/docs_src/performance/xla/broadcasting.md" target="_blank" rel="noopener">Broadcasting semantics</a></h3></li>
+<li><h3 id="Developing-a-new-backend-for-XLA"><a href="#Developing-a-new-backend-for-XLA" class="headerlink" title="Developing a new backend for XLA"></a><a href="https://github.com/liqiang311/tensorflow/blob/master/tensorflow/docs_src/performance/xla/developing_new_backend.md" target="_blank" rel="noopener">Developing a new backend for XLA</a></h3></li>
+<li><h3 id="Using-JIT-Compilation"><a href="#Using-JIT-Compilation" class="headerlink" title="Using JIT Compilation"></a><a href="https://github.com/liqiang311/tensorflow/blob/master/tensorflow/docs_src/performance/xla/jit.md" target="_blank" rel="noopener">Using JIT Compilation</a></h3></li>
+<li><h3 id="Operation-Semantics"><a href="#Operation-Semantics" class="headerlink" title="Operation Semantics"></a><a href="https://github.com/liqiang311/tensorflow/blob/master/tensorflow/docs_src/performance/xla/operation_semantics.md" target="_blank" rel="noopener">Operation Semantics</a></h3></li>
+<li><h3 id="Shapes-and-Layout"><a href="#Shapes-and-Layout" class="headerlink" title="Shapes and Layout"></a><a href="https://github.com/liqiang311/tensorflow/blob/master/tensorflow/docs_src/performance/xla/shapes.md" target="_blank" rel="noopener">Shapes and Layout</a></h3></li>
+<li><h3 id="Using-AOT-compilation"><a href="#Using-AOT-compilation" class="headerlink" title="Using AOT compilation"></a><a href="https://github.com/liqiang311/tensorflow/blob/master/tensorflow/docs_src/performance/xla/tfcompile.md" target="_blank" rel="noopener">Using AOT compilation</a></h3></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h1 id="其他资料"><a href="#其他资料" class="headerlink" title="其他资料"></a>其他资料</h1><p><a href="https://www.tensorflow.org/tutorials/" target="_blank" rel="noopener">Tutorials  |  TensorFlow</a></p>
+<p><a href="https://github.com/tensorflow/tensorflow" target="_blank" rel="noopener">tensorflow/tensorflow: Computation using data flow graphs for scalable machine learning</a></p>
+<p><a href="https://www.tensorflow.org/api_docs/" target="_blank" rel="noopener">API Documentation  |  TensorFlow</a></p>
+<p><a href="https://github.com/tensorflow/tensorflow/blob/r1.3/tensorflow/python/platform/flags.py" target="_blank" rel="noopener">tensorflow/flags.py at r1.3 · tensorflow/tensorflow</a></p>
+<p><a href="http://blog.csdn.net/u012436149/article/details/70264257" target="_blank" rel="noopener">tensorflow学习笔记（三十八）:损失函数加上正则项 - Keith - CSDN博客</a></p>
+<p><a href="http://sentiment-mining.blogspot.com/2016/12/tensorflow-name-scope-variable-scope.html" target="_blank" rel="noopener">TensorFlow 中 name scope 和 variable scope 有什么区别？ | Sentiment Mining</a></p>
+<p><a href="http://blog.csdn.net/sinat_33761963/article/details/62433234" target="_blank" rel="noopener">06：Tensorflow的可视化工具Tensorboard的初步使用 - 点绛唇-墨色凤舞的博客 - CSDN博客</a></p>
+<p><a href="http://blog.csdn.net/lanchunhui/article/details/70803060" target="_blank" rel="noopener">tensorflow 下的滑动平均模型 —— tf.train.ExponentialMovingAverage - 计算机科学与艺术 - CSDN博客</a></p>
+<p><a href="http://www.cnblogs.com/huangshiyu13/p/6534154.html" target="_blank" rel="noopener">查看Tensorflow版本 - Shiyu_Huang - 博客园</a></p>
+<p><a href="https://www.jiqizhixin.com/articles/2017-08-29-14" target="_blank" rel="noopener">机器之心GitHub项目：从零开始用TensorFlow搭建卷积神经网络 | 机器之心</a></p>
+<p><a href="https://www.jiqizhixin.com/articles/2017-08-10" target="_blank" rel="noopener">维度、广播操作与可视化：如何高效使用TensorFlow | 机器之心</a></p>
+<p><a href="https://github.com/aymericdamien/TensorFlow-Examples" target="_blank" rel="noopener">aymericdamien/TensorFlow-Examples: TensorFlow Tutorial and Examples for beginners</a></p>
+<p><a href="https://github.com/dandelionmane/tf-dev-summit-tensorboard-tutorial/blob/master/mnist.py" target="_blank" rel="noopener">tf-dev-summit-tensorboard-tutorial/mnist.py at master · dandelionmane/tf-dev-summit-tensorboard-tutorial</a></p>
+<p><a href="http://playground.tensorflow.org/#activation=tanh&amp;batchSize=10&amp;dataset=circle&amp;regDataset=reg-plane&amp;learningRate=0.03&amp;regularizationRate=0&amp;noise=0&amp;networkShape=4,2&amp;seed=0.23713&amp;showTestData=false&amp;discretize=false&amp;percTrainData=50&amp;x=true&amp;y=true&amp;xTimesY=false&amp;xSquared=false&amp;ySquared=false&amp;cosX=false&amp;sinX=false&amp;cosY=false&amp;sinY=false&amp;collectStats=false&amp;problem=classification&amp;initZero=false&amp;hideText=false" target="_blank" rel="noopener">A Neural Network Playground</a></p>
+<p><a href="https://github.com/tensorflow/tensorflow/issues/2218" target="_blank" rel="noopener">Add HDFS support · Issue #2218 · tensorflow/tensorflow</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/tensorflow/" rel="tag"># tensorflow</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/09/14/tensorflow-rdma-design/" rel="next" title="TensorFlow中rdma的设计细节">
+                <i class="fa fa-chevron-left"></i> TensorFlow中rdma的设计细节
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/09/14/vector-list-deque/" rel="prev" title="C++ STL vector、list、deque的比较">
+                C++ STL vector、list、deque的比较 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">linyemin</p>
+              <p class="site-description motion-element" itemprop="description">海阔凭鱼跃，天高任鸟飞</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">69</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">14</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">45</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Get-Started"><span class="nav-number">1.</span> <span class="nav-text">Get Started</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Getting-Started"><span class="nav-number">1.1.</span> <span class="nav-text">Getting Started</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Getting-Started-With-TensorFLow"><span class="nav-number">1.2.</span> <span class="nav-text">Getting Started With TensorFLow</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MNIST-For-ML-Beginners"><span class="nav-number">1.3.</span> <span class="nav-text">MNIST For ML Beginners</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Deep-MNIST-for-Experts"><span class="nav-number">1.4.</span> <span class="nav-text">Deep MNIST for Experts</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TensorFLow-Mechanics-101"><span class="nav-number">1.5.</span> <span class="nav-text">TensorFLow Mechanics 101</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tf-estimator-Quickstart"><span class="nav-number">1.6.</span> <span class="nav-text">tf.estimator Quickstart</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Building-Input-Functions-with-tf-estimator"><span class="nav-number">1.7.</span> <span class="nav-text">Building Input Functions with tf.estimator</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TensorBoard-Visualizing-Learning"><span class="nav-number">1.8.</span> <span class="nav-text">TensorBoard: Visualizing Learning</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TensorBoard-Graph-Visualization"><span class="nav-number">1.9.</span> <span class="nav-text">TensorBoard: Graph Visualization</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TensorBoard-Histogram-Dashboard"><span class="nav-number">1.10.</span> <span class="nav-text">TensorBoard Histogram Dashboard</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Programmer’s-Guide"><span class="nav-number">2.</span> <span class="nav-text">Programmer’s Guide</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Programmer’s-Guide-1"><span class="nav-number">2.1.</span> <span class="nav-text">Programmer’s Guide</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Tensors"><span class="nav-number">2.2.</span> <span class="nav-text">Tensors</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Variables"><span class="nav-number">2.3.</span> <span class="nav-text">Variables</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Graphs-and-Sessions"><span class="nav-number">2.4.</span> <span class="nav-text">Graphs and Sessions</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Estimators"><span class="nav-number">2.5.</span> <span class="nav-text">Estimators</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Saving-and-Restoring"><span class="nav-number">2.6.</span> <span class="nav-text">Saving and Restoring</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Using-the-Dataset-API-for-TensorFlow-Input-Pipelines"><span class="nav-number">2.7.</span> <span class="nav-text">Using the Dataset API for TensorFlow Input Pipelines</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Threading-and-Queues"><span class="nav-number">2.8.</span> <span class="nav-text">Threading and Queues</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Embeddings"><span class="nav-number">2.9.</span> <span class="nav-text">Embeddings</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Debugging-TensorFlow-Programs"><span class="nav-number">2.10.</span> <span class="nav-text">Debugging TensorFlow Programs</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TensorFlow-Version-Compatibility"><span class="nav-number">2.11.</span> <span class="nav-text">TensorFlow Version Compatibility</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Frequently-Asked-Questions"><span class="nav-number">2.12.</span> <span class="nav-text">Frequently Asked Questions</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Tutorials"><span class="nav-number">3.</span> <span class="nav-text">Tutorials</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Tutorials-1"><span class="nav-number">3.1.</span> <span class="nav-text">Tutorials</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Using-GPUs"><span class="nav-number">3.2.</span> <span class="nav-text">Using GPUs</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Image-Recognition"><span class="nav-number">3.3.</span> <span class="nav-text">Image Recognition</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#How-to-Retrain-Inception’s-Final-Layer-for-New-Categories"><span class="nav-number">3.4.</span> <span class="nav-text">How to Retrain Inception’s Final Layer for New Categories</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#A-Guide-to-TF-Layers-Building-a-Convolutional-Neural-Network"><span class="nav-number">3.5.</span> <span class="nav-text">A Guide to TF Layers: Building a Convolutional Neural Network</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Convolutional-Neural-Networks"><span class="nav-number">3.6.</span> <span class="nav-text">Convolutional Neural Networks</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Vector-Representations-of-Words"><span class="nav-number">3.7.</span> <span class="nav-text">Vector Representations of Words</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Recurrent-Neural-Networks"><span class="nav-number">3.8.</span> <span class="nav-text">Recurrent Neural Networks</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Sequence-to-Sequence-Models"><span class="nav-number">3.9.</span> <span class="nav-text">Sequence-to-Sequence Models</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Large-scale-Linear-Models-with-TensorFlow"><span class="nav-number">3.10.</span> <span class="nav-text">Large-scale Linear Models with TensorFlow</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TensorFlow-Linear-Model-Tutorial"><span class="nav-number">3.11.</span> <span class="nav-text">TensorFlow Linear Model Tutorial</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TensorFlow-Wide-amp-Deep-Learning-Tutorial"><span class="nav-number">3.12.</span> <span class="nav-text">TensorFlow Wide & Deep Learning Tutorial</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Improving-Linear-Models-Using-Explicit-Kernel-Methods"><span class="nav-number">3.13.</span> <span class="nav-text">Improving Linear Models Using Explicit Kernel Methods</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Mandelbrot-Set"><span class="nav-number">3.14.</span> <span class="nav-text">Mandelbrot Set</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Partial-Differential-Equations"><span class="nav-number">3.15.</span> <span class="nav-text">Partial Differential Equations</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Performance"><span class="nav-number">4.</span> <span class="nav-text">[Performance]</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Performance-1"><span class="nav-number">4.1.</span> <span class="nav-text">Performance</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Performance-Guide"><span class="nav-number">4.2.</span> <span class="nav-text">Performance Guide</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#High-Performance-Models"><span class="nav-number">4.3.</span> <span class="nav-text">High-Performance Models</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Benchmarks"><span class="nav-number">4.4.</span> <span class="nav-text">Benchmarks</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#How-to-Quantize-Neural-Networks-with-TensorFlow"><span class="nav-number">4.5.</span> <span class="nav-text">How to Quantize Neural Networks with TensorFlow</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#XLA"><span class="nav-number">4.6.</span> <span class="nav-text">XLA</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#XLA-Overview"><span class="nav-number">4.6.1.</span> <span class="nav-text">XLA Overview</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Broadcasting-semantics"><span class="nav-number">4.6.2.</span> <span class="nav-text">Broadcasting semantics</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Developing-a-new-backend-for-XLA"><span class="nav-number">4.6.3.</span> <span class="nav-text">Developing a new backend for XLA</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Using-JIT-Compilation"><span class="nav-number">4.6.4.</span> <span class="nav-text">Using JIT Compilation</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Operation-Semantics"><span class="nav-number">4.6.5.</span> <span class="nav-text">Operation Semantics</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Shapes-and-Layout"><span class="nav-number">4.6.6.</span> <span class="nav-text">Shapes and Layout</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Using-AOT-compilation"><span class="nav-number">4.6.7.</span> <span class="nav-text">Using AOT compilation</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#其他资料"><span class="nav-number">5.</span> <span class="nav-text">其他资料</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">linyemin</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="tensorflow," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="TensorFlow 多线程输入数据处理框架">
+<meta name="keywords" content="tensorflow">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TensorFlow 多线程输入数据处理框架">
+<meta property="og:url" content="http://yoursite.com/2017/10/30/tensorflow-thread-input/index.html">
+<meta property="og:site_name" content="林烨敏的博客">
+<meta property="og:description" content="TensorFlow 多线程输入数据处理框架">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-11-30T12:01:00.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="TensorFlow 多线程输入数据处理框架">
+<meta name="twitter:description" content="TensorFlow 多线程输入数据处理框架">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/10/30/tensorflow-thread-input/"/>
+
+
+
+
+
+  <title>TensorFlow 多线程输入数据处理框架 | 林烨敏的博客</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">林烨敏的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/30/tensorflow-thread-input/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="linyemin">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="林烨敏的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">TensorFlow 多线程输入数据处理框架</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-30T17:00:00+08:00">
+                2017-10-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/tensorflow/" itemprop="url" rel="index">
+                    <span itemprop="name">tensorflow</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>TensorFlow 多线程输入数据处理框架<br><a id="more"></a></p>
+<h2 id="队列"><a href="#队列" class="headerlink" title="队列"></a>队列</h2><ul>
+<li><code>tf.FIFOQueue</code>：先进先出队列</li>
+<li><code>tf.RandomShuffleQueue</code>：每次出队都是随机选择一个</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建一个先进先出队列，指定队列中最多存放5个元素，并指定相应的类型</span></span><br><span class="line">q = tf.FIFOQueue(<span class="number">5</span>, <span class="string">"int32"</span>)</span><br><span class="line"><span class="comment"># 使用enqueue_many来初始化队列中的元素，需要sess.run</span></span><br><span class="line">init = q.enqueue_many(([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>],))</span><br><span class="line"><span class="comment"># 使用dequeue来将队列中第一个元素出队</span></span><br><span class="line">x = q.dequeue()</span><br><span class="line"><span class="comment"># 定义运算并将运算结果入队</span></span><br><span class="line">q_inc = q.enqueue([x * x])</span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">    init.run()</span><br><span class="line">    <span class="keyword">for</span> _ <span class="keyword">in</span> range(<span class="number">10</span>):</span><br><span class="line">        v, _ = sess.run([x, q_inc])</span><br><span class="line">        print(v)</span><br></pre></td></tr></table></figure>
+<h2 id="多线程"><a href="#多线程" class="headerlink" title="多线程"></a>多线程</h2><ul>
+<li><code>tf.Coordinator</code><ul>
+<li>协同多个线程一起停止</li>
+<li>创建Coordinator对象后，将该对象传入每个线程中</li>
+<li>启动的线程会定期轮询<code>should_stop</code>函数，若为True，则表示当前线程需要退出</li>
+<li>当运行中的某一个线程调用<code>request_stop</code>函数时，所有线程的<code>should_stop</code>返回值将为True</li>
+<li>主线程中使用<code>join</code>进行线程等待</li>
+</ul>
+</li>
+<li><code>tf.QueueRunner</code></li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> threading</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 线程中运行的程序，每隔1秒检查是否需要退出，并打印自己的id</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">MyLoop</span><span class="params">(coord, worker_id)</span>:</span></span><br><span class="line">    <span class="keyword">while</span> <span class="keyword">not</span> coord.should_stop():</span><br><span class="line">        <span class="keyword">if</span> np.random.rand() &lt; <span class="number">0.1</span>:</span><br><span class="line">            print(<span class="string">"Stoping from id: %d"</span> % worker_id)</span><br><span class="line">            coord.request_stop()</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            print(<span class="string">"Working on id: %d"</span> % worker_id)</span><br><span class="line">        time.sleep(<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">coord = tf.train.Coordinator()</span><br><span class="line"><span class="comment"># 声明5个线程变量</span></span><br><span class="line">threads = [threading.Thread(target=MyLoop, args=(coord, i, ))</span><br><span class="line">           <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">5</span>)]</span><br><span class="line"><span class="keyword">for</span> t <span class="keyword">in</span> threads:</span><br><span class="line">    t.start()</span><br><span class="line">coord.join(threads)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 声明一个先进先出的队列</span></span><br><span class="line">queue = tf.FIFOQueue(<span class="number">100</span>, <span class="string">"float"</span>)</span><br><span class="line"><span class="comment"># 定义入队操作，在线程中会循环不断的入队</span></span><br><span class="line">enqueue_op = queue.enqueue([tf.random_normal([<span class="number">1</span>])])</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用tf.train.QueueRunner来创建多个线程运行队列的入队操作</span></span><br><span class="line"><span class="comment"># tf.train.QueueRunner第一个参数为被操作的队列</span></span><br><span class="line"><span class="comment"># 第二个参数表示创建5个线程，每个线程中运行的是enqueue_op操作</span></span><br><span class="line">qr = tf.train.QueueRunner(queue, [enqueue_op] * <span class="number">5</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 将定义过的QueueRunner加入TF计算图上的指定集合中</span></span><br><span class="line"><span class="comment"># add_queue_runner默认加入tf.GraphKeys.QUEUE_RUNNERS</span></span><br><span class="line">tf.train.add_queue_runner(qr)</span><br><span class="line"><span class="comment"># 定义出队操作</span></span><br><span class="line">out_tensor = queue.dequeue()</span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">    <span class="comment"># 利用Coordinator进行线程同步</span></span><br><span class="line">    coord = tf.train.Coordinator()</span><br><span class="line">    <span class="comment"># 使用QueueRunner时，需要明确调用以下函数来启动所有线程</span></span><br><span class="line">    <span class="comment"># 该函数会启动处于tf.GraphKeys.QUEUE_RUNNERS集合中的所有QueueRunner</span></span><br><span class="line">    threads = tf.train.start_queue_runners(sess=sess, coord=coord)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 获取队列中的值</span></span><br><span class="line">    <span class="keyword">for</span> _ <span class="keyword">in</span> range(<span class="number">3</span>):</span><br><span class="line">        print(sess.run(out_tensor))</span><br><span class="line"></span><br><span class="line">    coord.request_stop()</span><br><span class="line">    coord.join(threads)</span><br></pre></td></tr></table></figure>
+<h2 id="输入文件队列"><a href="#输入文件队列" class="headerlink" title="输入文件队列"></a>输入文件队列</h2><p>模拟生成多个TFRecord格式文件</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">_int64_feature</span><span class="params">(value)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> tf.train.Feature(int64_list=tf.train.Int64List(value=[value]))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 模拟海量数据情况下将数据写入不同的文件</span></span><br><span class="line">num_shards = <span class="number">2</span>  <span class="comment"># 总共写入多少文件</span></span><br><span class="line">instances_per_shard = <span class="number">2</span>  <span class="comment"># 每个文件中有多少数据</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(num_shards):</span><br><span class="line">    <span class="comment"># 将数据分成多个文件时，以类似0000n-of-0000m的后缀区分，其中m表示总共多少文件</span></span><br><span class="line">    <span class="comment"># n表示当前是第几个文件</span></span><br><span class="line">    filename = (<span class="string">'data.tfrecords-%.5d-of-%.5d'</span> % (i, num_shards))</span><br><span class="line">    <span class="comment"># 将Example结构写入TFRecord文件。</span></span><br><span class="line">    writer = tf.python_io.TFRecordWriter(filename)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 将数据封装为Example结构并写入TFRecord</span></span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> range(instances_per_shard):</span><br><span class="line">        <span class="comment"># Example结构仅包含当前样例属于第几个文件以及是当前文件的第几个样本。</span></span><br><span class="line">        example = tf.train.Example(features=tf.train.Features(feature=&#123;</span><br><span class="line">            <span class="string">'i'</span>: _int64_feature(i),</span><br><span class="line">            <span class="string">'j'</span>: _int64_feature(j)&#125;))</span><br><span class="line">        writer.write(example.SerializeToString())</span><br><span class="line">    writer.close()</span><br></pre></td></tr></table></figure>
+<p>处理多个TFRecord格式数据</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用match_filenames_once来获取文件列表</span></span><br><span class="line">files = tf.train.match_filenames_once(<span class="string">"data.tfrecords-*"</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 通过string_input_producer函数创建输入队列，输入队列中的文件列表为</span></span><br><span class="line"><span class="comment"># tf.train.match_filenames_once函数获取的文件列表。</span></span><br><span class="line"><span class="comment"># 这里shuffle参数设为False来避免随机打乱读文件的数序，但在一般解决实际</span></span><br><span class="line"><span class="comment"># 问题时，该参数会设置为True</span></span><br><span class="line">filename_queue = tf.train.string_input_producer(files, shuffle=<span class="keyword">False</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 读取并解析一个样例</span></span><br><span class="line">reader = tf.TFRecordReader()</span><br><span class="line">_, serialized_example = reader.read(filename_queue)</span><br><span class="line">features = tf.parse_single_example(</span><br><span class="line">    serialized_example,</span><br><span class="line">    features=&#123;</span><br><span class="line">        <span class="string">'i'</span>: tf.FixedLenFeature([], tf.int64),</span><br><span class="line">        <span class="string">'j'</span>: tf.FixedLenFeature([], tf.int64),</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">    sess.run([tf.global_variables_initializer(),</span><br><span class="line">              tf.local_variables_initializer()])</span><br><span class="line">    print(sess.run(files))</span><br><span class="line"></span><br><span class="line">    coord = tf.train.Coordinator()</span><br><span class="line">    threads = tf.train.start_queue_runners(sess=sess, coord=coord)</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">6</span>):</span><br><span class="line">        print(sess.run([features[<span class="string">'i'</span>], features[<span class="string">'j'</span>]]))</span><br><span class="line">    coord.request_stop()</span><br><span class="line">    coord.join(threads)</span><br></pre></td></tr></table></figure>
+<h2 id="组合训练数据-batching"><a href="#组合训练数据-batching" class="headerlink" title="组合训练数据(batching)"></a>组合训练数据(batching)</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"></span><br><span class="line">files = tf.train.match_filenames_once(<span class="string">"data.tfrecords-*"</span>)</span><br><span class="line"></span><br><span class="line">filename_queue = tf.train.string_input_producer(files, shuffle=<span class="keyword">False</span>)</span><br><span class="line"></span><br><span class="line">reader = tf.TFRecordReader()</span><br><span class="line">_, serialized_example = reader.read(filename_queue)</span><br><span class="line">features = tf.parse_single_example(</span><br><span class="line">    serialized_example,</span><br><span class="line">    features=&#123;</span><br><span class="line">        <span class="string">'i'</span>: tf.FixedLenFeature([], tf.int64),</span><br><span class="line">        <span class="string">'j'</span>: tf.FixedLenFeature([], tf.int64),</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 假设Example中i为特征矩阵，j为label</span></span><br><span class="line">example, label = features[<span class="string">'i'</span>], features[<span class="string">'j'</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 一个batch中样例的个数</span></span><br><span class="line">batch_size = <span class="number">3</span></span><br><span class="line"><span class="comment"># 组合样例的队列中最多可以存储的样例个数，若队列太大，则浪费内存</span></span><br><span class="line"><span class="comment"># 若队列过小，则会导致出队时产生阻塞。</span></span><br><span class="line"><span class="comment"># 一般会取一个跟batch size有关的值</span></span><br><span class="line">capacity = <span class="number">1000</span> + <span class="number">3</span> * batch_size</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用tf.train.batch来组合数据</span></span><br><span class="line"><span class="comment"># [example, label]指定了要组合的元素</span></span><br><span class="line"><span class="comment"># batch_size指batch大小</span></span><br><span class="line"><span class="comment"># capacity值队列大小，默认为32。当队列满时，暂停入队</span></span><br><span class="line"><span class="comment"># tf.train.shuffle_batch</span></span><br><span class="line">example_batch, label_batch = tf.train.batch(</span><br><span class="line">    [example, label], batch_size=batch_size, capacity=capacity)</span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">    sess.run([tf.global_variables_initializer(),</span><br><span class="line">              tf.local_variables_initializer()])</span><br><span class="line">    print(sess.run(files))</span><br><span class="line"></span><br><span class="line">    coord = tf.train.Coordinator()</span><br><span class="line">    threads = tf.train.start_queue_runners(sess=sess, coord=coord)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">10</span>):</span><br><span class="line">        cur_example_batch, cur_label_batch = sess.run(</span><br><span class="line">            [example_batch, label_batch])</span><br><span class="line">        print(cur_example_batch, cur_label_batch)</span><br><span class="line">    coord.request_stop()</span><br><span class="line">    coord.join(threads)</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>tf.train.batch</code></li>
+<li><code>tf.train.shuffle_batch</code></li>
+<li><code>tf.train.shffle_batch_join</code></li>
+</ul>
+<p>通过指定以上函数中的num_threads参数，来指定用几个线程来操作入队动作，其中<code>tf.train.shuffle_batch</code>为多个线程读取相同的文件，<code>tf.train.shffle_batch_join</code>为不同的线程读取不同的文件。</p>
+<h2 id="输入数据处理框架"><a href="#输入数据处理框架" class="headerlink" title="输入数据处理框架"></a>输入数据处理框架</h2><p>首先将MNIST数据集转换为TFRecord格式，代码见<a href="http://liqiang311.com/tensorflow-tfrecord/" target="_blank" rel="noopener">blog</a></p>
+<p>处理代码</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"></span><br><span class="line"><span class="comment"># 读取TFRecord格式文件</span></span><br><span class="line">files = tf.train.match_filenames_once(<span class="string">"output.tfrecords"</span>)</span><br><span class="line">filename_queue = tf.train.string_input_producer(files, shuffle=<span class="keyword">False</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 读取文件。</span></span><br><span class="line">reader = tf.TFRecordReader()</span><br><span class="line">_, serialized_example = reader.read(filename_queue)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 解析读取的样例。</span></span><br><span class="line">features = tf.parse_single_example(</span><br><span class="line">    serialized_example,</span><br><span class="line">    features=&#123;</span><br><span class="line">        <span class="string">'image_raw'</span>: tf.FixedLenFeature([], tf.string),</span><br><span class="line">        <span class="string">'pixels'</span>: tf.FixedLenFeature([], tf.int64),</span><br><span class="line">        <span class="string">'label'</span>: tf.FixedLenFeature([], tf.int64)</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 解析像素矩阵</span></span><br><span class="line">decoded_images = tf.decode_raw(features[<span class="string">'image_raw'</span>], tf.uint8)</span><br><span class="line">retyped_images = tf.cast(decoded_images, tf.float32)</span><br><span class="line">labels = tf.cast(features[<span class="string">'label'</span>], tf.int32)</span><br><span class="line">pixels = tf.cast(features[<span class="string">'pixels'</span>], tf.int32)</span><br><span class="line">images = tf.reshape(retyped_images, [<span class="number">784</span>])</span><br><span class="line"></span><br><span class="line">min_after_dequeue = <span class="number">10000</span></span><br><span class="line">batch_size = <span class="number">100</span></span><br><span class="line">capacity = min_after_dequeue + <span class="number">3</span> * batch_size</span><br><span class="line"></span><br><span class="line">image_batch, label_batch = tf.train.shuffle_batch(</span><br><span class="line">    [images, labels],</span><br><span class="line">    batch_size=batch_size,</span><br><span class="line">    capacity=capacity,</span><br><span class="line">    min_after_dequeue=min_after_dequeue)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">inference</span><span class="params">(input_tensor, weights1, biases1, weights2, biases2)</span>:</span></span><br><span class="line">    layer1 = tf.nn.relu(tf.matmul(input_tensor, weights1) + biases1)</span><br><span class="line">    <span class="keyword">return</span> tf.matmul(layer1, weights2) + biases2</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 模型相关的参数</span></span><br><span class="line">INPUT_NODE = <span class="number">784</span></span><br><span class="line">OUTPUT_NODE = <span class="number">10</span></span><br><span class="line">LAYER1_NODE = <span class="number">500</span></span><br><span class="line">REGULARAZTION_RATE = <span class="number">0.0001</span></span><br><span class="line">TRAINING_STEPS = <span class="number">5000</span></span><br><span class="line"></span><br><span class="line">weights1 = tf.Variable(tf.truncated_normal(</span><br><span class="line">    [INPUT_NODE, LAYER1_NODE], stddev=<span class="number">0.1</span>))</span><br><span class="line">biases1 = tf.Variable(tf.constant(<span class="number">0.1</span>, shape=[LAYER1_NODE]))</span><br><span class="line"></span><br><span class="line">weights2 = tf.Variable(tf.truncated_normal(</span><br><span class="line">    [LAYER1_NODE, OUTPUT_NODE], stddev=<span class="number">0.1</span>))</span><br><span class="line">biases2 = tf.Variable(tf.constant(<span class="number">0.1</span>, shape=[OUTPUT_NODE]))</span><br><span class="line"></span><br><span class="line">y = inference(image_batch, weights1, biases1, weights2, biases2)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 计算交叉熵及其平均值</span></span><br><span class="line">cross_entropy = tf.nn.sparse_softmax_cross_entropy_with_logits(</span><br><span class="line">    logits=y, labels=label_batch)</span><br><span class="line">cross_entropy_mean = tf.reduce_mean(cross_entropy)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 损失函数的计算</span></span><br><span class="line">regularizer = tf.contrib.layers.l2_regularizer(REGULARAZTION_RATE)</span><br><span class="line">regularaztion = regularizer(weights1) + regularizer(weights2)</span><br><span class="line">loss = cross_entropy_mean + regularaztion</span><br><span class="line"></span><br><span class="line"><span class="comment"># 优化损失函数</span></span><br><span class="line">train_step = tf.train.GradientDescentOptimizer(<span class="number">0.01</span>).minimize(loss)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 初始化会话，并开始训练过程。</span></span><br><span class="line"><span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">    sess.run([tf.global_variables_initializer(),</span><br><span class="line">              tf.local_variables_initializer()])</span><br><span class="line">    print(sess.run(files))</span><br><span class="line"></span><br><span class="line">    coord = tf.train.Coordinator()</span><br><span class="line">    threads = tf.train.start_queue_runners(sess=sess, coord=coord)</span><br><span class="line">    <span class="comment"># 循环的训练神经网络。</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(TRAINING_STEPS):</span><br><span class="line">        <span class="keyword">if</span> i % <span class="number">1000</span> == <span class="number">0</span>:</span><br><span class="line">            print(<span class="string">"After %d training step(s), loss is %g "</span> %</span><br><span class="line">                  (i, sess.run(loss)))</span><br><span class="line"></span><br><span class="line">        sess.run(train_step)</span><br><span class="line">    coord.request_stop()</span><br><span class="line">    coord.join(threads)</span><br></pre></td></tr></table></figure>
+<p>处理流程</p>
+<ol>
+<li><code>tf.train.string_input_producer</code><ol>
+<li>输入文件列表 {“A”, “B”, “C”}</li>
+<li>随机打乱</li>
+<li>输入文件队列 {“B”, “B”, “C”, “A”, “ “, “ “}</li>
+</ol>
+</li>
+<li><code>tf.train.shuffle_batch</code><ol>
+<li>生成多个Reader {“Reader1”, “Reader2”}</li>
+<li>分别进行数据预处理</li>
+<li>样例组合队列 {“(a,0)”, “(c,1)”, “(b,0)”, “(c,1)”, “…”, …}</li>
+</ol>
+</li>
+<li>生成Batch1、Batch2</li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/tensorflow/" rel="tag"># tensorflow</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/10/27/tensorflow-image-preprocessing/" rel="next" title="TensorFlow 图像预处理常用手段">
+                <i class="fa fa-chevron-left"></i> TensorFlow 图像预处理常用手段
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/10/30/tensorflow-rnn-quickstart/" rel="prev" title="TensorFlow RNN入门">
+                TensorFlow RNN入门 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">linyemin</p>
+              <p class="site-description motion-element" itemprop="description">海阔凭鱼跃，天高任鸟飞</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">69</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">14</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">45</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#队列"><span class="nav-number">1.</span> <span class="nav-text">队列</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#多线程"><span class="nav-number">2.</span> <span class="nav-text">多线程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#输入文件队列"><span class="nav-number">3.</span> <span class="nav-text">输入文件队列</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#组合训练数据-batching"><span class="nav-number">4.</span> <span class="nav-text">组合训练数据(batching)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#输入数据处理框架"><span class="nav-number">5.</span> <span class="nav-text">输入数据处理框架</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">linyemin</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="nginx," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="nginx.conf">
+<meta name="keywords" content="nginx">
+<meta property="og:type" content="article">
+<meta property="og:title" content="nginx配置文件详解">
+<meta property="og:url" content="http://yoursite.com/2017/09/14/nginx-conf/index.html">
+<meta property="og:site_name" content="林烨敏的博客">
+<meta property="og:description" content="nginx.conf">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-11-30T12:01:00.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="nginx配置文件详解">
+<meta name="twitter:description" content="nginx.conf">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/09/14/nginx-conf/"/>
+
+
+
+
+
+  <title>nginx配置文件详解 | 林烨敏的博客</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">林烨敏的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/14/nginx-conf/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="linyemin">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="林烨敏的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">nginx配置文件详解</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-14T16:01:54+08:00">
+                2017-09-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/openresty/" itemprop="url" rel="index">
+                    <span itemprop="name">openresty</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="nginx-conf"><a href="#nginx-conf" class="headerlink" title="nginx.conf"></a>nginx.conf</h2><a id="more"></a>
+<p><a href="http://blog.csdn.net/tjcyjd/article/details/50695922" target="_blank" rel="noopener">参照</a></p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 定义Nginx运行的用户和用户组。window下不指定</span></span><br><span class="line"><span class="attribute">user</span> www www;</span><br><span class="line"></span><br><span class="line"><span class="comment"># nginx进程数，建议设置为等于CPU总核心数</span></span><br><span class="line"><span class="attribute">worker_processes</span> <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 全局错误日志定义类型，[ debug | info | notice | warn | error | crit ]</span></span><br><span class="line"><span class="attribute">error_log</span> /var/log/ngingx/error.log <span class="literal">warn</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 进程文件</span></span><br><span class="line"><span class="attribute">pid</span> /var/run/nginx.pid;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 一个nginx进程打开的最多文件描述符数目，理论值应该是最多打开文件数（系统的值ulimit -n）</span></span><br><span class="line"><span class="comment"># 与nginx进程数相除，但是nginx分配请求并不均匀，所以建议与ulimit -n的值保持一致</span></span><br><span class="line"><span class="attribute">worker_rlimit_nofile</span> <span class="number">1024</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">#工作模式与连接数上限</span></span><br><span class="line">events&#123;</span><br><span class="line">    <span class="comment"># 参考事件模型，use [ kqueue | rtsig | epoll | /dev/poll | select | poll ];</span></span><br><span class="line">    <span class="comment"># epoll模型是Linux 2.6以上版本内核中的高性能网络I/O模型</span></span><br><span class="line">    <span class="comment"># 如果跑在FreeBSD上面，就用kqueue模型，Windows下不指定</span></span><br><span class="line">    <span class="attribute">use</span> <span class="literal">epoll</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 每个工作进程的最大连接数量。根据硬件调整，和前面工作进程配合起来用，尽量大，</span></span><br><span class="line">    <span class="comment"># 但是别把cpu跑到100%就行。每个进程允许的最多连接数，理论上每台nginx服务器的最大连接数</span></span><br><span class="line">    <span class="comment"># 为worker_processes*worker_connections</span></span><br><span class="line">    <span class="attribute">worker_connections</span> <span class="number">204800</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment"># keepalive超时时间</span></span><br><span class="line">    <span class="attribute">keepalive_timeout</span> <span class="number">60</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 为打开文件的指定缓存，默认是没有启用的，max指定缓存数量，建议和打开文件数一致，</span></span><br><span class="line">    <span class="comment"># inactive是指经过多长时间文件没被请求后删除缓存。</span></span><br><span class="line">    <span class="attribute">open_file_cache</span> max=<span class="number">1024</span> inactive=<span class="number">60s</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 多长时间检查一次缓存的有效信息。</span></span><br><span class="line">    <span class="attribute">open_file_cache_valid</span> <span class="number">80s</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment"># open_file_cache指令中的inactive参数时间内文件的最少使用次数，如果超过这个数字，文件</span></span><br><span class="line">    <span class="comment"># 描述符一直是在缓存中打开的，如上例，如果有一个文件在inactive时间内一次没被使用，它将被移除。</span></span><br><span class="line">    <span class="attribute">open_file_cache_min_uses</span> <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 设定http服务器，利用它的反向代理功能提供负载均衡支持</span></span><br><span class="line">http&#123;</span><br><span class="line">    <span class="comment"># 设定mime类型,类型由mime.type文件定义，该文件在为nginx自带，且与nginx.conf在同一目录下。</span></span><br><span class="line">    <span class="attribute">include</span> mime.types;</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 默认文件类型</span></span><br><span class="line">    <span class="attribute">default_type</span> application/octet-stream;</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 默认编码</span></span><br><span class="line">    <span class="attribute">charset</span> utf-<span class="number">8</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 保存服务器名字的hash表是由指令server_names_hash_max_size 和</span></span><br><span class="line">    <span class="comment"># server_names_hash_bucket_size所控制的。如果Nginx给出需要增大hash max size 或</span></span><br><span class="line">    <span class="comment"># hash bucket size的提示，那么首要的是增大前一个参数的大小.</span></span><br><span class="line">    <span class="attribute">server_names_hash_bucker_size</span> <span class="number">128</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 客户端请求头部的缓冲区大小。这个可以根据你的系统分页大小来设置，一般一个请求的头部大小</span></span><br><span class="line">    <span class="comment"># 不会超过1k，不过由于一般系统分页都要大于1k，所以这里设置为分页大小。</span></span><br><span class="line">    <span class="comment"># 分页大小可以用命令getconf PAGESIZE取得。</span></span><br><span class="line">    <span class="attribute">client_header_buffer_size</span> <span class="number">4k</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 客户请求头缓冲大小。nginx默认会用client_header_buffer_size这个buffer来读取</span></span><br><span class="line">    <span class="comment"># header值，如果header过大，它会使用large_client_header_buffers来读取。</span></span><br><span class="line">    <span class="attribute">large_client_header_buffers</span> <span class="number">8</span> <span class="number">128k</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 设定通过nginx上传文件的大小</span></span><br><span class="line">    <span class="attribute">client_max_body_size</span> <span class="number">300m</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 这个指令指定缓存是否启用。</span></span><br><span class="line">    <span class="comment"># 例: open_file_cache max=1000 inactive=20s;</span></span><br><span class="line">    <span class="comment"># open_file_cache_valid 30s;</span></span><br><span class="line">    <span class="comment"># open_file_cache_min_uses 2;</span></span><br><span class="line">    <span class="comment"># open_file_cache_errors on;</span></span><br><span class="line">    <span class="comment"># 语法:open_file_cache_errors on | off</span></span><br><span class="line">    <span class="comment"># 默认值:open_file_cache_errors off</span></span><br><span class="line">    <span class="comment"># 使用字段:http, server, location 这个指令指定是否在搜索一个文件是记录cache错误.</span></span><br><span class="line">    <span class="attribute">open_file_cache</span> max=<span class="number">102400</span> inactive=<span class="number">20s</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 日志格式设置。</span></span><br><span class="line">    <span class="comment"># $remote_addr与$http_x_forwarded_for用以记录客户端的ip地址；</span></span><br><span class="line">    <span class="comment"># $remote_user：用来记录客户端用户名称；</span></span><br><span class="line">    <span class="comment"># $time_local： 用来记录访问时间与时区；</span></span><br><span class="line">    <span class="comment"># $request： 用来记录请求的url与http协议；</span></span><br><span class="line">    <span class="comment"># $status： 用来记录请求状态；成功是200，</span></span><br><span class="line">    <span class="comment"># $body_bytes_sent ：记录发送给客户端文件主体内容大小；</span></span><br><span class="line">    <span class="comment"># $http_referer：用来记录从那个页面链接访问过来的；</span></span><br><span class="line">    <span class="comment"># $http_user_agent：记录客户浏览器的相关信息；</span></span><br><span class="line">    <span class="comment"># 通常web服务器放在反向代理的后面，这样就不能获取到客户的IP地址了，通过$remote_add</span></span><br><span class="line">    <span class="comment"># 拿到的IP地址是反向代理服务器的iP地址。反向代理服务器在转发请求的http头信息中，</span></span><br><span class="line">    <span class="comment"># 可以增加x_forwarded_for信息，用以记录原有客户端的IP地址和原来客户端的请求的服务器地址。</span></span><br><span class="line">    <span class="attribute">log_format</span> main <span class="string">'<span class="variable">$remote_addr</span> - <span class="variable">$remote_user</span> [<span class="variable">$time_local</span>] "<span class="variable">$request</span>" '</span></span><br><span class="line">                    <span class="string">'<span class="variable">$status</span> <span class="variable">$body_bytes_sent</span> "<span class="variable">$http_referer</span>" '</span></span><br><span class="line">                    <span class="string">"<span class="variable">$http_user_agent</span>"</span> <span class="string">"<span class="variable">$http_x_forwarded_for</span>"</span><span class="string">';</span></span><br><span class="line"><span class="string">    log_format log404   '</span><span class="variable">$status</span> [<span class="variable">$time_local</span>] <span class="variable">$remote_addr</span> <span class="variable">$host</span><span class="variable">$request_uri</span><span class="string">'</span></span><br><span class="line"><span class="string">                        '</span><span class="variable">$sent_http_location</span><span class="string">';</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    # 用了log_format指令设置了日志格式之后，需要用access_log指令指定日志文件的存放路径</span></span><br><span class="line"><span class="string">    access_log logs/access.log main;</span></span><br><span class="line"><span class="string">    access_log logs/access.404.log  log404;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    # sendfile指令指定 nginx 是否调用sendfile 函数（zero copy 方式）来输出文件，</span></span><br><span class="line"><span class="string">    # 对于普通应用，必须设为on。如果用来进行下载等应用磁盘IO重负载应用，可设置为off，</span></span><br><span class="line"><span class="string">    # 以平衡磁盘与网络IO处理速度，降低系统uptime。</span></span><br><span class="line"><span class="string">    sendfile on;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    # 此选项允许或禁止使用socke的TCP_CORK的选项，此选项仅在使用sendfile的时候使用</span></span><br><span class="line"><span class="string">    tcp_nopush on;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    # keepalive超时时间</span></span><br><span class="line"><span class="string">    keepalive_timeout 65;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    # 开启gzip压缩输出</span></span><br><span class="line"><span class="string">    gzip on;  </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    # 配置文件的包含</span></span><br><span class="line"><span class="string">    include /etc/nginx/conf.d/*.conf</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    # 配置DNS解析服务器，可以多个，用空格分隔</span></span><br><span class="line"><span class="string">    resolver 10.30.1.9;</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string"># 生产环境中不要使用"daemon"和"master_process"指令，这些选项仅用于开发调试。</span></span><br><span class="line"><span class="string">daemon off;</span></span><br></pre></td></tr></table></figure>
+<h2 id="日志"><a href="#日志" class="headerlink" title="日志"></a>日志</h2><p>日志级别如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">ngx.STDERR     -- 标准输出</span><br><span class="line">ngx.EMERG      -- 紧急报错</span><br><span class="line">ngx.ALERT      -- 报警</span><br><span class="line">ngx.CRIT       -- 严重，系统故障，触发运维告警系统</span><br><span class="line">ngx.ERR        -- 错误，业务不可恢复性错误</span><br><span class="line">ngx.WARN       -- 告警，业务中可忽略错误</span><br><span class="line">ngx.NOTICE     -- 提醒，业务比较重要信息</span><br><span class="line">ngx.INFO       -- 信息，业务琐碎日志信息，包含不同情况判断等</span><br><span class="line">ngx.DEBUG      -- 调试</span><br></pre></td></tr></table></figure>
+<p>修改nginx.conf文件中</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">error_log /var/log/ngingx/error.log warn</span><br></pre></td></tr></table></figure>
+<p>然后在Lua脚本中调用</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ngx.log(ngx.WARN,string.format(&quot;&quot;))</span><br><span class="line">ngx.log(ngx.ERR,string.format(&quot;&quot;))</span><br></pre></td></tr></table></figure>
+<p>日志输出如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">2017/06/06 19:32:26 [warn] 19356#3272: *20 [lua] content_by_lua(nginx.conf:52):5: [WARN] The request is from 127.0.0.1, client: 127.0.0.1, server: , request: &quot;GET / HTTP/1.1&quot;, host: &quot;localhost&quot;</span><br><span class="line">2017/06/06 19:32:26 [error] 19356#3272: *20 [lua] content_by_lua(nginx.conf:52):6: [ERROR] The request is from 127.0.0.1, client: 127.0.0.1, server: , request: &quot;GET / HTTP/1.1&quot;, host: &quot;localhost&quot;</span><br><span class="line">127.0.0.1 - - [06/Jun/2017:19:32:26 +0800] &quot;GET / HTTP/1.1&quot; 200 41 &quot;-&quot; &quot;Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1; Win64; x64; Trident/4.0; .NET CLR 2.0.50727; SLCC2; .NET CLR 3.5.30729; .NET CLR 3.0.30729; Media Center PC 6.0; .NET4.0C; .NET4.0E; TCO_20170606192303)&quot; &quot;-&quot;</span><br></pre></td></tr></table></figure>
+<p>第一行为warn级别，第二行为error级别，第三行为Access日志。</p>
+<p>系统中可以将关键流程日志设置为Warn，而非Notice和Info，因为nginx本身会输出大量的Notice和info信息。</p>
+<h2 id="location-匹配规则"><a href="#location-匹配规则" class="headerlink" title="location 匹配规则"></a>location 匹配规则</h2><p>语法规则</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">location [=|~|~*|^~] /uri/ &#123; … &#125;</span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th>模式</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>location = /uri</code></td>
+<td>= 表示精确匹配，只有完全匹配上才能生效</td>
+</tr>
+<tr>
+<td><code>location ^~ /uri</code></td>
+<td>^~ 开头对URL路径进行前缀匹配，并且在正则之前。</td>
+</tr>
+<tr>
+<td><code>location ~ pattern</code></td>
+<td>开头表示区分大小写的正则匹配</td>
+</tr>
+<tr>
+<td><code>location ~* pattern</code></td>
+<td>开头表示不区分大小写的正则匹配</td>
+</tr>
+<tr>
+<td><code>location /uri</code></td>
+<td>不带任何修饰符，也表示前缀匹配，但是在正则匹配之后</td>
+</tr>
+<tr>
+<td><code>location /</code></td>
+<td>通用匹配，任何未匹配到其它location的请求都会匹配到，相当于switch中的default</td>
+</tr>
+</tbody>
+</table>
+<p>前缀匹配时，Nginx 不对 url 做编码，因此请求为 /static/20%/aa，可以被规则 ^~ /static/ /aa 匹配到（注意是空格）<br>多个 location 配置的情况下匹配顺序为</p>
+<ul>
+<li>首先精确匹配 =</li>
+<li>其次前缀匹配 ^~</li>
+<li>其次是按文件中顺序的正则匹配</li>
+<li>然后匹配不带任何修饰的前缀匹配。</li>
+<li>最后是交给 / 通用匹配</li>
+<li>当有匹配成功时候，停止匹配，按当前匹配规则处理请求</li>
+</ul>
+<p>注意：前缀匹配，如果有包含关系时，按最大匹配原则进行匹配。比如在前缀匹配：<code>location /dir01</code> 与 <code>location /dir01/dir02</code>，如有请求 <code>http://localhost/dir01/dir02/file</code> 将最终匹配到 <code>location /dir01/dir02</code></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/nginx/" rel="tag"># nginx</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/09/14/lua/" rel="next" title="Lua语言学习">
+                <i class="fa fa-chevron-left"></i> Lua语言学习
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/09/14/openresty-qa/" rel="prev" title="openresty遇到的问题">
+                openresty遇到的问题 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">linyemin</p>
+              <p class="site-description motion-element" itemprop="description">海阔凭鱼跃，天高任鸟飞</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">69</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">14</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">45</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#nginx-conf"><span class="nav-number">1.</span> <span class="nav-text">nginx.conf</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#日志"><span class="nav-number">2.</span> <span class="nav-text">日志</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#location-匹配规则"><span class="nav-number">3.</span> <span class="nav-text">location 匹配规则</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">linyemin</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

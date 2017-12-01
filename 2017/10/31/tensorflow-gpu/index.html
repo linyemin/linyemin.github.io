@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="tensorflow," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="TensorFlow GPU加速">
+<meta name="keywords" content="tensorflow">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TensorFlow GPU加速">
+<meta property="og:url" content="http://yoursite.com/2017/10/31/tensorflow-gpu/index.html">
+<meta property="og:site_name" content="林烨敏的博客">
+<meta property="og:description" content="TensorFlow GPU加速">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-11-30T12:01:00.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="TensorFlow GPU加速">
+<meta name="twitter:description" content="TensorFlow GPU加速">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/10/31/tensorflow-gpu/"/>
+
+
+
+
+
+  <title>TensorFlow GPU加速 | 林烨敏的博客</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">林烨敏的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/31/tensorflow-gpu/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="linyemin">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="林烨敏的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">TensorFlow GPU加速</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-31T16:00:00+08:00">
+                2017-10-31
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/tensorflow/" itemprop="url" rel="index">
+                    <span itemprop="name">tensorflow</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>TensorFlow GPU加速<br><a id="more"></a></p>
+<h1 id="单卡"><a href="#单卡" class="headerlink" title="单卡"></a>单卡</h1><p>尽管机器上多个CPU，但是对于TF来说，所有的CPU都是<code>/cpu:0</code></p>
+<p>多个GPU时，设备名称为<code>/gpu:n</code>，n从0开始</p>
+<p>查看运行每一个操作的设备</p>
+<p>CPU上</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line">os.environ[<span class="string">'TF_CPP_MIN_LOG_LEVEL'</span>] = <span class="string">'3'</span></span><br><span class="line"></span><br><span class="line">a = tf.constant([<span class="number">1.0</span>, <span class="number">2.0</span>, <span class="number">3.0</span>], shape=[<span class="number">3</span>], name=<span class="string">'a'</span>)</span><br><span class="line">b = tf.constant([<span class="number">1.0</span>, <span class="number">2.0</span>, <span class="number">3.0</span>], shape=[<span class="number">3</span>], name=<span class="string">'b'</span>)</span><br><span class="line">c = a + b</span><br><span class="line"></span><br><span class="line"><span class="comment"># 通过log_device_placement参数来记录运行每一个运算的设备。</span></span><br><span class="line"><span class="keyword">with</span> tf.Session(config=tf.ConfigProto(log_device_placement=<span class="keyword">True</span>)) <span class="keyword">as</span> sess:</span><br><span class="line">    print(sess.run(c))</span><br></pre></td></tr></table></figure>
+<p>输出</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Device mapping: no known devices.</span><br><span class="line">add: (Add): /job:localhost/replica:0/task:0/cpu:0</span><br><span class="line">b: (Const): /job:localhost/replica:0/task:0/cpu:0</span><br><span class="line">a: (Const): /job:localhost/replica:0/task:0/cpu:0</span><br><span class="line">[ 2.  4.  6.]</span><br></pre></td></tr></table></figure>
+<p>GPU版本</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line">os.environ[<span class="string">'TF_CPP_MIN_LOG_LEVEL'</span>] = <span class="string">'3'</span></span><br><span class="line"></span><br><span class="line">a = tf.constant([<span class="number">1.0</span>, <span class="number">2.0</span>, <span class="number">3.0</span>], shape=[<span class="number">3</span>], name=<span class="string">'a'</span>)</span><br><span class="line">b = tf.constant([<span class="number">1.0</span>, <span class="number">2.0</span>, <span class="number">3.0</span>], shape=[<span class="number">3</span>], name=<span class="string">'b'</span>)</span><br><span class="line">c = a + b</span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> tf.device(<span class="string">"/cpu:0"</span>):</span><br><span class="line">    d = tf.constant([<span class="number">1.0</span>, <span class="number">2.0</span>, <span class="number">3.0</span>], shape=[<span class="number">3</span>], name=<span class="string">'d'</span>)</span><br><span class="line">    e = tf.constant([<span class="number">1.0</span>, <span class="number">2.0</span>, <span class="number">3.0</span>], shape=[<span class="number">3</span>], name=<span class="string">'e'</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> tf.device(<span class="string">"/gpu:1"</span>):</span><br><span class="line">    f = d + e</span><br><span class="line"></span><br><span class="line"><span class="comment"># 通过log_device_placement参数来记录运行每一个运算的设备。</span></span><br><span class="line"><span class="keyword">with</span> tf.Session(config=tf.ConfigProto(log_device_placement=<span class="keyword">True</span>)) <span class="keyword">as</span> sess:</span><br><span class="line">    print(sess.run(c))</span><br><span class="line">    print(sess.run(f))</span><br></pre></td></tr></table></figure>
+<p>输出</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Device mapping:</span><br><span class="line">/job:localhost/replica:0/task:0/gpu:0 -&gt; device: 0, name: Tesla P100-SXM2-16GB, pci bus id: 0000:0a:00.0</span><br><span class="line">/job:localhost/replica:0/task:0/gpu:1 -&gt; device: 1, name: Tesla P100-SXM2-16GB, pci bus id: 0000:0b:00.0</span><br><span class="line">add_1: (Add): /job:localhost/replica:0/task:0/gpu:1</span><br><span class="line">add: (Add): /job:localhost/replica:0/task:0/gpu:0</span><br><span class="line">e: (Const): /job:localhost/replica:0/task:0/cpu:0</span><br><span class="line">d: (Const): /job:localhost/replica:0/task:0/cpu:0</span><br><span class="line">b: (Const): /job:localhost/replica:0/task:0/gpu:0</span><br><span class="line">a: (Const): /job:localhost/replica:0/task:0/gpu:0</span><br><span class="line">[ 2.  4.  6.]</span><br><span class="line">[ 2.  4.  6.]</span><br></pre></td></tr></table></figure>
+<p>一些操作无法被放到GPU上，但是可以通过配置来智能的将不能放到GPU上的放到CPU上</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sess = tf.Session(config=tf.ConfigProto(allow_soft_placement=<span class="keyword">True</span>, log_device_placement=<span class="keyword">True</span>))</span><br></pre></td></tr></table></figure>
+<h1 id="并行模式"><a href="#并行模式" class="headerlink" title="并行模式"></a>并行模式</h1><p>同步和异步，并行环节为计算和参数更新。</p>
+<p>深度学习模型训练流程图</p>
+<p><img src="" alt=""></p>
+<p>异步模式深度学习模型训练流程图</p>
+<p><img src="" alt=""></p>
+<p>可以简单的认为异步模式就是单机模式复制了多份，每一份使用不同的训练数据进行训练。不同设备之间是完全独立的。</p>
+<p>存在的问题：多个设备对参数进行更新，可能会更新过头。如下图，黑球为初始状态，2个设备读取到此时的参数，均使黑球向左移动，而由于不同步问题，设备1先使得黑球移动到灰球，然后设备2再让灰球移动了白球位置。使得无法达到最优点。</p>
+<p>同步模式深度学习模型训练流程图</p>
+<p><img src="" alt=""></p>
+<p>所有设备会同时读取参数的取值，然后等待所有的设备的传播算法计算完成后，统一更新参数（取平均值）。</p>
+<p><img src="" alt=""></p>
+<p>缺点：受所有设备中最慢的设备制约。</p>
+<h1 id="一机多卡"><a href="#一机多卡" class="headerlink" title="一机多卡"></a>一机多卡</h1><p>因为一机上的GPU卡性能相似，所以采用同步方式。</p>
+<p>关于数据存储，因为需要为不同的GPU提供不同的训练数据，所以通过placeholder的方式就需要手动准备多份数据。为了方便训练数据的获取过程，可以采用输入队列的方式从TFRecord中读取数据，于是在这里提供的数据文件路径为将MNIST训练数据转化为TFRecords格式后的路径，如何将MNIST转化为TFRecord见<a href="http://liqiang311.com/tensorflow-tfrecord/" target="_blank" rel="noopener">TensorFlow TFRecord格式</a></p>
+<p>关于损失函数，对于给定的训练数据、正则化损失计算规则和命名空间，计算在这个命名空间下的总损失。之所以需要给定命名空间是因为不同的GPU上计算得出的正则化损失都会加入名为loss的集合，如果不通过命名空间就会将不同的GPU上的正则化损失都加进来。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> datetime <span class="keyword">import</span> datetime</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"><span class="keyword">import</span> mnist_inference</span><br><span class="line"></span><br><span class="line">os.environ[<span class="string">'TF_CPP_MIN_LOG_LEVEL'</span>] = <span class="string">'3'</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义训练神经网络时需要用到的参数。</span></span><br><span class="line">BATCH_SIZE = <span class="number">100</span></span><br><span class="line">LEARNING_RATE_BASE = <span class="number">0.001</span></span><br><span class="line">LEARNING_RATE_DECAY = <span class="number">0.99</span></span><br><span class="line">REGULARAZTION_RATE = <span class="number">0.0001</span></span><br><span class="line">TRAINING_STEPS = <span class="number">1000</span></span><br><span class="line">MOVING_AVERAGE_DECAY = <span class="number">0.99</span></span><br><span class="line">N_GPU = <span class="number">2</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义日志和模型输出的路径。</span></span><br><span class="line">MODEL_SAVE_PATH = <span class="string">"logs_and_models/"</span></span><br><span class="line">MODEL_NAME = <span class="string">"model.ckpt"</span></span><br><span class="line">DATA_PATH = <span class="string">"output.tfrecords"</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义输入队列得到训练数据</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_input</span><span class="params">()</span>:</span></span><br><span class="line">    filename_queue = tf.train.string_input_producer([DATA_PATH])</span><br><span class="line">    reader = tf.TFRecordReader()</span><br><span class="line">    _, serialized_example = reader.read(filename_queue)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 定义数据解析格式。</span></span><br><span class="line">    features = tf.parse_single_example(</span><br><span class="line">        serialized_example,</span><br><span class="line">        features=&#123;</span><br><span class="line">            <span class="string">'image_raw'</span>: tf.FixedLenFeature([], tf.string),</span><br><span class="line">            <span class="string">'pixels'</span>: tf.FixedLenFeature([], tf.int64),</span><br><span class="line">            <span class="string">'label'</span>: tf.FixedLenFeature([], tf.int64),</span><br><span class="line">        &#125;)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 解析图片和标签信息。</span></span><br><span class="line">    decoded_image = tf.decode_raw(features[<span class="string">'image_raw'</span>], tf.uint8)</span><br><span class="line">    reshaped_image = tf.reshape(decoded_image, [<span class="number">784</span>])</span><br><span class="line">    retyped_image = tf.cast(reshaped_image, tf.float32)</span><br><span class="line">    label = tf.cast(features[<span class="string">'label'</span>], tf.int32)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 定义输入队列并返回。</span></span><br><span class="line">    min_after_dequeue = <span class="number">10000</span></span><br><span class="line">    capacity = min_after_dequeue + <span class="number">3</span> * BATCH_SIZE</span><br><span class="line">    <span class="keyword">return</span> tf.train.shuffle_batch(</span><br><span class="line">        [retyped_image, label],</span><br><span class="line">        batch_size=BATCH_SIZE,</span><br><span class="line">        capacity=capacity,</span><br><span class="line">        min_after_dequeue=min_after_dequeue)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义损失函数。</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_loss</span><span class="params">(x, y_, regularizer, scope, reuse_variables=None)</span>:</span></span><br><span class="line">    <span class="keyword">with</span> tf.variable_scope(tf.get_variable_scope(), reuse=reuse_variables):</span><br><span class="line">        y = mnist_inference.inference(x, regularizer)</span><br><span class="line">    cross_entropy = tf.reduce_mean(</span><br><span class="line">        tf.nn.sparse_softmax_cross_entropy_with_logits(logits=y, labels=y_))</span><br><span class="line">    <span class="comment"># 计算当前命名空间（设备）上的损失</span></span><br><span class="line">    regularization_loss = tf.add_n(tf.get_collection(<span class="string">'losses'</span>, scope))</span><br><span class="line">    loss = cross_entropy + regularization_loss</span><br><span class="line">    <span class="keyword">return</span> loss</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 计算每一个变量梯度的平均值。</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">average_gradients</span><span class="params">(tower_grads)</span>:</span></span><br><span class="line">    average_grads = []</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 枚举所有的变量和变量在不同GPU上计算得出的梯度。</span></span><br><span class="line">    <span class="keyword">for</span> grad_and_vars <span class="keyword">in</span> zip(*tower_grads):</span><br><span class="line">        <span class="comment"># 计算所有GPU上的梯度平均值。</span></span><br><span class="line">        grads = []</span><br><span class="line">        <span class="keyword">for</span> g, _ <span class="keyword">in</span> grad_and_vars:</span><br><span class="line">            expanded_g = tf.expand_dims(g, <span class="number">0</span>)</span><br><span class="line">            grads.append(expanded_g)</span><br><span class="line">        grad = tf.concat(grads, <span class="number">0</span>)</span><br><span class="line">        grad = tf.reduce_mean(grad, <span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">        v = grad_and_vars[<span class="number">0</span>][<span class="number">1</span>]</span><br><span class="line">        grad_and_var = (grad, v)</span><br><span class="line">        <span class="comment"># 将变量和它的平均梯度对应起来。</span></span><br><span class="line">        average_grads.append(grad_and_var)</span><br><span class="line">    <span class="comment"># 返回所有变量的平均梯度，这个将被用于变量的更新。</span></span><br><span class="line">    <span class="keyword">return</span> average_grads</span><br><span class="line"></span><br><span class="line"><span class="comment"># 主训练过程。</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">(argv=None)</span>:</span></span><br><span class="line">    <span class="comment"># 将简单的运算放在CPU上，只有神经网络的训练过程放在GPU上。</span></span><br><span class="line">    <span class="keyword">with</span> tf.Graph().as_default(), tf.device(<span class="string">'/cpu:0'</span>):</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 定义基本的训练过程</span></span><br><span class="line">        x, y_ = get_input()</span><br><span class="line">        regularizer = tf.contrib.layers.l2_regularizer(REGULARAZTION_RATE)</span><br><span class="line"></span><br><span class="line">        global_step = tf.get_variable(<span class="string">'global_step'</span>, [],</span><br><span class="line">                                      initializer=tf.constant_initializer(<span class="number">0</span>),</span><br><span class="line">                                      trainable=<span class="keyword">False</span>)</span><br><span class="line">        learning_rate = tf.train.exponential_decay(LEARNING_RATE_BASE,</span><br><span class="line">                                                   global_step,</span><br><span class="line">                                                   <span class="number">60000</span> / BATCH_SIZE,</span><br><span class="line">                                                   LEARNING_RATE_DECAY)</span><br><span class="line"></span><br><span class="line">        opt = tf.train.GradientDescentOptimizer(learning_rate)</span><br><span class="line"></span><br><span class="line">        tower_grads = []</span><br><span class="line">        reuse_variables = <span class="keyword">False</span></span><br><span class="line">        <span class="comment"># 将神经网络的优化过程跑在不同的GPU上。</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(N_GPU):</span><br><span class="line">            <span class="comment"># 将优化过程指定在一个GPU上。</span></span><br><span class="line">            <span class="keyword">with</span> tf.device(<span class="string">'/gpu:%d'</span> % i):</span><br><span class="line">                <span class="keyword">with</span> tf.name_scope(<span class="string">'GPU_%d'</span> % i) <span class="keyword">as</span> scope:</span><br><span class="line">                    cur_loss = get_loss(x, y_, regularizer,</span><br><span class="line">                                        scope, reuse_variables)</span><br><span class="line">                    <span class="comment"># 第一次声明变量之后，将控制变量重用的参数设置为True</span></span><br><span class="line">                    <span class="comment"># 这样可以让不同的GPU更新同一组参数。</span></span><br><span class="line">                    reuse_variables = <span class="keyword">True</span></span><br><span class="line"></span><br><span class="line">                    <span class="comment"># 使用当前GPU计算所有变量的梯度</span></span><br><span class="line">                    grads = opt.compute_gradients(cur_loss)</span><br><span class="line">                    tower_grads.append(grads)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 计算变量的平均梯度。</span></span><br><span class="line">        grads = average_gradients(tower_grads)</span><br><span class="line">        <span class="keyword">for</span> grad, var <span class="keyword">in</span> grads:</span><br><span class="line">            <span class="keyword">if</span> grad <span class="keyword">is</span> <span class="keyword">not</span> <span class="keyword">None</span>:</span><br><span class="line">                tf.summary.histogram(</span><br><span class="line">                    <span class="string">'gradients_on_average/%s'</span> % var.op.name, grad)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 使用平均梯度更新参数。</span></span><br><span class="line">        apply_gradient_op = opt.apply_gradients(grads, global_step=global_step)</span><br><span class="line">        <span class="keyword">for</span> var <span class="keyword">in</span> tf.trainable_variables():</span><br><span class="line">            tf.summary.histogram(var.op.name, var)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 计算变量的滑动平均值。</span></span><br><span class="line">        variable_averages = tf.train.ExponentialMovingAverage(</span><br><span class="line">            MOVING_AVERAGE_DECAY, global_step)</span><br><span class="line">        variables_to_average = (</span><br><span class="line">            tf.trainable_variables() + tf.moving_average_variables())</span><br><span class="line">        variables_averages_op = variable_averages.apply(variables_to_average)</span><br><span class="line">        <span class="comment"># 每一轮迭代需要更新变量的取值并更新变量的滑动平均值。</span></span><br><span class="line">        train_op = tf.group(apply_gradient_op, variables_averages_op)</span><br><span class="line"></span><br><span class="line">        saver = tf.train.Saver(tf.global_variables())</span><br><span class="line">        summary_op = tf.summary.merge_all()</span><br><span class="line">        init = tf.global_variables_initializer()</span><br><span class="line">        <span class="keyword">with</span> tf.Session(config=tf.ConfigProto(</span><br><span class="line">                allow_soft_placement=<span class="keyword">True</span>, log_device_placement=<span class="keyword">True</span>)) <span class="keyword">as</span> sess:</span><br><span class="line">            <span class="comment"># 初始化所有变量并启动队列。</span></span><br><span class="line">            init.run()</span><br><span class="line">            coord = tf.train.Coordinator()</span><br><span class="line">            threads = tf.train.start_queue_runners(sess=sess, coord=coord)</span><br><span class="line">            summary_writer = tf.summary.FileWriter(MODEL_SAVE_PATH, sess.graph)</span><br><span class="line"></span><br><span class="line">            <span class="keyword">for</span> step <span class="keyword">in</span> range(TRAINING_STEPS):</span><br><span class="line">                <span class="comment"># 执行神经网络训练操作，并记录训练操作的运行时间。</span></span><br><span class="line">                start_time = time.time()</span><br><span class="line">                _, loss_value = sess.run([train_op, cur_loss])</span><br><span class="line">                duration = time.time() - start_time</span><br><span class="line"></span><br><span class="line">                <span class="comment"># 每隔一段时间数据当前的训练进度，并统计训练速度。</span></span><br><span class="line">                <span class="keyword">if</span> step != <span class="number">0</span> <span class="keyword">and</span> step % <span class="number">10</span> == <span class="number">0</span>:</span><br><span class="line">                    <span class="comment"># 计算使用过的训练数据个数。</span></span><br><span class="line">                    num_examples_per_step = BATCH_SIZE * N_GPU</span><br><span class="line">                    examples_per_sec = num_examples_per_step / duration</span><br><span class="line">                    sec_per_batch = duration / N_GPU</span><br><span class="line"></span><br><span class="line">                    <span class="comment"># 输出训练信息。</span></span><br><span class="line">                    format_str = (</span><br><span class="line">                        <span class="string">'%s: step %d, loss = %.2f (%.1f examples/sec; %.3f sec/batch)'</span>)</span><br><span class="line">                    print(format_str % (datetime.now(), step, loss_value,</span><br><span class="line">                                        examples_per_sec, sec_per_batch))</span><br><span class="line"></span><br><span class="line">                    <span class="comment"># 通过TensorBoard可视化训练过程。</span></span><br><span class="line">                    summary = sess.run(summary_op)</span><br><span class="line">                    summary_writer.add_summary(summary, step)</span><br><span class="line"></span><br><span class="line">                <span class="comment"># 每隔一段时间保存当前的模型。</span></span><br><span class="line">                <span class="keyword">if</span> step % <span class="number">1000</span> == <span class="number">0</span> <span class="keyword">or</span> (step + <span class="number">1</span>) == TRAINING_STEPS:</span><br><span class="line">                    checkpoint_path = os.path.join(MODEL_SAVE_PATH, MODEL_NAME)</span><br><span class="line">                    saver.save(sess, checkpoint_path, global_step=step)</span><br><span class="line"></span><br><span class="line">            coord.request_stop()</span><br><span class="line">            coord.join(threads)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    tf.app.run()</span><br></pre></td></tr></table></figure>
+<h1 id="分布式Tensorflow"><a href="#分布式Tensorflow" class="headerlink" title="分布式Tensorflow"></a>分布式Tensorflow</h1><h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><p>最简单的本地版单机集群</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建一个本地集群。</span></span><br><span class="line">c = tf.constant(<span class="string">"Hello, distributed TensorFlow!"</span>)</span><br><span class="line">server = tf.train.Server.create_local_server()</span><br><span class="line">sess = tf.Session(server.target)</span><br><span class="line">print(sess.run(c))</span><br></pre></td></tr></table></figure>
+<p>输出如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">I] Initialize GrpcChannelCache for job local -&gt; &#123;0 -&gt; localhost:57480&#125;</span><br><span class="line">I] tarted server with target: grpc://localhost:57480</span><br><span class="line">I] Start master session f276282b48feaadf with config:</span><br><span class="line">b&apos;Hello, distributed TensorFlow!&apos;</span><br></pre></td></tr></table></figure>
+<p>上述代码中，首先通过<code>tf.train.Server.create_local_server</code>函数在本地建立了一个只有一台机器的TF集群。然后在该集群上生成了一个会话，然后通过会话将运算运行在TF集群上。</p>
+<p>TF集群通过一系列的任务(tasks)来执行TF计算图中的运算。</p>
+<p>TF集群中的任务被聚合成工作(jobs)，每个工作可以包含一个或者多个任务。比如在训练深度学习模型时，一台运行反向传播的机器是一个任务，而所有运行反向传播机器的集合是一种工作。</p>
+<p>本地运行两个任务的TF集群代码如下：</p>
+<ul>
+<li>生成一个有两个任务的集群，一个任务跑在本地2222端口，一个跑在2223端口</li>
+<li>通过集群配置生成Server，并通过<code>job_name</code>和<code>task_index</code>指定当前所启动的任务</li>
+<li>通过server.target生成会话来使用TensorFlow集群中的资源。</li>
+</ul>
+<p>代码1</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line">c = tf.constant(<span class="string">"Hello from server1!"</span>)</span><br><span class="line"></span><br><span class="line">cluster = tf.train.ClusterSpec(&#123;<span class="string">"local"</span>: [<span class="string">"localhost:2222"</span>, <span class="string">"localhost:2223"</span>]&#125;)</span><br><span class="line">server = tf.train.Server(cluster, job_name=<span class="string">"local"</span>, task_index=<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">sess = tf.Session(server.target, config=tf.ConfigProto(</span><br><span class="line">    log_device_placement=<span class="keyword">True</span>))</span><br><span class="line">print(sess.run(c))</span><br><span class="line">server.join()</span><br></pre></td></tr></table></figure>
+<p>代码2</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line">c = tf.constant(<span class="string">"Hello from server2!"</span>)</span><br><span class="line"></span><br><span class="line">cluster = tf.train.ClusterSpec(&#123;<span class="string">"local"</span>: [<span class="string">"localhost:2222"</span>, <span class="string">"localhost:2223"</span>]&#125;)</span><br><span class="line">server = tf.train.Server(cluster, job_name=<span class="string">"local"</span>, task_index=<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">sess = tf.Session(server.target, config=tf.ConfigProto(</span><br><span class="line">    log_device_placement=<span class="keyword">True</span>))</span><br><span class="line">print(sess.run(c))</span><br><span class="line">server.join()</span><br></pre></td></tr></table></figure>
+<p>输出1</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">I] Initialize GrpcChannelCache for job local -&gt; &#123;0 -&gt; localhost:2222, 1 -&gt; localhost:2223&#125;</span><br><span class="line">I] Started server with target: grpc://localhost:2222</span><br><span class="line">I] CreateSession still waiting for response from worker: /job:local/replica:0/task:1</span><br><span class="line">I] Start master session a8ebceffea7be4f9 with config: log_device_placement: true</span><br><span class="line">Const: (Const): /job:local/replica:0/task:0/cpu:0</span><br><span class="line">I] Const: (Const)/job:local/replica:0/task:0/cpu:0</span><br><span class="line">b&apos;Hello from server1!&apos;</span><br></pre></td></tr></table></figure>
+<p>输出2</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">I] Initialize GrpcChannelCache for job local -&gt; &#123;0 -&gt; localhost:2222, 1 -&gt; localhost:2223&#125;</span><br><span class="line">I] Started server with target: grpc://localhost:2223</span><br><span class="line">I] Start master session af6a798759682e38 with config: log_device_placement: true</span><br><span class="line">Const: (Const): /job:local/replica:0/task:0/cpu:0</span><br><span class="line">I] Const: (Const)/job:local/replica:0/task:0/cpu:0</span><br><span class="line">b&apos;Hello from server2!&apos;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>代码运行后无法自动结束，也无法ctrl+c结束，必须手动kill</p>
+</blockquote>
+<p>ps-worker架构</p>
+<p>一般在做深度学习训练时，会定义两个工作，一个工作专门负责存储、获取以及更新变量的取值，这个工作中的所有任务称为参数服务器(parameter server ,ps)，另外一个工作负责运行反向传播算法来获取参数梯度，这个工作中的所有任务被称之为计算服务器(worker)。</p>
+<p>常见集群配置方法</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">tf.train,ClusterSpec(&#123;</span><br><span class="line">    <span class="string">"worker"</span>: [</span><br><span class="line">        <span class="string">"tf-worker0:2222"</span>,</span><br><span class="line">        <span class="string">"tf-worker1:2222"</span>,</span><br><span class="line">        <span class="string">"tf-worker2:2222"</span></span><br><span class="line">    ],</span><br><span class="line">    <span class="string">"ps"</span>: [</span><br><span class="line">        <span class="string">"tf-ps0:2222"</span>,</span><br><span class="line">        <span class="string">"tf-ps1:2222"</span></span><br><span class="line">    ]&#125;)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>其中的<code>tf-worker(i)</code>和<code>tf-ps(i)</code>均为服务器地址</p>
+</blockquote>
+<p>使用分布式TF训练深度学习时，一般有两种方式：计算图内分布式(in-graph relication)和计算图间分布式(between-graph relication)。</p>
+<p>图内分布式表示所有的任务参数使用的是一份，只不过运算被分发到了其他GPU上。</p>
+<p>图间分布式表示在每个服务器上创建一个独立的计算图，一些相同参数需要统一放到参数服务器上去。</p>
+<h2 id="模型训练"><a href="#模型训练" class="headerlink" title="模型训练"></a>模型训练</h2><p>在八卡服务器上用docker模拟4台2卡服务器：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker pull tensorflow/tensorflow:1.3.0-gpu-py3</span><br><span class="line">pip install nvidia-docker-compose</span><br></pre></td></tr></table></figure>
+<p>注：docker-compose文件中所用的<code>tensorflow:1.3.0-gpu-py3</code>镜像为自定义后的安装了SSH的镜像。</p>
+<p><a href="https://github.com/liqiang311/tf-code/blob/master/distributed/docker-compose.yml" target="_blank" rel="noopener">docker-compose.yml</a></p>
+<p>使用<code>nvidia-docker-compose up -d</code>启动</p>
+<p>将<a href="https://github.com/caicloud/tensorflow-tutorial/blob/master/Deep_Learning_with_TensorFlow/1.0.0/Chapter10/mnist_inference.py" target="_blank" rel="noopener"><code>mnist_inference.py</code></a>和MNIST_data拷贝到容器内。</p>
+<p>异步分布式代码<a href="https://github.com/liqiang311/tf-code/blob/master/distributed_mnist/dist_tf_mnist_async.py" target="_blank" rel="noopener">dist_tf_mnist_async.py</a></p>
+<p>运行代码</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">python dist_tf_mnist_async.py \</span><br><span class="line">--job_name='ps' \</span><br><span class="line">--task_id=0 \</span><br><span class="line">--ps_hosts='tf1:2222' \</span><br><span class="line">--worker_hosts='tf2:2222,tf3:2222,tf4:2222'</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">python dist_tf_mnist_async.py \</span><br><span class="line">--job_name='worker' \</span><br><span class="line">--task_id=0 \</span><br><span class="line">--ps_hosts='tf1:2222' \</span><br><span class="line">--worker_hosts='tf2:2222,tf3:2222,tf4:2222'</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">python dist_tf_mnist_async.py \</span><br><span class="line">--job_name='worker' \</span><br><span class="line">--task_id=1 \</span><br><span class="line">--ps_hosts='tf1:2222' \</span><br><span class="line">--worker_hosts='tf2:2222,tf3:2222,tf4:2222'</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">python dist_tf_mnist_async.py \</span><br><span class="line">--job_name='worker' \</span><br><span class="line">--task_id=2 \</span><br><span class="line">--ps_hosts='tf1:2222' \</span><br><span class="line">--worker_hosts='tf2:2222,tf3:2222,tf4:2222'</span><br></pre></td></tr></table></figure>
+<ul>
+<li>若运行失败，按<code>ctrl</code>+<code>z</code>退出任务，并执行命令<code>ps -ef|grep dist_tf_mnist|awk &#39;{print $2}&#39;|xargs kill -9</code>来停止进程。或者直接按<code>ctrl</code>+<code>\</code>。</li>
+<li>最好按照顺序来指定，出现过gRPC错误。</li>
+<li>训练步数最好长一点，出现过work1和work2结束了，work0还没开始跑，然后一直在等待work1和work2。</li>
+<li>出现过Save相关的错误，将缓存文件删除后正常。</li>
+<li>任务结束后PS没有退出，Worker们正常退出。</li>
+</ul>
+<p>附日志输出：</p>
+<p>ps</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">2017-11-02 19:44:15.985988: I tensorflow/core/distributed_runtime/rpc/grpc_channel.cc:215] Initialize GrpcChannelCache for job ps -&gt; &#123;0 -&gt; localhost:2222&#125;</span><br><span class="line">2017-11-02 19:44:15.986012: I tensorflow/core/distributed_runtime/rpc/grpc_channel.cc:215] Initialize GrpcChannelCache for job worker -&gt; &#123;0 -&gt; tf2:2222, 1 -&gt; tf3:2222, 2 -&gt; tf4:2222&#125;</span><br><span class="line">2017-11-02 19:44:15.992475: I tensorflow/core/distributed_runtime/rpc/grpc_server_lib.cc:316] Started server with target: grpc://localhost:2222</span><br></pre></td></tr></table></figure>
+<p>work0</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">2017-11-02 19:47:39.608580: I tensorflow/core/distributed_runtime/rpc/grpc_channel.cc:215] Initialize GrpcChannelCache for job ps -&gt; &#123;0 -&gt; tf1:2222&#125;</span><br><span class="line">2017-11-02 19:47:39.608617: I tensorflow/core/distributed_runtime/rpc/grpc_channel.cc:215] Initialize GrpcChannelCache for job worker -&gt; &#123;0 -&gt; localhost:2222, 1 -&gt; tf3:2222, 2 -&gt; tf4:2222&#125;</span><br><span class="line">2017-11-02 19:47:39.614075: I tensorflow/core/distributed_runtime/rpc/grpc_server_lib.cc:316] Started server with target: grpc://localhost:2222</span><br><span class="line">Extracting MNIST_data/train-images-idx3-ubyte.gz</span><br><span class="line">Extracting MNIST_data/train-labels-idx1-ubyte.gz</span><br><span class="line">Extracting MNIST_data/t10k-images-idx3-ubyte.gz</span><br><span class="line">Extracting MNIST_data/t10k-labels-idx1-ubyte.gz</span><br><span class="line">2017-11-02 19:47:40.341173: I tensorflow/core/distributed_runtime/master_session.cc:998] Start master session 939d3a7fc132946a with config: allow_soft_placement: true</span><br><span class="line">After 100 training steps (100 global steps), loss on training batch is 1.1583.  (0.013 sec/batch)</span><br><span class="line">After 200 training steps (200 global steps), loss on training batch is 0.997324.  (0.011 sec/batch)</span><br><span class="line">After 300 training steps (300 global steps), loss on training batch is 0.773724.  (0.010 sec/batch)</span><br><span class="line">...</span><br><span class="line">After 17400 training steps (49116 global steps), loss on training batch is 0.256622.  (0.003 sec/batch)</span><br><span class="line">After 17500 training steps (49416 global steps), loss on training batch is 0.194089.  (0.003 sec/batch)</span><br><span class="line">After 17600 training steps (49761 global steps), loss on training batch is 0.203695.  (0.003 sec/batch)</span><br></pre></td></tr></table></figure>
+<p>work1</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">2017-11-02 19:46:00.304995: I tensorflow/core/distributed_runtime/rpc/grpc_channel.cc:215] Initialize GrpcChannelCache for job ps -&gt; &#123;0 -&gt; tf1:2222&#125;</span><br><span class="line">2017-11-02 19:46:00.305041: I tensorflow/core/distributed_runtime/rpc/grpc_channel.cc:215] Initialize GrpcChannelCache for job worker -&gt; &#123;0 -&gt; tf2:2222, 1 -&gt; localhost:2222, 2 -&gt; tf4:2222&#125;</span><br><span class="line">2017-11-02 19:46:00.309096: I tensorflow/core/distributed_runtime/rpc/grpc_server_lib.cc:316] Started server with target: grpc://localhost:2222</span><br><span class="line">Extracting MNIST_data/train-images-idx3-ubyte.gz</span><br><span class="line">Extracting MNIST_data/train-labels-idx1-ubyte.gz</span><br><span class="line">Extracting MNIST_data/t10k-images-idx3-ubyte.gz</span><br><span class="line">Extracting MNIST_data/t10k-labels-idx1-ubyte.gz</span><br><span class="line">2017-11-02 19:46:10.896843: I tensorflow/core/distributed_runtime/master.cc:209] CreateSession still waiting for response from worker: /job:worker/replica:0/task:2</span><br><span class="line">2017-11-02 19:46:20.897174: I tensorflow/core/distributed_runtime/master.cc:209] CreateSession still waiting for response from worker: /job:worker/replica:0/task:2</span><br><span class="line">2017-11-02 19:47:55.381434: I tensorflow/core/distributed_runtime/master_session.cc:998] Start master session 0eee8cbf90393028 with config: allow_soft_placement: true</span><br><span class="line">After 100 training steps (2882 global steps), loss on training batch is 0.320553.  (0.000 sec/batch)</span><br><span class="line">After 200 training steps (3182 global steps), loss on training batch is 0.399293.  (0.001 sec/batch)</span><br><span class="line">After 300 training steps (3459 global steps), loss on training batch is 0.502328.  (0.001 sec/batch)</span><br><span class="line">...</span><br><span class="line">After 15500 training steps (49163 global steps), loss on training batch is 0.250214.  (0.003 sec/batch)</span><br><span class="line">After 15600 training steps (49463 global steps), loss on training batch is 0.263818.  (0.003 sec/batch)</span><br><span class="line">After 15700 training steps (49747 global steps), loss on training batch is 0.242237.  (0.003 sec/batch)</span><br></pre></td></tr></table></figure>
+<p>work2</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">2017-11-02 19:46:22.534712: I tensorflow/core/distributed_runtime/rpc/grpc_channel.cc:215] Initialize GrpcChannelCache for job ps -&gt; &#123;0 -&gt; tf1:2222&#125;</span><br><span class="line">2017-11-02 19:46:22.534750: I tensorflow/core/distributed_runtime/rpc/grpc_channel.cc:215] Initialize GrpcChannelCache for job worker -&gt; &#123;0 -&gt; tf2:2222, 1 -&gt; tf3:2222, 2 -&gt; localhost:2222&#125;</span><br><span class="line">2017-11-02 19:46:22.541141: I tensorflow/core/distributed_runtime/rpc/grpc_server_lib.cc:316] Started server with target: grpc://localhost:2222</span><br><span class="line">Extracting MNIST_data/train-images-idx3-ubyte.gz</span><br><span class="line">Extracting MNIST_data/train-labels-idx1-ubyte.gz</span><br><span class="line">Extracting MNIST_data/t10k-images-idx3-ubyte.gz</span><br><span class="line">Extracting MNIST_data/t10k-labels-idx1-ubyte.gz</span><br><span class="line">2017-11-02 19:47:49.774579: I tensorflow/core/distributed_runtime/master_session.cc:998] Start master session 7a6b5cf0ec6e077a with config: allow_soft_placement: true</span><br><span class="line">After 400 training steps (2052 global steps), loss on training batch is 0.388676.  (0.002 sec/batch)</span><br><span class="line">After 500 training steps (2252 global steps), loss on training batch is 0.385591.  (0.002 sec/batch)</span><br><span class="line">After 600 training steps (2472 global steps), loss on training batch is 0.495955.  (0.002 sec/batch)</span><br><span class="line">...</span><br><span class="line">After 16400 training steps (49619 global steps), loss on training batch is 0.23656.  (0.003 sec/batch)</span><br><span class="line">After 16500 training steps (49935 global steps), loss on training batch is 0.21213.  (0.003 sec/batch)</span><br></pre></td></tr></table></figure>
+<p>同步代码<a href="https://github.com/liqiang311/tf-code/blob/master/distributed_mnist/dist_tf_mnist_sync.py" target="_blank" rel="noopener">dist_tf_mnist_sync.py</a></p>
+<p>运行代码把<code>dist_tf_mnist_async.py</code>替换为<code>dist_tf_mnist_sync.py</code></p>
+<p>日志</p>
+<p>ps</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>work0</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>work1</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">```</span><br><span class="line"></span><br><span class="line">work2</span><br></pre></td></tr></table></figure>
+<p>```</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/tensorflow/" rel="tag"># tensorflow</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/10/30/tensorflow-rnn-quickstart/" rel="next" title="TensorFlow RNN入门">
+                <i class="fa fa-chevron-left"></i> TensorFlow RNN入门
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/11/03/tensorflow-tensorboard/" rel="prev" title="TensorFlow TensorBoard 使用">
+                TensorFlow TensorBoard 使用 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">linyemin</p>
+              <p class="site-description motion-element" itemprop="description">海阔凭鱼跃，天高任鸟飞</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">69</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">14</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">45</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#单卡"><span class="nav-number">1.</span> <span class="nav-text">单卡</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#并行模式"><span class="nav-number">2.</span> <span class="nav-text">并行模式</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#一机多卡"><span class="nav-number">3.</span> <span class="nav-text">一机多卡</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#分布式Tensorflow"><span class="nav-number">4.</span> <span class="nav-text">分布式Tensorflow</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#原理"><span class="nav-number">4.1.</span> <span class="nav-text">原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#模型训练"><span class="nav-number">4.2.</span> <span class="nav-text">模型训练</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">linyemin</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

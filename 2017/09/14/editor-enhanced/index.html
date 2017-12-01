@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="editor," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="浏览器插件">
+<meta name="keywords" content="editor">
+<meta property="og:type" content="article">
+<meta property="og:title" content="各种编辑器的加强功能">
+<meta property="og:url" content="http://yoursite.com/2017/09/14/editor-enhanced/index.html">
+<meta property="og:site_name" content="林烨敏的博客">
+<meta property="og:description" content="浏览器插件">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-11-30T12:01:00.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="各种编辑器的加强功能">
+<meta name="twitter:description" content="浏览器插件">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/09/14/editor-enhanced/"/>
+
+
+
+
+
+  <title>各种编辑器的加强功能 | 林烨敏的博客</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">林烨敏的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/14/editor-enhanced/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="linyemin">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="林烨敏的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">各种编辑器的加强功能</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-14T15:58:21+08:00">
+                2017-09-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/tool/" itemprop="url" rel="index">
+                    <span itemprop="name">tool</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="浏览器插件"><a href="#浏览器插件" class="headerlink" title="浏览器插件"></a>浏览器插件</h1><a id="more"></a>
+<h2 id="Google翻译-中英文"><a href="#Google翻译-中英文" class="headerlink" title="Google翻译(中英文)"></a>Google翻译(中英文)</h2><h2 id="Markdown-Preview-Plus"><a href="#Markdown-Preview-Plus" class="headerlink" title="Markdown Preview Plus"></a><a href="https://chrome.google.com/webstore/detail/markdown-preview-plus/febilkbfcbhebfnokafefeacimjdckgl?utm_source=chrome-app-launcher-info-dialog" target="_blank" rel="noopener">Markdown Preview Plus</a></h2><h2 id="Github-Tree"><a href="#Github-Tree" class="headerlink" title="Github Tree"></a><a href="https://github.com/buunguyen/octotree/blob/master/dist/chrome.crx" target="_blank" rel="noopener">Github Tree</a></h2><p>点击view raw下载，然后安装</p>
+<h2 id="划词翻译"><a href="#划词翻译" class="headerlink" title="划词翻译"></a><a href="https://github.com/Selection-Translator/crx-selection-translate" target="_blank" rel="noopener">划词翻译</a></h2><h2 id="qiniu-upload-files"><a href="#qiniu-upload-files" class="headerlink" title="qiniu upload files"></a><a href="https://chrome.google.com/webstore/detail/qiniu-upload-files/emmfkgdgapbjphdolealbojmcmnphdcc" target="_blank" rel="noopener">qiniu upload files</a></h2><h2 id="七牛在线存图"><a href="#七牛在线存图" class="headerlink" title="七牛在线存图"></a><a href="https://chrome.google.com/webstore/detail/%E4%B8%83%E7%89%9B%E5%9C%A8%E7%BA%BF%E5%AD%98%E5%9B%BE/ojgilmgaopbpimndoelnhacamaabdpni" target="_blank" rel="noopener">七牛在线存图</a></h2><h1 id="Vim"><a href="#Vim" class="headerlink" title="Vim"></a>Vim</h1><p><a href="http://www.cnblogs.com/wangj08/archive/2013/03/13/2957309.html" target="_blank" rel="noopener">reference</a></p>
+<p><code>vim ~/.vimrc</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">syntax on</span><br><span class="line">set number</span><br><span class="line">set tabstop=4</span><br><span class="line">set expandtab</span><br><span class="line">set hlsearch</span><br></pre></td></tr></table></figure>
+<h1 id="Sublime3"><a href="#Sublime3" class="headerlink" title="Sublime3"></a>Sublime3</h1><h2 id="激活"><a href="#激活" class="headerlink" title="激活"></a>激活</h2><p>3126激活码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">—– BEGIN LICENSE —–</span><br><span class="line">Michael Barnes</span><br><span class="line">Single User License</span><br><span class="line">EA7E-821385</span><br><span class="line">8A353C41 872A0D5C DF9B2950 AFF6F667</span><br><span class="line">C458EA6D 8EA3C286 98D1D650 131A97AB</span><br><span class="line">AA919AEC EF20E143 B361B1E7 4C8B7F04</span><br><span class="line">B085E65E 2F5F5360 8489D422 FB8FC1AA</span><br><span class="line">93F6323C FD7F7544 3F39C318 D95E6480</span><br><span class="line">FCCC7561 8A4A1741 68FA4223 ADCEDE07</span><br><span class="line">200C25BE DBBC4855 C4CFB774 C5EC138C</span><br><span class="line">0FEC1CEF D9DCECEC D3A5DAD1 01316C36</span><br><span class="line">—— END LICENSE ——</span><br></pre></td></tr></table></figure>
+<p>3143激活码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">—– BEGIN LICENSE —–  </span><br><span class="line">TwitterInc  </span><br><span class="line">200 User License  </span><br><span class="line">EA7E-890007  </span><br><span class="line">1D77F72E 390CDD93 4DCBA022 FAF60790  </span><br><span class="line">61AA12C0 A37081C5 D0316412 4584D136  </span><br><span class="line">94D7F7D4 95BC8C1C 527DA828 560BB037  </span><br><span class="line">D1EDDD8C AE7B379F 50C9D69D B35179EF  </span><br><span class="line">2FE898C4 8E4277A8 555CE714 E1FB0E43  </span><br><span class="line">D5D52613 C3D12E98 BC49967F 7652EED2  </span><br><span class="line">9D2D2E61 67610860 6D338B72 5CF95C69  </span><br><span class="line">E36B85CC 84991F19 7575D828 470A92AB  </span><br><span class="line">—— END LICENSE ——</span><br></pre></td></tr></table></figure>
+<h2 id="设置"><a href="#设置" class="headerlink" title="设置"></a>设置</h2><p><code>Prefences</code>-&gt;<code>Settings</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&quot;font_size&quot;: 14,</span><br><span class="line">&quot;default_encoding&quot;:&quot;UTF-8&quot;, //unix模式</span><br><span class="line">&quot;default_line_ending&quot;:&quot;unix&quot;,</span><br><span class="line"></span><br><span class="line">&quot;translate_tabs_to_spaces&quot;: false, //</span><br></pre></td></tr></table></figure>
+<h2 id="在文件夹右键和空格右键处添加用Sublime打开"><a href="#在文件夹右键和空格右键处添加用Sublime打开" class="headerlink" title="在文件夹右键和空格右键处添加用Sublime打开"></a>在文件夹右键和空格右键处添加用Sublime打开</h2><p><code>Win + R</code> -&gt; <code>regedit</code>打开注册表</p>
+<h3 id="在资源管理器的当前目录打开"><a href="#在资源管理器的当前目录打开" class="headerlink" title="在资源管理器的当前目录打开"></a>在资源管理器的当前目录打开</h3><p>定位到如下：<code>HKEY_CLASSES_ROOT\Directory\background\shell</code></p>
+<p>右键点击<code>shell</code>，<code>新建</code>-&gt;<code>项</code>，命名为<code>Sublime</code></p>
+<p>右键点击<code>Sublime</code>，<code>新建</code>-&gt;<code>项</code>，命名为<code>command</code></p>
+<p>点击<code>command</code>，右侧会出现默认的一条数据，双击<code>名称</code>一栏的<code>(默认)</code>，修改数值数据为<code>&quot;C:\Program Files\Sublime Text 3\sublime_text.exe&quot; &quot;-a&quot; &quot;%v&quot;</code></p>
+<h3 id="点击文件夹用Sublime打开"><a href="#点击文件夹用Sublime打开" class="headerlink" title="点击文件夹用Sublime打开"></a>点击文件夹用Sublime打开</h3><p>定位到如下：<code>HKEY_CLASSES_ROOT\Directory\shell</code></p>
+<p>重复以上内容。</p>
+<h2 id="Markdown-Editing"><a href="#Markdown-Editing" class="headerlink" title="Markdown Editing"></a>Markdown Editing</h2><p><a href="http://blog.csdn.net/hfut_jf/article/details/52853868" target="_blank" rel="noopener">Reference</a></p>
+<p><code>Ctrl+Shift+P</code>-&gt;<code>Prefences: MarkdownEditing Settings User</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    &quot;font_size&quot;: 13,</span><br><span class="line">    &quot;ignored_packages&quot;:</span><br><span class="line">    [</span><br><span class="line">        &quot;Vintage&quot;</span><br><span class="line">    ],</span><br><span class="line"></span><br><span class="line">    /*</span><br><span class="line">        Enable or not mathjax support.</span><br><span class="line">    */</span><br><span class="line">    &quot;enable_mathjax&quot;: true,</span><br><span class="line"></span><br><span class="line">    /*</span><br><span class="line">        Enable or not highlight.js support for syntax highlighting.</span><br><span class="line">    */</span><br><span class="line">    &quot;enable_highlight&quot;: true,</span><br><span class="line"></span><br><span class="line">    //&quot;color_scheme&quot;: &quot;Packages/MarkdownEditing/MarkdownEditor-Dark.tmTheme&quot;,</span><br><span class="line">    &quot;color_scheme&quot;: &quot;Packages/MarkdownEditing/MarkdownEditor-Yellow.tmTheme&quot;,</span><br><span class="line">    //&quot;color_scheme&quot;: &quot;Packages/MarkdownEditing/MarkdownEditor.tmTheme&quot;,</span><br><span class="line"></span><br><span class="line">    // Layout</span><br><span class="line">    &quot;draw_centered&quot;: false,</span><br><span class="line">    &quot;wrap_width&quot;: 0,</span><br><span class="line"></span><br><span class="line">    // Line</span><br><span class="line">    &quot;line_numbers&quot;: true,</span><br><span class="line">    &quot;highlight_line&quot;: true,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>附：<a href="https://github.com/SublimeText-Markdown/MarkdownEditing" target="_blank" rel="noopener">MarkdownEditing GitHub</a></p>
+<h2 id="MarkdownPreview"><a href="#MarkdownPreview" class="headerlink" title="MarkdownPreview"></a>MarkdownPreview</h2><p><a href="https://github.com/revolunet/sublimetext-markdown-preview/blob/master/tests/test.md" target="_blank" rel="noopener">test.md</a></p>
+<h2 id="pylint"><a href="#pylint" class="headerlink" title="pylint"></a>pylint</h2><p><a href="https://www.zhaokeli.com/Article/6353.html" target="_blank" rel="noopener">Sublime配置pylinter实现查错,格式化,代码自动规范,对错误显示图标(python语法检查)</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    // When versbose is &apos;true&apos;, various messages will be written to the console.</span><br><span class="line">    // values: true or false</span><br><span class="line">    &quot;verbose&quot;: false,</span><br><span class="line">    // The full path to the Python executable you want to</span><br><span class="line">    // run Pylint with or simply use &apos;python&apos;.</span><br><span class="line">    &quot;python_bin&quot;: &quot;python&quot;,</span><br><span class="line">    // The following paths will be added Pylint&apos;s Python path</span><br><span class="line">    &quot;python_path&quot;: [</span><br><span class="line">        &quot;c:/python27/python.exe&quot;</span><br><span class="line">                   ],</span><br><span class="line">    // Optionally set the working directory</span><br><span class="line">    &quot;working_dir&quot;: null,</span><br><span class="line">    // Full path to the lint.py module in the pylint package</span><br><span class="line">    &quot;pylint_path&quot;: &quot;c:/python27/Lib/site-packages/pylint/lint.py&quot;,</span><br><span class="line">    // Optional full path to a Pylint configuration file</span><br><span class="line">    &quot;pylint_rc&quot;: null,</span><br><span class="line">    // Set to true to automtically run Pylint on save</span><br><span class="line">    &quot;run_on_save&quot;: true,</span><br><span class="line">    // Set to true to use graphical error icons</span><br><span class="line">    &quot;use_icons&quot;: true,</span><br><span class="line">    &quot;disable_outline&quot;: false,</span><br><span class="line">    // Status messages stay as long as cursor is on an error line</span><br><span class="line">    &quot;message_stay&quot;: true,</span><br><span class="line">    // Ignore Pylint error types. Possible values:</span><br><span class="line">    // &quot;R&quot; : Refactor for a &quot;good practice&quot; metric violation</span><br><span class="line">    // &quot;C&quot; : Convention for coding standard violation</span><br><span class="line">    // &quot;W&quot; : Warning for stylistic problems, or minor programming issues</span><br><span class="line">    // &quot;E&quot; : Error for important programming issues (i.e. most probably bug)</span><br><span class="line">    // &quot;F&quot; : Fatal for errors which prevented further processing</span><br><span class="line">    &quot;ignore&quot;: [],</span><br><span class="line">    // a list of strings of individual errors to disable, ex: [&quot;C0301&quot;]</span><br><span class="line">    &quot;disable&quot;: [],</span><br><span class="line">    &quot;plugins&quot;: []</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="python环境"><a href="#python环境" class="headerlink" title="python环境"></a>python环境</h2><p><a href="http://www.cnblogs.com/jxldjsn/p/6034158.html" target="_blank" rel="noopener">blog</a></p>
+<h2 id="ConvertToUTF8"><a href="#ConvertToUTF8" class="headerlink" title="ConvertToUTF8"></a>ConvertToUTF8</h2><h2 id="SublimeREPL"><a href="#SublimeREPL" class="headerlink" title="SublimeREPL"></a>SublimeREPL</h2><h2 id="SublimeCodeIntel"><a href="#SublimeCodeIntel" class="headerlink" title="SublimeCodeIntel"></a>SublimeCodeIntel</h2><h2 id="GoSublime-amp-GoImports"><a href="#GoSublime-amp-GoImports" class="headerlink" title="GoSublime &amp; GoImports"></a>GoSublime &amp; GoImports</h2><h2 id="Anaconda"><a href="#Anaconda" class="headerlink" title="Anaconda"></a>Anaconda</h2><p>自动格式化代码<code>ctrl</code>+<code>alt</code>+<code>R</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">	&quot;auto_formatting&quot;: true</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="VSCode"><a href="#VSCode" class="headerlink" title="VSCode"></a>VSCode</h1><h2 id="设置-1"><a href="#设置-1" class="headerlink" title="设置"></a>设置</h2><p><code>Crtl+,</code>-&gt;<code>用户设置</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;editor.fontSize&quot;: 16,</span><br><span class="line">    // 要使用的代理设置。如果尚未设置，则将从 http_proxy 和 https_proxy 环境变量获取</span><br><span class="line">  &quot;http.proxy&quot;: &quot;http://proxyhk.zte.com.cn:80&quot;,</span><br><span class="line">  &quot;files.autoSave&quot;: &quot;afterDelay&quot;,</span><br><span class="line">  &quot;workbench.colorTheme&quot;: &quot;Solarized Light&quot;,</span><br><span class="line">  &quot;git.enableSmartCommit&quot;: true,</span><br><span class="line">  &quot;git.confirmSync&quot;: false,</span><br><span class="line">  &quot;markdown.preview.fontSize&quot;: 16,</span><br><span class="line">  &quot;workbench.iconTheme&quot;: &quot;vscode-icons&quot;,</span><br><span class="line">  &quot;window.menuBarVisibility&quot;: &quot;default&quot;,</span><br><span class="line">  &quot;explorer.confirmDelete&quot;: false,</span><br><span class="line">  &quot;python.workspaceSymbols.tagFilePath&quot;: &quot;$&#123;workspaceRoot&#125;/tags&quot;,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="插件"><a href="#插件" class="headerlink" title="插件"></a>插件</h2><ul>
+<li>C/C++</li>
+<li>Docker</li>
+<li>Go</li>
+<li>Markdown All in One</li>
+<li>Markdown+ Math</li>
+<li>Python</li>
+<li>vscode-icons</li>
+<li>vscode-pandoc</li>
+</ul>
+<h2 id="编译C"><a href="#编译C" class="headerlink" title="编译C++"></a>编译C++</h2><p><a href="http://blog.csdn.net/c_duoduo/article/details/51615381" target="_blank" rel="noopener">Windows下VSCode编译调试c/c++</a></p>
+<h1 id="Atom"><a href="#Atom" class="headerlink" title="Atom"></a>Atom</h1><h2 id="Markdown配置"><a href="#Markdown配置" class="headerlink" title="Markdown配置"></a>Markdown配置</h2><p><a href="http://www.cnblogs.com/libin-1/p/6638165.html" target="_blank" rel="noopener">blog</a></p>
+<h1 id="字体"><a href="#字体" class="headerlink" title="字体"></a>字体</h1><p><a href="https://github.com/adobe-fonts/source-code-pro" target="_blank" rel="noopener">Source Code Pro</a></p>
+<h1 id="Markdown相关"><a href="#Markdown相关" class="headerlink" title="Markdown相关"></a>Markdown相关</h1><p><a href="http://blog.csdn.net/KimBing/article/details/52934959?locationNum=2&amp;fps=1" target="_blank" rel="noopener">Flow语法</a></p>
+<p><a href="http://blog.csdn.net/u011729865/article/details/49207455" target="_blank" rel="noopener">序列图和流程图</a></p>
+<h1 id="FastStone-Capture-激活"><a href="#FastStone-Capture-激活" class="headerlink" title="FastStone Capture 激活"></a>FastStone Capture 激活</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">FastStone Capture 注册码 序列号：</span><br><span class="line">name/用户名：TEAM JiOO</span><br><span class="line">key/注册码：CPCWXRVCZW30HMKE8KQQUXW</span><br><span class="line">USER NAME:TEAM_BRAiGHTLiNG_2007</span><br><span class="line">CODE:XPNMF-ISDYF-LCSED-BPATU</span><br><span class="line">RPTME-IMDHD-MIEPX-VLXAW</span><br><span class="line">企业版序列号：</span><br><span class="line">name：bluman</span><br><span class="line">serial/序列号/注册码：VPISCJULXUFGDDXYAUYF</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/editor/" rel="tag"># editor</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/09/14/docker-compose-yml/" rel="next" title="Docker Compose文件详解">
+                <i class="fa fa-chevron-left"></i> Docker Compose文件详解
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/09/14/gcc/" rel="prev" title="G++编译C++程序">
+                G++编译C++程序 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">linyemin</p>
+              <p class="site-description motion-element" itemprop="description">海阔凭鱼跃，天高任鸟飞</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">69</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">14</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">45</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#浏览器插件"><span class="nav-number">1.</span> <span class="nav-text">浏览器插件</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Google翻译-中英文"><span class="nav-number">1.1.</span> <span class="nav-text">Google翻译(中英文)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Markdown-Preview-Plus"><span class="nav-number">1.2.</span> <span class="nav-text">Markdown Preview Plus</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Github-Tree"><span class="nav-number">1.3.</span> <span class="nav-text">Github Tree</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#划词翻译"><span class="nav-number">1.4.</span> <span class="nav-text">划词翻译</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#qiniu-upload-files"><span class="nav-number">1.5.</span> <span class="nav-text">qiniu upload files</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#七牛在线存图"><span class="nav-number">1.6.</span> <span class="nav-text">七牛在线存图</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Vim"><span class="nav-number">2.</span> <span class="nav-text">Vim</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Sublime3"><span class="nav-number">3.</span> <span class="nav-text">Sublime3</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#激活"><span class="nav-number">3.1.</span> <span class="nav-text">激活</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#设置"><span class="nav-number">3.2.</span> <span class="nav-text">设置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#在文件夹右键和空格右键处添加用Sublime打开"><span class="nav-number">3.3.</span> <span class="nav-text">在文件夹右键和空格右键处添加用Sublime打开</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#在资源管理器的当前目录打开"><span class="nav-number">3.3.1.</span> <span class="nav-text">在资源管理器的当前目录打开</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#点击文件夹用Sublime打开"><span class="nav-number">3.3.2.</span> <span class="nav-text">点击文件夹用Sublime打开</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Markdown-Editing"><span class="nav-number">3.4.</span> <span class="nav-text">Markdown Editing</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MarkdownPreview"><span class="nav-number">3.5.</span> <span class="nav-text">MarkdownPreview</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pylint"><span class="nav-number">3.6.</span> <span class="nav-text">pylint</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#python环境"><span class="nav-number">3.7.</span> <span class="nav-text">python环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ConvertToUTF8"><span class="nav-number">3.8.</span> <span class="nav-text">ConvertToUTF8</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SublimeREPL"><span class="nav-number">3.9.</span> <span class="nav-text">SublimeREPL</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SublimeCodeIntel"><span class="nav-number">3.10.</span> <span class="nav-text">SublimeCodeIntel</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GoSublime-amp-GoImports"><span class="nav-number">3.11.</span> <span class="nav-text">GoSublime & GoImports</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Anaconda"><span class="nav-number">3.12.</span> <span class="nav-text">Anaconda</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#VSCode"><span class="nav-number">4.</span> <span class="nav-text">VSCode</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#设置-1"><span class="nav-number">4.1.</span> <span class="nav-text">设置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#插件"><span class="nav-number">4.2.</span> <span class="nav-text">插件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#编译C"><span class="nav-number">4.3.</span> <span class="nav-text">编译C++</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Atom"><span class="nav-number">5.</span> <span class="nav-text">Atom</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Markdown配置"><span class="nav-number">5.1.</span> <span class="nav-text">Markdown配置</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#字体"><span class="nav-number">6.</span> <span class="nav-text">字体</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Markdown相关"><span class="nav-number">7.</span> <span class="nav-text">Markdown相关</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#FastStone-Capture-激活"><span class="nav-number">8.</span> <span class="nav-text">FastStone Capture 激活</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">linyemin</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

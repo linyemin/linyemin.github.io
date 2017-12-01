@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="tensorflow," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="循环神经网络, Recurrent neural network, RNN">
+<meta name="keywords" content="tensorflow">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TensorFlow RNN入门">
+<meta property="og:url" content="http://yoursite.com/2017/10/30/tensorflow-rnn-quickstart/index.html">
+<meta property="og:site_name" content="林烨敏的博客">
+<meta property="og:description" content="循环神经网络, Recurrent neural network, RNN">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-11-30T12:01:00.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="TensorFlow RNN入门">
+<meta name="twitter:description" content="循环神经网络, Recurrent neural network, RNN">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/10/30/tensorflow-rnn-quickstart/"/>
+
+
+
+
+
+  <title>TensorFlow RNN入门 | 林烨敏的博客</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">林烨敏的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/30/tensorflow-rnn-quickstart/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="linyemin">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="林烨敏的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">TensorFlow RNN入门</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-30T17:00:00+08:00">
+                2017-10-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/tensorflow/" itemprop="url" rel="index">
+                    <span itemprop="name">tensorflow</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>循环神经网络, Recurrent neural network, RNN<br><a id="more"></a></p>
+<h1 id="RNN简介"><a href="#RNN简介" class="headerlink" title="RNN简介"></a>RNN简介</h1><p>起源于1982年的霍普菲尔德网络。</p>
+<p>RNN的主要用途是处理和预测序列数据。应用于语音识别、语言模型、机器翻译以及时序分析等问题。</p>
+<p>CNN中隐藏层中的节点是无连接的。RNN隐藏层的输入不仅包括输入层的输出，也包括上一时刻隐藏层的输出。</p>
+<h2 id="前向传播"><a href="#前向传播" class="headerlink" title="前向传播"></a>前向传播</h2><p>损失函数为所有时刻上损失函数的总和。</p>
+<p>使用numpy库模拟前向传播</p>
+<p>示意图：</p>
+<p><img src="" alt=""></p>
+<p>代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line"><span class="comment"># 不同时刻的输入，此处为2个时刻</span></span><br><span class="line">X = [<span class="number">1</span>, <span class="number">2</span>]</span><br><span class="line"><span class="comment"># 初始的状态，即上一个循环体的输出</span></span><br><span class="line">state = [<span class="number">0.0</span>, <span class="number">0.0</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 循环体参数state为state的系数，input为X的系数</span></span><br><span class="line">w_cell_state = np.asarray([[<span class="number">0.1</span>, <span class="number">0.2</span>], [<span class="number">0.3</span>, <span class="number">0.4</span>]])</span><br><span class="line">w_cell_input = np.asarray([<span class="number">0.5</span>, <span class="number">0.6</span>])</span><br><span class="line">b_cell = np.asarray([<span class="number">0.1</span>, <span class="number">-0.1</span>])</span><br><span class="line"></span><br><span class="line"><span class="comment"># 用于当前时刻从循环体输出的参数</span></span><br><span class="line">w_output = np.asarray([[<span class="number">1.0</span>], [<span class="number">2.0</span>]])</span><br><span class="line">b_output = <span class="number">0.1</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(len(X)):</span><br><span class="line">    before_activation = np.dot(state, w_cell_state) + \</span><br><span class="line">        X[i] * w_cell_input + b_cell</span><br><span class="line">    state = np.tanh(before_activation)</span><br><span class="line">    final_output = np.dot(state, w_output) + b_output</span><br><span class="line">    print(<span class="string">"before activation: "</span>, before_activation)</span><br><span class="line">    print(<span class="string">"state: "</span>, state)</span><br><span class="line">    print(<span class="string">"output: "</span>, final_output)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>当循环体过多时，会发生梯度消失问题。</p>
+</blockquote>
+<h1 id="LTSM"><a href="#LTSM" class="headerlink" title="LTSM"></a>LTSM</h1><p>RNN中一个重要结构：长短时记忆网络, long short-term memory, LSTM</p>
+<p>1997年提出，为了解决长期依赖问题(long-term dependencies)</p>
+<p>LSTM是一种特殊的循环体结构，拥有三个门：输入门、遗忘门、输出门。</p>
+<p>之所以是门，是因为使用了全连接网络+sigmoid激活函数，通过[0,1]内的输出来决定有多少信息可以通过这个门。</p>
+<p>遗忘门的作用是使得RNN忘记之前没有用的信息，遗忘门根据当前的输入x(t)、上一时刻的状态c(t-1)和上一时刻的输出h(t-1)来决定哪一部分记忆需要被遗忘。</p>
+<p>输入门的作用是补充最新的记忆，输入们同样通过当前的输入x(t)、上一时刻的状态c(t-1)和上一时刻的输出h(t-1)来决定哪一部分当前信息进入这一时刻的状态中。</p>
+<p>通过输入门和遗忘门，LSTM结构可以更加有效的决定哪些信息应该被遗忘，哪些信息应该得到保留，即得到当前状态c(t)。</p>
+<p>输出门会根据当前的输入x(t)、这一时刻的状态c(t)和上一时刻的输出h(t-1)来决定这一时刻的输出h(t)</p>
+<p>伪代码如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">lstm = rnn_cell.BasicLSTMCell(lstm_hidden_size)</span><br><span class="line"></span><br><span class="line">state = lstm.zero_state(batch_size, tf.float32)</span><br><span class="line"></span><br><span class="line">loss = <span class="number">0.0</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(num_steps):</span><br><span class="line">    <span class="comment"># 在第一个时刻申明的LSTM结构中使用的变量，后续要重复利用</span></span><br><span class="line">    <span class="keyword">if</span> i &gt; <span class="number">0</span>: tf.get_variable_scrope().reuse_variables()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 每一步处理一个时刻，将当前输入和前一时刻状态传入定义的LSTM</span></span><br><span class="line">    lstm_output, state = lstm(current_input, state)</span><br><span class="line">    final_output = fully_connected(lstm_output)</span><br><span class="line"></span><br><span class="line">    loss += calc_loss(final_output, expected_output)</span><br></pre></td></tr></table></figure>
+<h1 id="RNN的变种"><a href="#RNN的变种" class="headerlink" title="RNN的变种"></a>RNN的变种</h1><h2 id="双向RNN和深层RNN"><a href="#双向RNN和深层RNN" class="headerlink" title="双向RNN和深层RNN"></a>双向RNN和深层RNN</h2><p>双向循环神经网络bidirectional RNN，使得当前时刻的输出不仅与上一时刻的状态有关，也与后一时刻的状态有关。使用2个RNN进行组合。</p>
+<p><img src="" alt=""></p>
+<p>深层循环神经网络deepRNN，将每一时刻的循环体重复多次。不同层的参数不同，而不同时刻同一层的参数相同。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">lstm = rnn_cell.BasicLSTMCell(lstm_size)</span><br><span class="line"></span><br><span class="line">stacked_lstm = rnn_cell.MultiRNNCell([lstm]*number_of_layers)</span><br><span class="line"></span><br><span class="line">state = stacked_lstm.zero_state(batch_size, tf.float32)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(len(num_steps)):</span><br><span class="line">    <span class="keyword">if</span> i &gt; <span class="number">0</span>: tf.get_variable_scrope().reuse_variables()</span><br><span class="line">    stacked_lstm_output, state = stacked_lstm(current_input, state)</span><br><span class="line">    final_output = fully_connected(stacked_lstm_output)</span><br><span class="line">    loss += cal_loss(final_output, expected_output)</span><br></pre></td></tr></table></figure>
+<h2 id="RNN的Dropout"><a href="#RNN的Dropout" class="headerlink" title="RNN的Dropout"></a>RNN的Dropout</h2><p><img src="" alt=""></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">lstm = rnn_cell.BasicLSTMCell(lstm_size)</span><br><span class="line"></span><br><span class="line">dropout_lstm = tf.nn.rnn_cell.DropoutWrapper(lstm, output_keep_prob=<span class="number">0.5</span>)</span><br><span class="line"></span><br><span class="line">stacked_lstm = rnn_cell.MultiRNNCell([dropout_lstm] * number_of_layers)</span><br></pre></td></tr></table></figure>
+<h1 id="RNN样例应用"><a href="#RNN样例应用" class="headerlink" title="RNN样例应用"></a>RNN样例应用</h1><h2 id="自然语言建模"><a href="#自然语言建模" class="headerlink" title="自然语言建模"></a>自然语言建模</h2><p>一个句子看作是一个单词的序列，一个句子出现的概率为</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">p(S)=p(w1,w2,w3,...,wm)</span><br><span class="line">    =p(w1)p(w2|w1)p(w3|w1,w2)...p(wm|w1,w2,...,wm-1)</span><br></pre></td></tr></table></figure>
+<p>以上的每一个p均为语言模型的一个参数，为了估计参数取值，常见方法有：n-gram方法、决策树、最大熵模型、条件随机场、神经网络语言模型等等。</p>
+<p>n-gram中的n一般取1，2，3，分别称为unigram、bigram（常用）、trigram。</p>
+<p>语言模型的评价指标为复杂度（<strong>perplexity</strong>），表示平均分支系数(average branch factor)，模型预测下一个词时的平均可选择数量。</p>
+<p><strong>PTB文本数据集</strong></p>
+<p>PTB(Penn Treebank Dataset) <a href="http://www.fit.vutbr.cz/~imikolov/rnnlm/simple-examples.tgz" target="_blank" rel="noopener">下载地址</a></p>
+<p>使用<code>tar zxvf simple-examples.tgz</code>解压</p>
+<p>下载<a href="https://github.com/tensorflow/models/blob/master/tutorials/rnn/ptb/reader.py" target="_blank" rel="noopener"><code>reader.py</code></a></p>
+<p>数据使用<a href="https://github.com/caicloud/tensorflow-tutorial/blob/master/Deep_Learning_with_TensorFlow/1.0.0/Chapter08/2.%20PTB%E6%95%B0%E6%8D%AE%E9%9B%86%E4%BB%8B%E7%BB%8D.ipynb" target="_blank" rel="noopener">代码</a></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"><span class="keyword">import</span> reader</span><br><span class="line"></span><br><span class="line">DATA_PATH = <span class="string">"simple-examples/data"</span></span><br><span class="line">train_data, valid_data, test_data, _ = reader.ptb_raw_data(DATA_PATH)</span><br><span class="line"></span><br><span class="line">print(len(train_data))</span><br><span class="line">print(train_data[:<span class="number">100</span>])</span><br><span class="line"></span><br><span class="line"><span class="comment"># ptb_producer返回的为一个二维的tuple数据。4为batch大小，5为截断长度</span></span><br><span class="line">result = reader.ptb_producer(train_data, <span class="number">4</span>, <span class="number">5</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 通过队列依次读取batch。</span></span><br><span class="line"><span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">    coord = tf.train.Coordinator()</span><br><span class="line">    threads = tf.train.start_queue_runners(sess=sess, coord=coord)</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">3</span>):</span><br><span class="line">        x, y = sess.run(result)</span><br><span class="line">        print(<span class="string">"X&#123;&#125;: &#123;&#125;"</span>.format(i, x))</span><br><span class="line">        print(<span class="string">"Y&#123;&#125;: &#123;&#125;"</span>.format(i, y))</span><br><span class="line">    coord.request_stop()</span><br><span class="line">    coord.join(threads)</span><br></pre></td></tr></table></figure>
+<p>输出如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">929589</span><br><span class="line">[9970, 9971, 9972, 9974, 9975, 9976, 9980, 9981, 9982, 9983, 9984, 9986, 9987, 9988, 9989, 9991, 9992, 9993, 9994, 9995, 9996, 9997, 9998, 9999, 2, 9256, 1, 3, 72, 393, 33, 2133, 0, 146, 19, 6, 9207, 276, 407, 3, 2, 23, 1, 13, 141, 4, 1, 5465, 0, 3081, 1596, 96, 2, 7682, 1, 3, 72, 393, 8, 337, 141, 4, 2477, 657, 2170, 955, 24, 521, 6, 9207, 276, 4, 39, 303, 438, 3684, 2, 6, 942, 4, 3150, 496, 263, 5, 138, 6092, 4241, 6036, 30, 988, 6, 241, 760, 4, 1015, 2786, 211, 6, 96, 4]</span><br><span class="line">X0: [[9970 9971 9972 9974 9975]</span><br><span class="line"> [ 332 7147  328 1452 8595]    </span><br><span class="line"> [1969    0   98   89 2254]    </span><br><span class="line"> [   3    3    2   14   24]]   </span><br><span class="line">Y0: [[9971 9972 9974 9975 9976]</span><br><span class="line"> [7147  328 1452 8595   59]    </span><br><span class="line"> [   0   98   89 2254    0]    </span><br><span class="line"> [   3    2   14   24  198]]   </span><br><span class="line">X1: [[9976 9980 9981 9982 9983]</span><br><span class="line"> [  59 1569  105 2231    1]    </span><br><span class="line"> [   0  312 1641    4 1063]    </span><br><span class="line"> [ 198  150 2262   10    0]]   </span><br><span class="line">Y1: [[9980 9981 9982 9983 9984]</span><br><span class="line"> [1569  105 2231    1  895]    </span><br><span class="line"> [ 312 1641    4 1063    8]    </span><br><span class="line"> [ 150 2262   10    0  507]]   </span><br><span class="line">X2: [[9984 9986 9987 9988 9989]</span><br><span class="line"> [ 895    1 5574    4  618]    </span><br><span class="line"> [   8  713    0  264  820]    </span><br><span class="line"> [ 507   74 2619    0    1]]   </span><br><span class="line">Y2: [[9986 9987 9988 9989 9991]</span><br><span class="line"> [   1 5574    4  618    2]    </span><br><span class="line"> [ 713    0  264  820    2]    </span><br><span class="line"> [  74 2619    0    1    8]]</span><br></pre></td></tr></table></figure>
+<ul>
+<li>数据集中包含929589个单词</li>
+<li>每次单词有特有的ID，每个句子的结束标识为2</li>
+<li>截断大小为5：代表RNN的输入最多只有5个元素，过多会导致梯度消失</li>
+<li>batch_size为4：代表得到几批数据</li>
+<li>会自动生成每个batch对应的答案，代表当前单词的后一个单词</li>
+</ul>
+<p>完整的RNN语言模型代码</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"><span class="keyword">import</span> reader</span><br><span class="line"></span><br><span class="line"><span class="comment"># 读取数据并打印长度及前100位数据</span></span><br><span class="line">DATA_PATH = <span class="string">"simple-examples/data"</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 网络参数</span></span><br><span class="line">HIDDEN_SIZE = <span class="number">200</span>  <span class="comment"># 隐藏层规模</span></span><br><span class="line">NUM_LAYERS = <span class="number">2</span>  <span class="comment"># 深层RNN中LSTM结构的层数</span></span><br><span class="line">VOCAB_SIZE = <span class="number">10000</span>  <span class="comment"># 词典规模</span></span><br><span class="line"></span><br><span class="line">LEARNING_RATE = <span class="number">1.0</span>  <span class="comment"># 学习速率</span></span><br><span class="line">TRAIN_BATCH_SIZE = <span class="number">20</span>  <span class="comment"># 训练数据batch的大小</span></span><br><span class="line">TRAIN_NUM_STEP = <span class="number">35</span>  <span class="comment"># 训练数据截断长度</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 在测试时不需截断，可以将测试数据看作超长序列</span></span><br><span class="line">EVAL_BATCH_SIZE = <span class="number">1</span>  <span class="comment"># 测试数据batch的大小</span></span><br><span class="line">EVAL_NUM_STEP = <span class="number">1</span>  <span class="comment"># 测试数据截断长度</span></span><br><span class="line">NUM_EPOCH = <span class="number">2</span>  <span class="comment"># 使用训练数据的轮数</span></span><br><span class="line">KEEP_PROB = <span class="number">0.5</span>  <span class="comment"># 节点不被dropout的概率</span></span><br><span class="line">MAX_GRAD_NORM = <span class="number">5</span>  <span class="comment"># 用于控制梯度膨胀的参数</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PTBModel</span><span class="params">(object)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, is_training, batch_size, num_steps)</span>:</span></span><br><span class="line">        <span class="comment"># 记录使用的batch大小和截断长度</span></span><br><span class="line">        self.batch_size = batch_size</span><br><span class="line">        self.num_steps = num_steps</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 定义输入层，可以看到输入层的维度为batch_size*num_steps</span></span><br><span class="line">        <span class="comment"># 这和ptb_producter函数输出的训练数据batch是一致的</span></span><br><span class="line">        self.input_data = tf.placeholder(tf.int32, [batch_size, num_steps])</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 定义预期输出</span></span><br><span class="line">        self.targets = tf.placeholder(tf.int32, [batch_size, num_steps])</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 定义使用LSTM结构为循环体结构且使用dropout的深层循环神经网络</span></span><br><span class="line">        lstm_cell = tf.nn.rnn_cell.BasicLSTMCell(HIDDEN_SIZE)</span><br><span class="line">        <span class="keyword">if</span> is_training:</span><br><span class="line">            lstm_cell = tf.nn.rnn_cell.DropoutWrapper(</span><br><span class="line">                lstm_cell, output_keep_prob=KEEP_PROB)</span><br><span class="line">        cell = tf.nn.rnn_cell.MultiRNNCell([lstm_cell] * NUM_LAYERS)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 初始化最初的状态</span></span><br><span class="line">        self.initial_state = cell.zero_state(batch_size, tf.float32)</span><br><span class="line">        <span class="comment"># 将单词ID转换为单词向量。因为总共有VOCAB_SIZE个单词，每个单词向量的维度为</span></span><br><span class="line">        <span class="comment"># HIDDEN_SIZE, 所以embedding参数维度为VOCAB_SIZE*HIDDEN_SIZE</span></span><br><span class="line">        embedding = tf.get_variable(<span class="string">"embedding"</span>, [VOCAB_SIZE, HIDDEN_SIZE])</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 将原本batch_size*num_steps个单词ID转换为单词向量，转化为的输入层维度</span></span><br><span class="line">        <span class="comment"># 为batch_size*num_steps*HIDDEN_SIZE</span></span><br><span class="line">        inputs = tf.nn.embedding_lookup(embedding, self.input_data)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 只在训练时dropout</span></span><br><span class="line">        <span class="keyword">if</span> is_training:</span><br><span class="line">            inputs = tf.nn.dropout(inputs, KEEP_PROB)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 定义输出列表。在这里先将不同时刻LSTM结构的输出收集起来，再通过一个全连接得到最终的输出</span></span><br><span class="line">        outputs = []</span><br><span class="line">        <span class="comment"># state存储不同batch中LSTM的状态，将其初始化为0</span></span><br><span class="line">        state = self.initial_state</span><br><span class="line">        <span class="keyword">with</span> tf.variable_scope(<span class="string">"RNN"</span>):</span><br><span class="line">            <span class="keyword">for</span> time_step <span class="keyword">in</span> range(num_steps):</span><br><span class="line">                <span class="keyword">if</span> time_step &gt; <span class="number">0</span>:</span><br><span class="line">                    tf.get_variable_scope().reuse_variables()</span><br><span class="line">                <span class="comment"># 从输入数据中获取当前时刻的输入并传入LSTM</span></span><br><span class="line">                cell_output, state = cell(inputs[:, time_step, :], state)</span><br><span class="line">                <span class="comment"># 将当前输出加入输出队列</span></span><br><span class="line">                outputs.append(cell_output)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 把输出队列展开为[batch, hidden_size*num_steps]</span></span><br><span class="line">        <span class="comment"># 然后reshape成batch*nu_steps, hidden_size</span></span><br><span class="line">        output = tf.reshape(tf.concat(outputs, <span class="number">1</span>), [<span class="number">-1</span>, HIDDEN_SIZE])</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 将从LSTM中得到的输出再经过一个全连接层得到最后的预测结果，最终的预测结果在每一个时刻上</span></span><br><span class="line">        <span class="comment"># 都是长度为VOCAB_SIZE的数组，经过softmax层表示下一个位置是不同单词的概率</span></span><br><span class="line">        weight = tf.get_variable(<span class="string">"weight"</span>, [HIDDEN_SIZE, VOCAB_SIZE])</span><br><span class="line">        bias = tf.get_variable(<span class="string">"bias"</span>, [VOCAB_SIZE])</span><br><span class="line">        logits = tf.matmul(output, weight) + bias</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 定义交叉熵损失函数</span></span><br><span class="line">        loss = tf.contrib.legacy_seq2seq.sequence_loss_by_example(</span><br><span class="line">            [logits],</span><br><span class="line">            [tf.reshape(self.targets, [<span class="number">-1</span>])],</span><br><span class="line">            [tf.ones([batch_size * num_steps], dtype=tf.float32)])</span><br><span class="line">        self.cost = tf.reduce_sum(loss) / batch_size</span><br><span class="line">        self.final_state = state</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 只在训练模型时定义反向传播操作。</span></span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> is_training:</span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line">        trainable_variables = tf.trainable_variables()</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 控制梯度大小，定义优化方法和训练步骤。</span></span><br><span class="line">        grads, _ = tf.clip_by_global_norm(tf.gradients(</span><br><span class="line">            self.cost, trainable_variables), MAX_GRAD_NORM)</span><br><span class="line">        optimizer = tf.train.GradientDescentOptimizer(LEARNING_RATE)</span><br><span class="line">        self.train_op = optimizer.apply_gradients(</span><br><span class="line">            zip(grads, trainable_variables))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用给定的模型model在数据data上运行train_op并返回在全部数据上的perplexity值</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">run_epoch</span><span class="params">(session, model, data, train_op, output_log, epoch_size)</span>:</span></span><br><span class="line">    total_costs = <span class="number">0.0</span></span><br><span class="line">    iters = <span class="number">0</span></span><br><span class="line">    state = session.run(model.initial_state)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 训练一个epoch。</span></span><br><span class="line">    <span class="keyword">for</span> step <span class="keyword">in</span> range(epoch_size):</span><br><span class="line">        x, y = session.run(data)</span><br><span class="line">        cost, state, _ = session.run(</span><br><span class="line">            [model.cost, model.final_state, train_op],</span><br><span class="line">            &#123;model.input_data: x,</span><br><span class="line">             model.targets: y,</span><br><span class="line">             model.initial_state: state&#125;)</span><br><span class="line">        total_costs += cost</span><br><span class="line">        iters += model.num_steps</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> output_log <span class="keyword">and</span> step % <span class="number">100</span> == <span class="number">0</span>:</span><br><span class="line">            print(<span class="string">"After %d steps, perplexity is %.3f"</span> %</span><br><span class="line">                  (step, np.exp(total_costs / iters)))</span><br><span class="line">    <span class="keyword">return</span> np.exp(total_costs / iters)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义主函数并执行</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">    train_data, valid_data, test_data, _ = reader.ptb_raw_data(DATA_PATH)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 计算一个epoch需要训练的次数</span></span><br><span class="line">    train_data_len = len(train_data)</span><br><span class="line">    train_batch_len = train_data_len // TRAIN_BATCH_SIZE</span><br><span class="line">    train_epoch_size = (train_batch_len - <span class="number">1</span>) // TRAIN_NUM_STEP</span><br><span class="line"></span><br><span class="line">    valid_data_len = len(valid_data)</span><br><span class="line">    valid_batch_len = valid_data_len // EVAL_BATCH_SIZE</span><br><span class="line">    valid_epoch_size = (valid_batch_len - <span class="number">1</span>) // EVAL_NUM_STEP</span><br><span class="line"></span><br><span class="line">    test_data_len = len(test_data)</span><br><span class="line">    test_batch_len = test_data_len // EVAL_BATCH_SIZE</span><br><span class="line">    test_epoch_size = (test_batch_len - <span class="number">1</span>) // EVAL_NUM_STEP</span><br><span class="line"></span><br><span class="line">    initializer = tf.random_uniform_initializer(<span class="number">-0.05</span>, <span class="number">0.05</span>)</span><br><span class="line">    <span class="keyword">with</span> tf.variable_scope(<span class="string">"language_model"</span>, reuse=<span class="keyword">None</span>,</span><br><span class="line">                           initializer=initializer):</span><br><span class="line">        train_model = PTBModel(<span class="keyword">True</span>, TRAIN_BATCH_SIZE, TRAIN_NUM_STEP)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">with</span> tf.variable_scope(<span class="string">"language_model"</span>, reuse=<span class="keyword">True</span>,</span><br><span class="line">                           initializer=initializer):</span><br><span class="line">        eval_model = PTBModel(<span class="keyword">False</span>, EVAL_BATCH_SIZE, EVAL_NUM_STEP)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 训练模型。</span></span><br><span class="line">    <span class="keyword">with</span> tf.Session() <span class="keyword">as</span> session:</span><br><span class="line">        tf.global_variables_initializer().run()</span><br><span class="line"></span><br><span class="line">        train_queue = reader.ptb_producer(</span><br><span class="line">            train_data, train_model.batch_size, train_model.num_steps)</span><br><span class="line">        eval_queue = reader.ptb_producer(</span><br><span class="line">            valid_data, eval_model.batch_size, eval_model.num_steps)</span><br><span class="line">        test_queue = reader.ptb_producer(</span><br><span class="line">            test_data, eval_model.batch_size, eval_model.num_steps)</span><br><span class="line"></span><br><span class="line">        coord = tf.train.Coordinator()</span><br><span class="line">        threads = tf.train.start_queue_runners(sess=session, coord=coord)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(NUM_EPOCH):</span><br><span class="line">            print(<span class="string">"In iteration: %d"</span> % (i + <span class="number">1</span>))</span><br><span class="line">            run_epoch(session, train_model, train_queue,</span><br><span class="line">                      train_model.train_op, <span class="keyword">True</span>, train_epoch_size)</span><br><span class="line"></span><br><span class="line">            valid_perplexity = run_epoch(</span><br><span class="line">                session, eval_model, eval_queue, tf.no_op(),</span><br><span class="line">                <span class="keyword">False</span>, valid_epoch_size)</span><br><span class="line">            print(<span class="string">"Epoch: %d Validation Perplexity: %.3f"</span> %</span><br><span class="line">                  (i + <span class="number">1</span>, valid_perplexity))</span><br><span class="line"></span><br><span class="line">        test_perplexity = run_epoch(</span><br><span class="line">            session, eval_model, test_queue, tf.no_op(),</span><br><span class="line">            <span class="keyword">False</span>, test_epoch_size)</span><br><span class="line">        print(<span class="string">"Test Perplexity: %.3f"</span> % test_perplexity)</span><br><span class="line"></span><br><span class="line">        coord.request_stop()</span><br><span class="line">        coord.join(threads)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
+<h2 id="时间序列预测"><a href="#时间序列预测" class="headerlink" title="时间序列预测"></a>时间序列预测</h2><p>TFLearn IRIS代码实例</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn <span class="keyword">import</span> model_selection</span><br><span class="line"><span class="keyword">from</span> sklearn <span class="keyword">import</span> datasets</span><br><span class="line"><span class="keyword">from</span> sklearn <span class="keyword">import</span> metrics</span><br><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> tensorflow.contrib.learn.python.learn.estimators.estimator <span class="keyword">import</span> SKCompat</span><br><span class="line">learn = tf.contrib.learn</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 自定义softmax回归模型</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">my_model</span><span class="params">(features, target)</span>:</span></span><br><span class="line">    target = tf.one_hot(target, <span class="number">3</span>, <span class="number">1</span>, <span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 计算预测值及损失函数。</span></span><br><span class="line">    logits = tf.contrib.layers.fully_connected(features, <span class="number">3</span>, tf.nn.softmax)</span><br><span class="line">    loss = tf.losses.softmax_cross_entropy(target, logits)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 创建优化步骤。</span></span><br><span class="line">    train_op = tf.contrib.layers.optimize_loss(</span><br><span class="line">        loss,</span><br><span class="line">        tf.contrib.framework.get_global_step(),</span><br><span class="line">        optimizer=<span class="string">'Adam'</span>,</span><br><span class="line">        learning_rate=<span class="number">0.01</span>)</span><br><span class="line">    <span class="keyword">return</span> tf.argmax(logits, <span class="number">1</span>), loss, train_op</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 读取数据并将数据转化成TensorFlow要求的float32格式</span></span><br><span class="line">iris = datasets.load_iris()</span><br><span class="line">x_train, x_test, y_train, y_test = model_selection.train_test_split(</span><br><span class="line">    iris.data, iris.target, test_size=<span class="number">0.2</span>, random_state=<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">x_train, x_test = map(np.float32, [x_train, x_test])</span><br><span class="line"></span><br><span class="line">classifier = SKCompat(learn.Estimator(</span><br><span class="line">    model_fn=my_model, model_dir=<span class="string">"Models/model_1"</span>))</span><br><span class="line">classifier.fit(x_train, y_train, steps=<span class="number">800</span>)</span><br><span class="line"></span><br><span class="line">y_predicted = [i <span class="keyword">for</span> i <span class="keyword">in</span> classifier.predict(x_test)]</span><br><span class="line">score = metrics.accuracy_score(y_test, y_predicted)</span><br><span class="line">print(<span class="string">'Accuracy: %.2f%%'</span> % (score * <span class="number">100</span>))</span><br></pre></td></tr></table></figure>
+<p>预测sin曲线</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"><span class="keyword">from</span> tensorflow.contrib.learn.python.learn.estimators.estimator <span class="keyword">import</span> SKCompat</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line">learn = tf.contrib.learn</span><br><span class="line"></span><br><span class="line"><span class="comment"># 设置神经网络的参数</span></span><br><span class="line">HIDDEN_SIZE = <span class="number">30</span>  <span class="comment"># LSTM中隐藏节点的个数</span></span><br><span class="line">NUM_LAYERS = <span class="number">2</span>  <span class="comment"># LSTM的层数</span></span><br><span class="line"></span><br><span class="line">TIMESTEPS = <span class="number">10</span>  <span class="comment"># RNN的截断长度</span></span><br><span class="line">TRAINING_STEPS = <span class="number">3000</span>  <span class="comment"># 训练轮次</span></span><br><span class="line">BATCH_SIZE = <span class="number">32</span>  <span class="comment"># batch大小</span></span><br><span class="line"></span><br><span class="line">TRAINING_EXAMPLES = <span class="number">10000</span>  <span class="comment"># 训练数据个数</span></span><br><span class="line">TESTING_EXAMPLES = <span class="number">1000</span>  <span class="comment"># 测试数据个数</span></span><br><span class="line">SAMPLE_GAP = <span class="number">0.01</span>  <span class="comment"># 采样间隔</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义生成正弦数据的函数</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">generate_data</span><span class="params">(seq)</span>:</span></span><br><span class="line">    X = []</span><br><span class="line">    y = []</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 序列的第i项和后面的TIMESTEPS-1项合并在一起作为输入。</span></span><br><span class="line">    <span class="comment"># 第i+TIMESTPES项作为输出。</span></span><br><span class="line">    <span class="comment"># 即用sin函数前面的TIMESTEPS个点的信息，预测第i+TIMESTPES个点的函数值</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(len(seq) - TIMESTEPS - <span class="number">1</span>):</span><br><span class="line">        X.append([seq[i: i + TIMESTEPS]])</span><br><span class="line">        y.append([seq[i + TIMESTEPS]])</span><br><span class="line">    <span class="keyword">return</span> np.array(X, dtype=np.float32), np.array(y, dtype=np.float32)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义lstm模型</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">lstm_model</span><span class="params">(X, y)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">lstm_cell</span><span class="params">()</span>:</span></span><br><span class="line">        <span class="keyword">return</span> tf.contrib.rnn.BasicLSTMCell(HIDDEN_SIZE, state_is_tuple=<span class="keyword">True</span>)</span><br><span class="line">    cell = tf.contrib.rnn.MultiRNNCell(</span><br><span class="line">        [lstm_cell() <span class="keyword">for</span> _ <span class="keyword">in</span> range(NUM_LAYERS)])</span><br><span class="line"></span><br><span class="line">    output, _ = tf.nn.dynamic_rnn(cell, X, dtype=tf.float32)</span><br><span class="line">    output = tf.reshape(output, [<span class="number">-1</span>, HIDDEN_SIZE])</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 通过无激活函数的全联接层计算线性回归，并将数据压缩成一维数组的结构。</span></span><br><span class="line">    predictions = tf.contrib.layers.fully_connected(output, <span class="number">1</span>, <span class="keyword">None</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 将predictions和labels调整统一的shape</span></span><br><span class="line">    labels = tf.reshape(y, [<span class="number">-1</span>])</span><br><span class="line">    predictions = tf.reshape(predictions, [<span class="number">-1</span>])</span><br><span class="line"></span><br><span class="line">    loss = tf.losses.mean_squared_error(predictions, labels)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 创建模型优化器并得到优化步骤</span></span><br><span class="line">    train_op = tf.contrib.layers.optimize_loss(</span><br><span class="line">        loss, tf.contrib.framework.get_global_step(),</span><br><span class="line">        optimizer=<span class="string">"Adagrad"</span>, learning_rate=<span class="number">0.1</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> predictions, loss, train_op</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 进行训练</span></span><br><span class="line"><span class="comment"># 封装之前定义的lstm。</span></span><br><span class="line">regressor = SKCompat(learn.Estimator(</span><br><span class="line">    model_fn=lstm_model, model_dir=<span class="string">"Models/model_2"</span>))</span><br><span class="line"></span><br><span class="line"><span class="comment"># 生成数据。</span></span><br><span class="line">test_start = TRAINING_EXAMPLES * SAMPLE_GAP</span><br><span class="line">test_end = (TRAINING_EXAMPLES + TESTING_EXAMPLES) * SAMPLE_GAP</span><br><span class="line">train_X, train_y = generate_data(np.sin(np.linspace(</span><br><span class="line">    <span class="number">0</span>, test_start, TRAINING_EXAMPLES, dtype=np.float32)))</span><br><span class="line">test_X, test_y = generate_data(np.sin(np.linspace(</span><br><span class="line">    test_start, test_end, TESTING_EXAMPLES, dtype=np.float32)))</span><br><span class="line"></span><br><span class="line"><span class="comment"># 拟合数据。</span></span><br><span class="line">regressor.fit(train_X, train_y, batch_size=BATCH_SIZE, steps=TRAINING_STEPS)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 计算预测值。</span></span><br><span class="line">predicted = [[pred] <span class="keyword">for</span> pred <span class="keyword">in</span> regressor.predict(test_X)]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 计算MSE。</span></span><br><span class="line">rmse = np.sqrt(((predicted - test_y) ** <span class="number">2</span>).mean(axis=<span class="number">0</span>))</span><br><span class="line">print(<span class="string">"Mean Square Error is: %f"</span> % rmse[<span class="number">0</span>])</span><br><span class="line"></span><br><span class="line">plot_predicted, = plt.plot(predicted, label=<span class="string">'predicted'</span>)</span><br><span class="line">plot_test, = plt.plot(test_y, label=<span class="string">'real_sin'</span>)</span><br><span class="line">plt.legend([plot_predicted, plot_test], [<span class="string">'predicted'</span>, <span class="string">'real_sin'</span>])</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/tensorflow/" rel="tag"># tensorflow</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/10/30/tensorflow-thread-input/" rel="next" title="TensorFlow 多线程输入数据处理框架">
+                <i class="fa fa-chevron-left"></i> TensorFlow 多线程输入数据处理框架
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/10/31/tensorflow-gpu/" rel="prev" title="TensorFlow GPU加速">
+                TensorFlow GPU加速 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">linyemin</p>
+              <p class="site-description motion-element" itemprop="description">海阔凭鱼跃，天高任鸟飞</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">69</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">14</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">45</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#RNN简介"><span class="nav-number">1.</span> <span class="nav-text">RNN简介</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#前向传播"><span class="nav-number">1.1.</span> <span class="nav-text">前向传播</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#LTSM"><span class="nav-number">2.</span> <span class="nav-text">LTSM</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#RNN的变种"><span class="nav-number">3.</span> <span class="nav-text">RNN的变种</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#双向RNN和深层RNN"><span class="nav-number">3.1.</span> <span class="nav-text">双向RNN和深层RNN</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RNN的Dropout"><span class="nav-number">3.2.</span> <span class="nav-text">RNN的Dropout</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#RNN样例应用"><span class="nav-number">4.</span> <span class="nav-text">RNN样例应用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#自然语言建模"><span class="nav-number">4.1.</span> <span class="nav-text">自然语言建模</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#时间序列预测"><span class="nav-number">4.2.</span> <span class="nav-text">时间序列预测</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">linyemin</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

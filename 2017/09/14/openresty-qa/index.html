@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="openresty," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="资料 OpenResty® - 中文官方站 OpenResty Github openresty/lua-nginx-module GitHub OpenResty 最佳实践-极客学院Wiki LuaJIT函数优化列表 Lua 在线工具 | 菜鸟工具 基于nginx的api网关 - akin的博客 - 博客频道 - C">
+<meta name="keywords" content="openresty">
+<meta property="og:type" content="article">
+<meta property="og:title" content="openresty遇到的问题">
+<meta property="og:url" content="http://yoursite.com/2017/09/14/openresty-qa/index.html">
+<meta property="og:site_name" content="林烨敏的博客">
+<meta property="og:description" content="资料 OpenResty® - 中文官方站 OpenResty Github openresty/lua-nginx-module GitHub OpenResty 最佳实践-极客学院Wiki LuaJIT函数优化列表 Lua 在线工具 | 菜鸟工具 基于nginx的api网关 - akin的博客 - 博客频道 - CSDN.NET 服务端架构中的“网关服务器” - 永远的朋友 - 51CTO技术">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-11-30T12:01:00.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="openresty遇到的问题">
+<meta name="twitter:description" content="资料 OpenResty® - 中文官方站 OpenResty Github openresty/lua-nginx-module GitHub OpenResty 最佳实践-极客学院Wiki LuaJIT函数优化列表 Lua 在线工具 | 菜鸟工具 基于nginx的api网关 - akin的博客 - 博客频道 - CSDN.NET 服务端架构中的“网关服务器” - 永远的朋友 - 51CTO技术">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/09/14/openresty-qa/"/>
+
+
+
+
+
+  <title>openresty遇到的问题 | 林烨敏的博客</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">林烨敏的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/14/openresty-qa/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="linyemin">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="林烨敏的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">openresty遇到的问题</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-14T16:02:05+08:00">
+                2017-09-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/openresty/" itemprop="url" rel="index">
+                    <span itemprop="name">openresty</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="资料"><a href="#资料" class="headerlink" title="资料"></a>资料</h2><ul>
+<li><a href="OpenResty® - 中文官方站">OpenResty® - 中文官方站</a></li>
+<li><a href="https://github.com/openresty/openresty" target="_blank" rel="noopener">OpenResty Github</a></li>
+<li><a href="https://github.com/openresty/lua-nginx-module" target="_blank" rel="noopener">openresty/lua-nginx-module GitHub</a></li>
+<li><a href="http://wiki.jikexueyuan.com/project/openresty/" target="_blank" rel="noopener">OpenResty 最佳实践-极客学院Wiki</a></li>
+<li><a href="http://wiki.luajit.org/NYI" target="_blank" rel="noopener">LuaJIT函数优化列表</a></li>
+<li><a href="https://c.runoob.com/compile/66" target="_blank" rel="noopener">Lua 在线工具 | 菜鸟工具</a></li>
+<li><a href="http://blog.csdn.net/akin_zhou/article/details/50373414" target="_blank" rel="noopener">基于nginx的api网关 - akin的博客 - 博客频道 - CSDN.NET</a></li>
+<li><a href="http://yaocoder.blog.51cto.com/2668309/1374280/" target="_blank" rel="noopener">服务端架构中的“网关服务器” - 永远的朋友 - 51CTO技术博客</a></li>
+<li><a href="http://blog.csdn.net/tjcyjd/article/details/50695922" target="_blank" rel="noopener">Nginx配置文件（nginx.conf）配置详解 - 浮云中的神马 - 博客频道 - CSDN.NET</a></li>
+<li><a href="http://jinnianshilongnian.iteye.com/blog/2186448" target="_blank" rel="noopener">第二章 OpenResty(Nginx+Lua)开发入门 - 开涛的博客—公众号：kaitao-1234567，一如既往的干货分享 - ITeye技术网站</a></li>
+<li><a href="http://www.cnblogs.com/mfrbuaa/p/5413786.html" target="_blank" rel="noopener">Nginx担当WebSockets代理 - mfrbuaa - 博客园</a></li>
+<li><a href="http://tool.chinaz.com/tools/urlencode.aspx" target="_blank" rel="noopener">UrlEncode编码/UrlDecode解码 - 站长工具</a></li>
+<li><a href="http://blog.csdn.net/joker_zhou/article/details/49361753" target="_blank" rel="noopener">如何在nginx中使用系统的环境变量(转) - 菜鸟刚起飞 - 博客频道 - CSDN.NET</a></li>
+<li><a href="https://www.v2ex.com/t/129032" target="_blank" rel="noopener">请教一下关于 Nginx 反向代理到虚拟目录时如何处理使用绝对路径的静态文件 - V2EX</a></li>
+<li><a href="http://www.cnblogs.com/fanzhidongyzby/p/5194895.html" target="_blank" rel="noopener">nginx常用代理配置 - Florian - 博客园</a></li>
+<li><a href="http://nginx.org/en/docs/http/ngx_http_sub_module.html" target="_blank" rel="noopener">Module ngx_http_sub_module</a></li>
+<li><a href="编译nginx的源码安装subs_filter模块 - dudu - 博客园">编译nginx的源码安装subs_filter模块 - dudu - 博客园</a></li>
+</ul>
+<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><a id="more"></a>
+<h3 id="WebSocket代理"><a href="#WebSocket代理" class="headerlink" title="WebSocket代理"></a>WebSocket代理</h3><p><a href="http://www.cnblogs.com/mfrbuaa/p/5413786.html" target="_blank" rel="noopener">解决方法</a></p>
+<p>在入口nginx.conf中添加配置</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">map $http_upgrade $connection_upgrade &#123;</span><br><span class="line">    default upgrade;</span><br><span class="line">    &apos;&apos; close;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"># add for websocket of paas</span><br><span class="line">location ^~ /keybox/ &#123;</span><br><span class="line">    proxy_pass http://10.96.32.66;</span><br><span class="line">    proxy_http_version 1.1;</span><br><span class="line">    proxy_set_header Upgrade $http_upgrade;</span><br><span class="line">    proxy_set_header Connection &quot;Upgrade&quot;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="双层Nginx-URI被修改问题"><a href="#双层Nginx-URI被修改问题" class="headerlink" title="双层Nginx URI被修改问题"></a>双层Nginx URI被修改问题</h3><p>初始请求URI</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/winery/servicetemplates/http%253A%252F%252Fwww.zte.com.cn%252Fpaas%252Fr3%252Fservice%252Fopenabtest%252Flatest/112/topologytemplate/?edit</span><br></pre></td></tr></table></figure>
+<p>到第二层后变为解码后的(<a href="http://tool.chinaz.com/tools/urlencode.aspx" target="_blank" rel="noopener">解码地址</a>)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/winery/servicetemplates/http%3A%2F%2Fwww.zte.com.cn%2Fpaas%2Fr3%2Fservice%2Fopenabtest%2Flatest/112/topologytemplate/?edit</span><br></pre></td></tr></table></figure>
+<p>测试如下：</p>
+<p>本地一层nginx代理成功，无此问题</p>
+<p>将Access层去掉后，无此问题</p>
+<p>问题定位Access层。</p>
+<p>中间日志设置无效。</p>
+<p>在第二层的location接口修改</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">location</span> /winery/ &#123;</span><br><span class="line">    <span class="attribute">return</span> <span class="number">200</span> <span class="variable">$request_uri</span>;</span><br><span class="line">    <span class="comment">#proxy_pass http://10.96.32.66/winery/;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这样就会收到的request请求是否正确</p>
+<p>然后利用curl命令访问第一层</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl localhost:8384/winery/servicetemplates/http%253A%252F%252Fwww.zte.com.cn%252Fpaas%252Fr3%252Fservice%252Fopenabtest%252Flatest/112/topologytemplate/?edit</span><br></pre></td></tr></table></figure>
+<p>发现返回如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/winery/servicetemplates/http%3A%2F%2Fwww.zte.com.cn%2Fpaas%2Fr3%2Fservice%2Fopenabtest%2Flatest/112/topologytemplate/?edit</span><br></pre></td></tr></table></figure>
+<p>解决办法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">location ~* (.*) &#123;</span><br><span class="line">    set $destIP &apos;&apos;;</span><br><span class="line">    set $trace_log_seq &apos;&apos;;</span><br><span class="line">    set $trace_log_depth &apos;&apos;;</span><br><span class="line">    rewrite_by_lua_file conf/lua/gray_user_filter.lua;</span><br><span class="line">    proxy_set_header trace-log-seq $trace_log_seq;</span><br><span class="line">    proxy_set_header trace-log-depth $trace_log_depth;</span><br><span class="line">    proxy_set_header Host $host;</span><br><span class="line">    proxy_set_header X-Real-IP $remote_addr;</span><br><span class="line">    proxy_set_header REMOTE-HOST $remote_addr;</span><br><span class="line">    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;</span><br><span class="line">    proxy_connect_timeout 600s;</span><br><span class="line">    proxy_read_timeout 600s;</span><br><span class="line">    proxy_send_timeout 600s;</span><br><span class="line">    proxy_pass http://$destIP:8384/$1?$args;</span><br><span class="line">    proxy_redirect   http://$destIP:8384/ /;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>$1</code>是正则匹配中第一个括号内的东西，<code>args</code>是?后的参数。</p>
+<p>发现正则匹配中会将uri进行解码，导致<code>$1</code>中放入解码后的文本。</p>
+<p>解决方法1：</p>
+<p>将15行的<code>/$1?$args</code>改为<code>$request_uri</code></p>
+<p>解决方法2：</p>
+<p>将1行的location改为<code>location / {</code>，同时将15行的<code>/$1?$args</code>删除。</p>
+<p>修改后curl返回为</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/winery/servicetemplates/http%253A%252F%252Fwww.zte.com.cn%252Fpaas%252Fr3%252Fservice%252Fopenabtest%252Flatest/112/topologytemplate/?edit</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/openresty/" rel="tag"># openresty</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/09/14/nginx-conf/" rel="next" title="nginx配置文件详解">
+                <i class="fa fa-chevron-left"></i> nginx配置文件详解
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/09/14/regular/" rel="prev" title="正则表达式学习">
+                正则表达式学习 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">linyemin</p>
+              <p class="site-description motion-element" itemprop="description">海阔凭鱼跃，天高任鸟飞</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">69</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">14</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">45</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#资料"><span class="nav-number">1.</span> <span class="nav-text">资料</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#问题"><span class="nav-number">2.</span> <span class="nav-text">问题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#WebSocket代理"><span class="nav-number">2.1.</span> <span class="nav-text">WebSocket代理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#双层Nginx-URI被修改问题"><span class="nav-number">2.2.</span> <span class="nav-text">双层Nginx URI被修改问题</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">linyemin</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
