@@ -87,10 +87,12 @@
 <meta property="og:site_name" content="林烨敏的博客">
 <meta property="og:description" content="选择Hexo搭建个人博客 之前使用过多种应用来搭建个人博客，也迁移多多次。写博客也渐渐习惯了Markdown，最终选择了Hexo，选择它的理由主要是我喜欢的几项功能都能够给予满足。  选择Hexo的几个理由： 支持MD文件转网页。 借助github，无需额外搭建服务器。 主题多样，尤其是Next主题简洁，符合个人审美观。 借助VPS，可以做到随处写随处发布。  准备的几项工作：安装Git（必须）作">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-12-01T08:01:55.127Z">
+<meta property="og:image" content="http://yoursite.com/2017/12/01/learn-hexo/_image/2017-12-01-16-38-34.jpg?r=100">
+<meta property="og:updated_time" content="2017-12-01T08:49:15.135Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Hexo 搭建个人博客">
 <meta name="twitter:description" content="选择Hexo搭建个人博客 之前使用过多种应用来搭建个人博客，也迁移多多次。写博客也渐渐习惯了Markdown，最终选择了Hexo，选择它的理由主要是我喜欢的几项功能都能够给予满足。  选择Hexo的几个理由： 支持MD文件转网页。 借助github，无需额外搭建服务器。 主题多样，尤其是Next主题简洁，符合个人审美观。 借助VPS，可以做到随处写随处发布。  准备的几项工作：安装Git（必须）作">
+<meta name="twitter:image" content="http://yoursite.com/2017/12/01/learn-hexo/_image/2017-12-01-16-38-34.jpg?r=100">
 
 
 
@@ -380,10 +382,11 @@
 <p>3) 验证主题<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ hexo clean</span><br><span class="line">$ hexo g -d</span><br></pre></td></tr></table></figure></p>
 <p>查看网页是否已经替换了主题.<br>4) 主题设定<br>Next提供了三种主题，即Scheme。在themes/next/_config.yml中进行配置：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#scheme: Muse</span><br><span class="line">#scheme: Mist</span><br><span class="line">scheme: Pisces</span><br></pre></td></tr></table></figure></p>
 <p>这里选择Pisces，这个也是我比较喜欢的Scheme。<br>5) 设置语言<br>编辑在主目录下myblog里的_config.yml：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">language: zh-Hans</span><br></pre></td></tr></table></figure></p>
-<p>目前Next支持的语言如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">语言 |	代码 |	设定实例</span><br><span class="line">English |	en |	language: en</span><br><span class="line">简体中文 |	zh-Hans |	language: zh-Hans</span><br><span class="line">Français |	fr-FR |	language: fr-FR</span><br><span class="line">Português |	pt |	language: pt</span><br><span class="line">繁體中文 |	zh-hk | 或者 zh-tw	language: zh-hk</span><br><span class="line">Русский язык |	ru	 |language: ru</span><br><span class="line">Deutsch |	de |	language: de</span><br><span class="line">日本語 |	ja |	language: ja</span><br><span class="line">Indonesian |	id |	language: id</span><br></pre></td></tr></table></figure></p>
+<p>目前Next支持的语言如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">语言   |   代码   |   设定实例</span><br><span class="line">English   |   en   |   language: en</span><br><span class="line">简体中文   |   zh-Hans   |   language: zh-Hans</span><br><span class="line">Français   |   fr-FR   |   language: fr-FR</span><br><span class="line">Português   |   pt   |   language: pt</span><br><span class="line">繁體中文   |   zh-hk   |   或者 zh-tw	language: zh-hk</span><br><span class="line">Русский язык   |   ru   |   language: ru</span><br><span class="line">Deutsch   |   de   |   language: de</span><br><span class="line">日本語   |   ja   |   language: ja</span><br><span class="line">Indonesian   |   id   |   language: id</span><br></pre></td></tr></table></figure></p>
 <p>6) 设置菜单<br>修改_config.yml文件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">menu:</span><br><span class="line">  home: /</span><br><span class="line">  archives: /archives</span><br><span class="line">  #about: /about</span><br><span class="line">  #categories: /categories</span><br><span class="line">  tags: /tags</span><br><span class="line">  #commonweal: /404.html</span><br></pre></td></tr></table></figure></p>
 <p>7) 修改Scheme Pisces的主页面大小<br>默认的右侧偏小（个人感觉），往往会造成代码段阅读的不友好（被跨行），因此需要调节主页内容版块的大小。<br>打开文件myblog/themes/next/source/css/_variables/custom.styl<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$main-desktop                   = 1200px</span><br><span class="line">$content-desktop                = 900px</span><br></pre></td></tr></table></figure></p>
 <p>8) 验证修改<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ hexo clean</span><br><span class="line">$ hexo g -d</span><br></pre></td></tr></table></figure></p>
+<p>最终效果如下图：<br><img src="./_image/2017-12-01-16-38-34.jpg?r=100" alt=""></p>
 
       
     </div>
@@ -423,6 +426,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/12/05/CAPTCHARecognition/" rel="prev" title="基于tensorflow的验证码识别">
+                基于tensorflow的验证码识别 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -499,7 +506,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">70</span>
+                  <span class="site-state-item-count">71</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
