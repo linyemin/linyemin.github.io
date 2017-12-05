@@ -344,19 +344,17 @@
 
       
         
-          
-            <h1 id="基于tensorflow的验证码识别"><a href="#基于tensorflow的验证码识别" class="headerlink" title="基于tensorflow的验证码识别"></a>基于tensorflow的验证码识别</h1><blockquote>
+          <h1 id="基于tensorflow的验证码识别"><a href="#基于tensorflow的验证码识别" class="headerlink" title="基于tensorflow的验证码识别"></a>基于tensorflow的验证码识别</h1><blockquote>
 <p>验证码最初的设计初衷是区分人和机器，随着AI技术的发展，大部分的验证码已经无法实现这样的功能了。为了验证这一事实，决定采用tensorflow来搭建深度学习模型，以此来验证深度学习对验证码识别的准确度。</p>
 </blockquote>
-<h2 id="构建训练数据集"><a href="#构建训练数据集" class="headerlink" title="构建训练数据集"></a>构建训练数据集</h2><p>收集海量的验证码是一件困难的工作。因此，我们采用常用的验证码生成库来生成训练案例。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> captcha.image <span class="keyword">import</span> ImageCaptcha</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">from</span> PIL <span class="keyword">import</span> Image</span><br><span class="line"><span class="keyword">import</span> random</span><br><span class="line"><span class="comment"># 验证码中的字符, 就不用汉字了</span></span><br><span class="line">number = [<span class="string">'0'</span>,<span class="string">'1'</span>,<span class="string">'2'</span>,<span class="string">'3'</span>,<span class="string">'4'</span>,<span class="string">'5'</span>,<span class="string">'6'</span>,<span class="string">'7'</span>,<span class="string">'8'</span>,<span class="string">'9'</span>]</span><br><span class="line">alphabet = [<span class="string">'a'</span>,<span class="string">'b'</span>,<span class="string">'c'</span>,<span class="string">'d'</span>,<span class="string">'e'</span>,<span class="string">'f'</span>,<span class="string">'g'</span>,<span class="string">'h'</span>,<span class="string">'i'</span>,<span class="string">'j'</span>,<span class="string">'k'</span>,<span class="string">'l'</span>,<span class="string">'m'</span>,<span class="string">'n'</span>,<span class="string">'o'</span>,<span class="string">'p'</span>,<span class="string">'q'</span>,<span class="string">'r'</span>,<span class="string">'s'</span>,<span class="string">'t'</span>,<span class="string">'u'</span>,<span class="string">'v'</span>,<span class="string">'w'</span>,<span class="string">'x'</span>,<span class="string">'y'</span>,<span class="string">'z'</span>]</span><br><span class="line">ALPHABET = [<span class="string">'A'</span>,<span class="string">'B'</span>,<span class="string">'C'</span>,<span class="string">'D'</span>,<span class="string">'E'</span>,<span class="string">'F'</span>,<span class="string">'G'</span>,<span class="string">'H'</span>,<span class="string">'I'</span>,<span class="string">'J'</span>,<span class="string">'K'</span>,<span class="string">'L'</span>,<span class="string">'M'</span>,<span class="string">'N'</span>,<span class="string">'O'</span>,<span class="string">'P'</span>,<span class="string">'Q'</span>,<span class="string">'R'</span>,<span class="string">'S'</span>,<span class="string">'T'</span>,<span class="string">'U'</span>,<span class="string">'V'</span>,<span class="string">'W'</span>,<span class="string">'X'</span>,<span class="string">'Y'</span>,<span class="string">'Z'</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 验证码一般都无视大小写；验证码长度4个字符</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">random_captcha_text</span><span class="params">(char_set=number+alphabet+ALPHABET, captcha_size=<span class="number">4</span>)</span>:</span></span><br><span class="line">    captcha_text = []</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(captcha_size):</span><br><span class="line">        c = random.choice(char_set)</span><br><span class="line">        captcha_text.append(c)</span><br><span class="line">    <span class="keyword">return</span> captcha_text</span><br><span class="line">    </span><br><span class="line"><span class="comment"># 生成字符对应的验证码</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">gen_captcha_text_and_image</span><span class="params">()</span>:</span></span><br><span class="line">    image = ImageCaptcha()</span><br><span class="line">    captcha_text = random_captcha_text()</span><br><span class="line">    captcha_text = <span class="string">''</span>.join(captcha_text)</span><br><span class="line">    captcha = image.generate(captcha_text)</span><br><span class="line">    captcha_image = Image.open(captcha)</span><br><span class="line">    captcha_image = np.array(captcha_image)</span><br><span class="line">    <span class="keyword">return</span> captcha_text, captcha_image</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    <span class="comment"># 测试二维码的生成</span></span><br><span class="line">    text, image = gen_captcha_text_and_image()</span><br><span class="line">    f = plt.figure()</span><br><span class="line">    ax = f.add_subplot(<span class="number">111</span>)</span><br><span class="line">    ax.text(<span class="number">0.1</span>, <span class="number">0.9</span>,text, ha=<span class="string">'center'</span>, va=<span class="string">'center'</span>, transform=ax.transAxes)</span><br><span class="line">    plt.imshow(image)</span><br><span class="line">    plt.show()</span><br></pre></td></tr></table></figure></p>
-<p>最终测试的验证码：<br><img src="http://7xr1hm.com1.z0.glb.clouddn.com/yzm1.png" alt=""></p>
-<h2 id="模型数据预处理"><a href="#模型数据预处理" class="headerlink" title="模型数据预处理"></a>模型数据预处理</h2><p>模型数据预处理，统一输入img的维度。我们这里通过转换为灰度的方式来达到统一输入维度。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line"><span class="comment"># 如果图片的维度在三维及以上，即长、宽、通道。我们通过对上个通道上的数据进行求平均来达到灰度的效果。[255, 255, 254] =&gt; 254.666</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">convert2gray</span><span class="params">(img)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> len(img.shape) &gt; <span class="number">2</span>:</span><br><span class="line">        gray = np.mean(img, <span class="number">-1</span>)</span><br><span class="line">        <span class="keyword">return</span> gray</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">return</span> img</span><br><span class="line"></span><br><span class="line"><span class="comment"># char_set包含所有数字、大小写英文字母</span></span><br><span class="line">char_set = ic.number + ic.alphabet + ic.ALPHABET + [<span class="string">'_'</span>]  <span class="comment"># 如果验证码长度小于4, '_'用来补齐</span></span><br><span class="line">CHAR_SET_LEN = len(char_set)</span><br><span class="line"><span class="comment"># 这个方法是将4位字符转为252长度的向量</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">text2vec</span><span class="params">(text)</span>:</span></span><br><span class="line">    text_len = len(text)</span><br><span class="line">    <span class="keyword">if</span> text_len &gt; MAX_CAPTCHA:</span><br><span class="line">        <span class="keyword">raise</span> ValueError(<span class="string">'验证码最长4个字符'</span>)</span><br><span class="line"></span><br><span class="line">    vector = np.zeros(MAX_CAPTCHA*CHAR_SET_LEN)</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">char2pos</span><span class="params">(c)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> c ==<span class="string">'_'</span>:</span><br><span class="line">            k = <span class="number">62</span></span><br><span class="line">            <span class="keyword">return</span> k</span><br><span class="line">        k = ord(c)<span class="number">-48</span></span><br><span class="line">        <span class="keyword">if</span> k &gt; <span class="number">9</span>:</span><br><span class="line">            k = ord(c) - <span class="number">55</span></span><br><span class="line">            <span class="keyword">if</span> k &gt; <span class="number">35</span>:</span><br><span class="line">                k = ord(c) - <span class="number">61</span></span><br><span class="line">                <span class="keyword">if</span> k &gt; <span class="number">61</span>:</span><br><span class="line">                    <span class="keyword">raise</span> ValueError(<span class="string">'No Map'</span>) </span><br><span class="line">        <span class="keyword">return</span> k</span><br><span class="line">    <span class="keyword">for</span> i, c <span class="keyword">in</span> enumerate(text):</span><br><span class="line">        idx = i * CHAR_SET_LEN + char2pos(c)</span><br><span class="line">        vector[idx] = <span class="number">1</span></span><br><span class="line">    <span class="keyword">return</span> vector</span><br><span class="line">    </span><br><span class="line"><span class="comment"># 向量转回文本</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">vec2text</span><span class="params">(vec)</span>:</span></span><br><span class="line">    char_pos = vec.nonzero()[<span class="number">0</span>]</span><br><span class="line">    text=[]</span><br><span class="line">    <span class="keyword">for</span> i, c <span class="keyword">in</span> enumerate(char_pos):</span><br><span class="line">        char_at_pos = i <span class="comment">#c/63</span></span><br><span class="line">        char_idx = c % CHAR_SET_LEN</span><br><span class="line">        <span class="keyword">if</span> char_idx &lt; <span class="number">10</span>:</span><br><span class="line">            char_code = char_idx + ord(<span class="string">'0'</span>)</span><br><span class="line">        <span class="keyword">elif</span> char_idx &lt;<span class="number">36</span>:</span><br><span class="line">            char_code = char_idx - <span class="number">10</span> + ord(<span class="string">'A'</span>)</span><br><span class="line">        <span class="keyword">elif</span> char_idx &lt; <span class="number">62</span>:</span><br><span class="line">            char_code = char_idx-  <span class="number">36</span> + ord(<span class="string">'a'</span>)</span><br><span class="line">        <span class="keyword">elif</span> char_idx == <span class="number">62</span>:</span><br><span class="line">            char_code = ord(<span class="string">'_'</span>)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">raise</span> ValueError(<span class="string">'error'</span>)</span><br><span class="line">        text.append(chr(char_code))</span><br><span class="line">    <span class="keyword">return</span> <span class="string">""</span>.join(text)</span><br><span class="line">    </span><br><span class="line"><span class="comment"># 生成一个训练batch，batch长度128</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_next_batch</span><span class="params">(batch_size=<span class="number">128</span>)</span>:</span></span><br><span class="line">    batch_x = np.zeros([batch_size, IMAGE_HEIGHT*IMAGE_WIDTH])</span><br><span class="line">    batch_y = np.zeros([batch_size, MAX_CAPTCHA*CHAR_SET_LEN])</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 有时生成图像大小不是(60, 160, 3)</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">wrap_gen_captcha_text_and_image</span><span class="params">()</span>:</span></span><br><span class="line">        <span class="keyword">while</span> <span class="keyword">True</span>:</span><br><span class="line">            text, image = ic.gen_captcha_text_and_image()</span><br><span class="line">            <span class="keyword">if</span> image.shape == (<span class="number">60</span>, <span class="number">160</span>, <span class="number">3</span>):</span><br><span class="line">                <span class="keyword">return</span> text, image</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(batch_size):</span><br><span class="line">        text, image = wrap_gen_captcha_text_and_image()</span><br><span class="line">        image = convert2gray(image)</span><br><span class="line"></span><br><span class="line">        batch_x[i,:] = image.flatten() / <span class="number">255</span> <span class="comment"># (image.flatten()-128)/128  mean为0</span></span><br><span class="line">        batch_y[i,:] = text2vec(text)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> batch_x, batch_y</span><br></pre></td></tr></table></figure></p>
-<h2 id="构建训练模型"><a href="#构建训练模型" class="headerlink" title="构建训练模型"></a>构建训练模型</h2><p>采用CNN，包含三个卷积池化层和两个全链接层<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br></pre></td><td class="code"><pre><span class="line">X = tf.placeholder(tf.float32, [<span class="keyword">None</span>, IMAGE_HEIGHT*IMAGE_WIDTH])</span><br><span class="line">Y = tf.placeholder(tf.float32, [<span class="keyword">None</span>, MAX_CAPTCHA*CHAR_SET_LEN])</span><br><span class="line">keep_prob = tf.placeholder(tf.float32) <span class="comment"># dropout</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义CNN</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">crack_captcha_cnn</span><span class="params">(w_alpha=<span class="number">0.01</span>, b_alpha=<span class="number">0.1</span>)</span>:</span></span><br><span class="line">    x = tf.reshape(X, shape=[<span class="number">-1</span>, IMAGE_HEIGHT, IMAGE_WIDTH, <span class="number">1</span>])</span><br><span class="line"></span><br><span class="line">    <span class="comment">#w_c1_alpha = np.sqrt(2.0/(IMAGE_HEIGHT*IMAGE_WIDTH)) #</span></span><br><span class="line">    <span class="comment">#w_c2_alpha = np.sqrt(2.0/(3*3*32)) </span></span><br><span class="line">    <span class="comment">#w_c3_alpha = np.sqrt(2.0/(3*3*64)) </span></span><br><span class="line">    <span class="comment">#w_d1_alpha = np.sqrt(2.0/(8*32*64))</span></span><br><span class="line">    <span class="comment">#out_alpha = np.sqrt(2.0/1024)</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 3 个卷积层</span></span><br><span class="line">    w_c1 = tf.Variable(w_alpha*tf.random_normal([<span class="number">3</span>, <span class="number">3</span>, <span class="number">1</span>, <span class="number">32</span>]))</span><br><span class="line">    b_c1 = tf.Variable(b_alpha*tf.random_normal([<span class="number">32</span>]))</span><br><span class="line">    conv1 = tf.nn.relu(tf.nn.bias_add(tf.nn.conv2d(x, w_c1, strides=[<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>], padding=<span class="string">'SAME'</span>), b_c1))</span><br><span class="line">    conv1 = tf.nn.max_pool(conv1, ksize=[<span class="number">1</span>, <span class="number">2</span>, <span class="number">2</span>, <span class="number">1</span>], strides=[<span class="number">1</span>, <span class="number">2</span>, <span class="number">2</span>, <span class="number">1</span>], padding=<span class="string">'SAME'</span>)</span><br><span class="line">    conv1 = tf.nn.dropout(conv1, keep_prob)</span><br><span class="line"></span><br><span class="line">    w_c2 = tf.Variable(w_alpha*tf.random_normal([<span class="number">3</span>, <span class="number">3</span>, <span class="number">32</span>, <span class="number">64</span>]))</span><br><span class="line">    b_c2 = tf.Variable(b_alpha*tf.random_normal([<span class="number">64</span>]))</span><br><span class="line">    conv2 = tf.nn.relu(tf.nn.bias_add(tf.nn.conv2d(conv1, w_c2, strides=[<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>], padding=<span class="string">'SAME'</span>), b_c2))</span><br><span class="line">    conv2 = tf.nn.max_pool(conv2, ksize=[<span class="number">1</span>, <span class="number">2</span>, <span class="number">2</span>, <span class="number">1</span>], strides=[<span class="number">1</span>, <span class="number">2</span>, <span class="number">2</span>, <span class="number">1</span>], padding=<span class="string">'SAME'</span>)</span><br><span class="line">    conv2 = tf.nn.dropout(conv2, keep_prob)</span><br><span class="line"></span><br><span class="line">    w_c3 = tf.Variable(w_alpha*tf.random_normal([<span class="number">3</span>, <span class="number">3</span>, <span class="number">64</span>, <span class="number">64</span>]))</span><br><span class="line">    b_c3 = tf.Variable(b_alpha*tf.random_normal([<span class="number">64</span>]))</span><br><span class="line">    conv3 = tf.nn.relu(tf.nn.bias_add(tf.nn.conv2d(conv2, w_c3, strides=[<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>], padding=<span class="string">'SAME'</span>), b_c3))</span><br><span class="line">    conv3 = tf.nn.max_pool(conv3, ksize=[<span class="number">1</span>, <span class="number">2</span>, <span class="number">2</span>, <span class="number">1</span>], strides=[<span class="number">1</span>, <span class="number">2</span>, <span class="number">2</span>, <span class="number">1</span>], padding=<span class="string">'SAME'</span>)</span><br><span class="line">    conv3 = tf.nn.dropout(conv3, keep_prob)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># Fully connected layer</span></span><br><span class="line">    w_d = tf.Variable(w_alpha*tf.random_normal([<span class="number">8</span>*<span class="number">20</span>*<span class="number">64</span>, <span class="number">1024</span>]))</span><br><span class="line">    b_d = tf.Variable(b_alpha*tf.random_normal([<span class="number">1024</span>]))</span><br><span class="line">    dense = tf.reshape(conv3, [<span class="number">-1</span>, w_d.get_shape().as_list()[<span class="number">0</span>]])</span><br><span class="line">    dense = tf.nn.relu(tf.add(tf.matmul(dense, w_d), b_d))</span><br><span class="line">    dense = tf.nn.dropout(dense, keep_prob)</span><br><span class="line"></span><br><span class="line">    w_out = tf.Variable(w_alpha*tf.random_normal([<span class="number">1024</span>, MAX_CAPTCHA*CHAR_SET_LEN]))</span><br><span class="line">    b_out = tf.Variable(b_alpha*tf.random_normal([MAX_CAPTCHA*CHAR_SET_LEN]))</span><br><span class="line">    out = tf.add(tf.matmul(dense, w_out), b_out)</span><br><span class="line">    <span class="comment">#out = tf.nn.softmax(out)</span></span><br><span class="line">    <span class="keyword">return</span> out</span><br><span class="line"></span><br><span class="line"><span class="comment">#开始训练及保存模型</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">train_crack_captcha_cnn</span><span class="params">()</span>:</span></span><br><span class="line">    output = crack_captcha_cnn()</span><br><span class="line">    <span class="comment"># loss</span></span><br><span class="line">    <span class="comment">#loss = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(output, Y))</span></span><br><span class="line">    loss = tf.reduce_mean(tf.nn.sigmoid_cross_entropy_with_logits(logits=output, labels=Y))</span><br><span class="line">        <span class="comment"># 最后一层用来分类的softmax和sigmoid有什么不同？</span></span><br><span class="line">    <span class="comment"># optimizer 为了加快训练 learning_rate应该开始大，然后慢慢衰</span></span><br><span class="line">    optimizer = tf.train.AdamOptimizer(learning_rate=<span class="number">0.001</span>).minimize(loss)</span><br><span class="line"></span><br><span class="line">    predict = tf.reshape(output, [<span class="number">-1</span>, MAX_CAPTCHA, CHAR_SET_LEN])</span><br><span class="line">    max_idx_p = tf.argmax(predict, <span class="number">2</span>)</span><br><span class="line">    max_idx_l = tf.argmax(tf.reshape(Y, [<span class="number">-1</span>, MAX_CAPTCHA, CHAR_SET_LEN]), <span class="number">2</span>)</span><br><span class="line">    correct_pred = tf.equal(max_idx_p, max_idx_l)</span><br><span class="line">    accuracy = tf.reduce_mean(tf.cast(correct_pred, tf.float32))</span><br><span class="line"></span><br><span class="line">    saver = tf.train.Saver()</span><br><span class="line">    <span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">        sess.run(tf.global_variables_initializer())</span><br><span class="line"></span><br><span class="line">        step = <span class="number">0</span></span><br><span class="line">        <span class="keyword">while</span> <span class="keyword">True</span>:</span><br><span class="line">            batch_x, batch_y = get_next_batch(<span class="number">64</span>)</span><br><span class="line">            _, loss_ = sess.run([optimizer, loss], feed_dict=&#123;X: batch_x, Y: batch_y, keep_prob: <span class="number">0.75</span>&#125;)</span><br><span class="line">            print(step, loss_)</span><br><span class="line">            </span><br><span class="line">            <span class="comment"># 每100 step计算一次准确率</span></span><br><span class="line">            <span class="keyword">if</span> step % <span class="number">100</span> == <span class="number">0</span>:</span><br><span class="line">                batch_x_test, batch_y_test = get_next_batch(<span class="number">100</span>)</span><br><span class="line">                acc = sess.run(accuracy, feed_dict=&#123;X: batch_x_test, Y: batch_y_test, keep_prob: <span class="number">1.</span>&#125;)</span><br><span class="line">                print(step, acc)</span><br><span class="line">                <span class="comment"># 如果准确率大于50%,保存模型,完成训练</span></span><br><span class="line">                <span class="keyword">if</span> acc &gt; <span class="number">0.9</span>:</span><br><span class="line">                    saver.save(sess, <span class="string">"./Model/crack_capcha.model"</span>, global_step=step)</span><br><span class="line">                    <span class="keyword">break</span></span><br><span class="line"></span><br><span class="line">            step += <span class="number">1</span></span><br></pre></td></tr></table></figure></p>
-<p>经过10100次训练后，准确率达到90%以上，训练时间1小时10分钟。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">(10096, 0.01938362)</span><br><span class="line">(10097, 0.017134182)</span><br><span class="line">(10098, 0.022120956)</span><br><span class="line">(10099, 0.019756839)</span><br><span class="line">(10100, 0.024086259)</span><br><span class="line">(10100, 0.90750003)</span><br><span class="line">End:		2017-11-17 10:24:31</span><br><span class="line">Spend Time:	1:09:57.760766</span><br></pre></td></tr></table></figure></p>
-<h2 id="模型加载及测试"><a href="#模型加载及测试" class="headerlink" title="模型加载及测试"></a>模型加载及测试</h2><p>训练完成的模型被保存，需要重新被加载。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">from</span> PIL <span class="keyword">import</span> Image</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">crack_captcha</span><span class="params">(captcha_image)</span>:</span></span><br><span class="line">    output = tc.crack_captcha_cnn()</span><br><span class="line">    saver = tf.train.Saver()</span><br><span class="line">    <span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">        <span class="keyword">with</span> tf.device(<span class="string">"/cpu:0"</span>):</span><br><span class="line">            saver.restore(sess, <span class="string">"./Model/crack_capcha.model-10100"</span>)</span><br><span class="line">            predict = tf.argmax(tf.reshape(output, [<span class="number">-1</span>, tc.MAX_CAPTCHA, tc.CHAR_SET_LEN]), <span class="number">2</span>)</span><br><span class="line">            text_list = sess.run(predict, feed_dict=&#123;tc.X: [captcha_image], tc.keep_prob: <span class="number">1</span>&#125;)</span><br><span class="line">            text = text_list[<span class="number">0</span>].tolist()</span><br><span class="line">            vector = np.zeros(tc.MAX_CAPTCHA*tc.CHAR_SET_LEN)</span><br><span class="line">            i = <span class="number">0</span></span><br><span class="line">            <span class="keyword">for</span> n <span class="keyword">in</span> text:</span><br><span class="line">                vector[i*tc.CHAR_SET_LEN + n] = <span class="number">1</span></span><br><span class="line">                i += <span class="number">1</span></span><br><span class="line">                </span><br><span class="line">        <span class="keyword">return</span> tc.vec2text(vector)</span><br><span class="line">        </span><br><span class="line">text, image = ic.gen_captcha_text_and_image()</span><br><span class="line">f = plt.figure()</span><br><span class="line">plt.imshow(image)</span><br><span class="line">plt.show()</span><br><span class="line">image = tc.convert2gray(image)</span><br><span class="line">image = image.flatten() / <span class="number">255</span></span><br><span class="line">predict_text = crack_captcha(image)</span><br><span class="line">print(<span class="string">"正确: &#123;&#125; 预测: &#123;&#125;"</span>.format(text, predict_text))</span><br></pre></td></tr></table></figure></p>
-<p>最终的预测结果：<br><img src="http://7xr1hm.com1.z0.glb.clouddn.com/yzm2.png" alt=""><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">INFO:tensorflow:Restoring parameters from ./Model/crack_capcha.model-10100</span><br><span class="line">正确: rLwX 预测: rLwX</span><br></pre></td></tr></table></figure></p>
-
-          
+<h2 id="构建训练数据集"><a href="#构建训练数据集" class="headerlink" title="构建训练数据集"></a>构建训练数据集</h2><p>收集海量的验证码是一件困难的工作。因此，我们采用常用的验证码生成库来生成训练案例。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/12/05/CAPTCHARecognition/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -495,8 +493,7 @@
 
       
         
-          
-            <h1 id="选择Hexo搭建个人博客"><a href="#选择Hexo搭建个人博客" class="headerlink" title="选择Hexo搭建个人博客"></a>选择Hexo搭建个人博客</h1><blockquote>
+          <h1 id="选择Hexo搭建个人博客"><a href="#选择Hexo搭建个人博客" class="headerlink" title="选择Hexo搭建个人博客"></a>选择Hexo搭建个人博客</h1><blockquote>
 <p>之前使用过多种应用来搭建个人博客，也迁移多多次。写博客也渐渐习惯了Markdown，最终选择了Hexo，选择它的理由主要是我喜欢的几项功能都能够给予满足。</p>
 </blockquote>
 <h2 id="选择Hexo的几个理由："><a href="#选择Hexo的几个理由：" class="headerlink" title="选择Hexo的几个理由："></a>选择Hexo的几个理由：</h2><ol>
@@ -505,42 +502,13 @@
 <li>主题多样，尤其是Next主题简洁，符合个人审美观。</li>
 <li>借助VPS，可以做到随处写随处发布。</li>
 </ol>
-<h2 id="准备的几项工作："><a href="#准备的几项工作：" class="headerlink" title="准备的几项工作："></a>准备的几项工作：</h2><h3 id="安装Git（必须）"><a href="#安装Git（必须）" class="headerlink" title="安装Git（必须）"></a>安装Git（必须）</h3><p><strong>作用：</strong> 把本地的hexo内容提交到github上。<br><strong>下载地址：</strong>  <a href="https://git-scm.com/downloads" target="_blank" rel="noopener">git官网</a><br><strong>验证：</strong> 在Git Bash中输入：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ git --version</span><br><span class="line">git version 2.12.0.windows.1</span><br></pre></td></tr></table></figure></p>
-<h3 id="安装Node-js（必须）"><a href="#安装Node-js（必须）" class="headerlink" title="安装Node.js（必须）"></a>安装Node.js（必须）</h3><p><strong>下载地址：</strong> <a href="https://nodejs.org/en/" target="_blank" rel="noopener">node官网</a><br><strong>验证：</strong> 在Git Bash中输入：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$  node -v</span><br><span class="line">v8.9.1</span><br></pre></td></tr></table></figure></p>
-<h3 id="github账户注册和配置"><a href="#github账户注册和配置" class="headerlink" title="github账户注册和配置"></a>github账户注册和配置</h3><p>如果已经有账号，请跳过此步骤！<br>第一步： Github 注册<br><a href="https://github.com" target="_blank" rel="noopener">Github官网</a><br>第二步： 创建代码库<br>登录之后，点击页面右上角的加号，选择New repository。<br>在Repository name的输入框内填写linyemin.github.io。（<strong>这里要注意name的格式一定是xxxxx.github.io</strong>）</p>
-<h2 id="安装Hexo"><a href="#安装Hexo" class="headerlink" title="安装Hexo"></a>安装Hexo</h2><p>在你的计算机上创建一个目录，用于存放Hexo的相关文件。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$ mkdir myblog</span><br><span class="line">$ <span class="built_in">cd</span> myblog</span><br><span class="line">$ npm i -g hexo</span><br><span class="line">C:\Users\lin\AppData\Roaming\npm\hexo -&gt; C:\Users\lin\AppData\Roaming\npm\node_m                                odules\hexo\bin\hexo</span><br><span class="line"> &#123;<span class="string">"os"</span>:<span class="string">"darwin"</span>,<span class="string">"arch"</span>:<span class="string">"any"</span>&#125; (current: &#123;<span class="string">"os"</span>:<span class="string">"win32"</span>,<span class="string">"arch"</span>:<span class="string">"x64"</span>&#125;                                )</span><br><span class="line">+ hexo@3.4.2</span><br><span class="line">added 369 packages <span class="keyword">in</span> 64.941s</span><br></pre></td></tr></table></figure></p>
-<p>到这一步就安装完成了，下面来验证下：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">$ hexo -v</span><br><span class="line">hexo-cli: 1.0.4</span><br><span class="line">os: Windows_NT 10.0.14393 win32 x64</span><br><span class="line">http_parser: 2.7.0</span><br><span class="line">node: 8.9.1</span><br><span class="line">v8: 6.1.534.47</span><br><span class="line">uv: 1.15.0</span><br><span class="line">zlib: 1.2.11</span><br><span class="line">ares: 1.10.1-DEV</span><br><span class="line">modules: 57</span><br><span class="line">nghttp2: 1.25.0</span><br><span class="line">openssl: 1.0.2m</span><br><span class="line">icu: 59.1</span><br><span class="line">unicode: 9.0</span><br><span class="line">cldr: 31.0.1</span><br><span class="line">tz: 2017b</span><br></pre></td></tr></table></figure></p>
-<h2 id="Hexo的本地配置"><a href="#Hexo的本地配置" class="headerlink" title="Hexo的本地配置"></a>Hexo的本地配置</h2><p><strong>初始化hexo</strong><br><code>hexo init</code><br>然后输入：<br><code>npm install</code><br>之后npm会自动安装你需要的组件。<br><strong>体验Hexo</strong><br>继续执行下面的命令，输入：<br><code>hexo g</code><br>这个命令是将MD文件转换为HTML的警惕网页<br><code>hexo s</code><br>这个命令是启动服务，默认端口为4000，可以根据自己需求来进行修改。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">INFO Hexo is running at http://0.0.0.0:4000/. Press Ctrl+C to stop.</span><br></pre></td></tr></table></figure></p>
-<h2 id="Hexo与github进行关联"><a href="#Hexo与github进行关联" class="headerlink" title="Hexo与github进行关联"></a>Hexo与github进行关联</h2><p>主要分为两步</p>
-<ul>
-<li>配置git个人信息</li>
-<li>配置Deployment信息<h3 id="配置git个人信息"><a href="#配置git个人信息" class="headerlink" title="配置git个人信息"></a>配置git个人信息</h3>如果已经有相关配置，跳过这个环节。</li>
-</ul>
-<ol>
-<li><p>在Git Bash里面输入（xxxxx中替换你自己的信息）：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git config --global user.name <span class="string">"xxxxx"</span></span><br><span class="line">git config --global user.email <span class="string">"xxxxxxxxxx@163.com"</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>生成密钥</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen -t rsa -C <span class="string">"xxxxxxxxxxxxxx@163.com"</span></span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-<h3 id="配置Deployment信息"><a href="#配置Deployment信息" class="headerlink" title="配置Deployment信息"></a>配置Deployment信息</h3><p>在Git Bash中安装deployer-git插件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-deployer-git --save</span><br></pre></td></tr></table></figure></p>
-<p>在安装hexo的目录下找到_config.yml，然后修改：<br><figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">deploy:</span><br><span class="line">  <span class="built_in">type</span>: git</span><br><span class="line">  repo: git@github.<span class="keyword">com</span>:linyemin/linyemin.github.io.git</span><br><span class="line">  branch: master</span><br></pre></td></tr></table></figure></p>
-<p>替换掉里面的repo内容，也就是在github中的仓库地址。</p>
-<h3 id="测试和github关联成功"><a href="#测试和github关联成功" class="headerlink" title="测试和github关联成功"></a>测试和github关联成功</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ hexo clean</span><br><span class="line">$ hexo g -d //生成及部署到github</span><br></pre></td></tr></table></figure>
-<p>部署成功后，直接在浏览器中查看<a href="https://linyemin.github.io，这里的地址需要替换成你自己的仓库地址。如果可以成功看到网页，则说明你部署成功。" target="_blank" rel="noopener">https://linyemin.github.io，这里的地址需要替换成你自己的仓库地址。如果可以成功看到网页，则说明你部署成功。</a></p>
-<h2 id="Next主题的配置"><a href="#Next主题的配置" class="headerlink" title="Next主题的配置"></a>Next主题的配置</h2><p>1) 安装Next<br>在安装hexo的目录下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/iissnan/hexo-theme-next themes/next</span><br></pre></td></tr></table></figure></p>
-<p>2) 配置Next<br>在当前目录下，修改_config.yml文件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">theme: next</span><br></pre></td></tr></table></figure></p>
-<p>3) 验证主题<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ hexo clean</span><br><span class="line">$ hexo g -d</span><br></pre></td></tr></table></figure></p>
-<p>查看网页是否已经替换了主题.<br>4) 主题设定<br>Next提供了三种主题，即Scheme。在themes/next/_config.yml中进行配置：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#scheme: Muse</span><br><span class="line">#scheme: Mist</span><br><span class="line">scheme: Pisces</span><br></pre></td></tr></table></figure></p>
-<p>这里选择Pisces，这个也是我比较喜欢的Scheme。<br>5) 设置语言<br>编辑在主目录下myblog里的_config.yml：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">language: zh-Hans</span><br></pre></td></tr></table></figure></p>
-<p>目前Next支持的语言如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">语言   |   代码   |   设定实例</span><br><span class="line">English   |   en   |   language: en</span><br><span class="line">简体中文   |   zh-Hans   |   language: zh-Hans</span><br><span class="line">Français   |   fr-FR   |   language: fr-FR</span><br><span class="line">Português   |   pt   |   language: pt</span><br><span class="line">繁體中文   |   zh-hk   |   或者 zh-tw	language: zh-hk</span><br><span class="line">Русский язык   |   ru   |   language: ru</span><br><span class="line">Deutsch   |   de   |   language: de</span><br><span class="line">日本語   |   ja   |   language: ja</span><br><span class="line">Indonesian   |   id   |   language: id</span><br></pre></td></tr></table></figure></p>
-<p>6) 设置菜单<br>修改_config.yml文件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">menu:</span><br><span class="line">  home: /</span><br><span class="line">  archives: /archives</span><br><span class="line">  #about: /about</span><br><span class="line">  #categories: /categories</span><br><span class="line">  tags: /tags</span><br><span class="line">  #commonweal: /404.html</span><br></pre></td></tr></table></figure></p>
-<p>7) 修改Scheme Pisces的主页面大小<br>默认的右侧偏小（个人感觉），往往会造成代码段阅读的不友好（被跨行），因此需要调节主页内容版块的大小。<br>打开文件myblog/themes/next/source/css/_variables/custom.styl<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$main-desktop                   = 1200px</span><br><span class="line">$content-desktop                = 900px</span><br></pre></td></tr></table></figure></p>
-<p>8) 验证修改<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ hexo clean</span><br><span class="line">$ hexo g -d</span><br></pre></td></tr></table></figure></p>
-<p>最终效果如下图：<br><img src="./_image/2017-12-01-16-38-34.jpg?r=100" alt=""></p>
-
-          
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/12/01/learn-hexo/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -657,160 +625,11 @@
 
       
         
-          
-            <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
+          <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
 <h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/11/27/gpu-install/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="linyemin">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="林烨敏的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/11/27/gpu-install/" itemprop="url">GPU集群环境一键式部署</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-27T23:30:00+08:00">
-                2017-11-27
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/linux/" itemprop="url" rel="index">
-                    <span itemprop="name">linux</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>下载各个安装包</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2017/11/27/gpu-install/#more" rel="contents">
+            <a class="btn" href="/2017/11/30/hello-world/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -957,6 +776,152 @@
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2017/11/27/gpu-qa/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/11/27/gpu-install/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="linyemin">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="林烨敏的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/11/27/gpu-install/" itemprop="url">GPU集群环境一键式部署</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-27T23:30:00+08:00">
+                2017-11-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/linux/" itemprop="url" rel="index">
+                    <span itemprop="name">linux</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>下载各个安装包</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/11/27/gpu-install/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
